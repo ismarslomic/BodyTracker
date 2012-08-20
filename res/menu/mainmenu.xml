@@ -1,0 +1,20 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/addMeasurement"
+        android:enabled="true"
+        android:icon="@drawable/add"
+        android:showAsAction="always"
+        android:title="ADD"
+        android:visible="true">
+    </item>
+
+    <item
+        android:id="@+id/weekStat"
+        android:icon="@drawable/week_stat"
+        android:showAsAction="always"
+        android:title="WEEK STAT" android:enabled="true" android:visible="true">
+    </item>
+    <item android:id="@+id/item1" android:title="SETTINGS" android:showAsAction="collapseActionView" android:visible="true" android:enabled="true"></item>
+
+</menu>

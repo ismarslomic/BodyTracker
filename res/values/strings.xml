@@ -1,0 +1,19 @@
+<resources>
+
+    <string name="app_name">Body Measurement</string>
+    <string name="hello_world">Hello world!</string>
+    <string name="menu_settings">Settings</string>
+    <string name="gen_placeholder">View placeholder</string>
+    <string-array name="view_switch_list">
+        <item>Table view</item>
+        <item>Chart view</item>
+    </string-array>
+    
+    <string name="title_tab_chest">Chest</string>
+    <string name="title_tab_waist">Waist</string>
+    <string name="title_tab_weight">Weight</string>
+    <string name="share">Share</string>
+    
+    <string name="alert_dialog_ok">OK</string>
+    <string name="alert_dialog_cancel">Cancel</string>
+</resources>

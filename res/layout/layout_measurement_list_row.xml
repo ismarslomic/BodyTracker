@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:columnCount="1" >
+
+    <TextView
+        android:id="@+id/measurement_value"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_gravity="left"
+        android:layout_row="0"
+        android:textSize="30dp"
+        android:textAllCaps="true" />
+
+    <TextView
+        android:id="@+id/measurement_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_column="0"
+        android:layout_gravity="left"
+        android:layout_row="1"
+        android:textSize="15dp"
+        android:textAllCaps="true"/>
+
+    <TextView
+        android:id="@+id/diff_value"
+        android:layout_column="0"
+        android:layout_gravity="right"
+        android:layout_row="0"
+        android:textAllCaps="true" />
+
+    <ImageView
+        android:id="@+id/diff_icon"
+        android:layout_width="48dip"
+        android:layout_height="48dip"
+        android:layout_column="0"
+        android:layout_gravity="right"
+        android:layout_row="1" />
+
+</GridLayout>

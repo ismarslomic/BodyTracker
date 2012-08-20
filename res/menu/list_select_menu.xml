@@ -1,0 +1,12 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/deleteMeasurement"
+        android:enabled="true"
+        android:icon="@drawable/delete"
+        android:showAsAction="always"
+        android:title="DELETE"
+        android:visible="true">
+    </item>
+
+</menu>
