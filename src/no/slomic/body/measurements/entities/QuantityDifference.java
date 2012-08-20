@@ -1,15 +1,14 @@
 package no.slomic.body.measurements.entities;
 
-import org.unitsofmeasurement.quantity.Quantity;
-import org.unitsofmeasurement.unit.Unit;
 
-public class QuantityDifference <Q extends Quantity<Q>>
+
+public class QuantityDifference
 {
 	public static final int EQUAL_TO = 0, GREATER_THAN = 1, LESS_THAN = -1;
-	private Unit<Q> unit;
+	private Unit unit;
 	private Number value;
 	
-	public QuantityDifference (double value, Unit<Q> unit)
+	public QuantityDifference (double value, Unit unit)
 	{
 		this.value = value;
 		this.unit = unit;
@@ -26,7 +25,7 @@ public class QuantityDifference <Q extends Quantity<Q>>
 		this.value = value;
 	}
 	
-	public void setUnit(Unit<Q> unit) {
+	public void setUnit(Unit unit) {
 		this.unit = unit;
 	}
 	
@@ -54,7 +53,7 @@ public class QuantityDifference <Q extends Quantity<Q>>
 	/**
 	 * @return the unit of difference value
 	 */
-	public Unit<Q> unit() {
+	public Unit unit() {
 		return unit;
 	}
 	
