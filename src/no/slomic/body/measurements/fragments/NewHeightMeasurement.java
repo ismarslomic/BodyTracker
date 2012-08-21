@@ -68,7 +68,7 @@ public class NewHeightMeasurement extends DialogFragment implements OnClickListe
         if (savedInstanceState != null) {
             date = (Calendar) savedInstanceState.getSerializable("date");
             value = savedInstanceState.getDouble("value");
-            quantity = new Quantity(value, LengthUnit.m);
+            quantity = new Quantity(value, LengthUnit.M);
         } else {
             date = Calendar.getInstance();
             getInitialQuantity();
@@ -112,7 +112,7 @@ public class NewHeightMeasurement extends DialogFragment implements OnClickListe
             quantity = latestMeasurement.getQuantity();
         } else {
             // TODO: fast verdi 40 under bør flyttes ut fra denne klassen
-            quantity = new Quantity(0.040, LengthUnit.m);
+            quantity = new Quantity(0.040, LengthUnit.M);
         }
     }
 

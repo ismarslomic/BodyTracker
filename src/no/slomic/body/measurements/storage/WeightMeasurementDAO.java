@@ -175,11 +175,11 @@ public class WeightMeasurementDAO {
     }
 
     public WeightUnit getUnit(String unitSymbol) {
-        if (unitSymbol.equals(WeightUnit.lb.getSymbol()))
-            return WeightUnit.lb;
-        else if (unitSymbol.equals(WeightUnit.kg.getSymbol()))
-            return WeightUnit.kg;
+        if (unitSymbol.equals(WeightUnit.LB.getSymbol()))
+            return WeightUnit.LB;
+        else if (unitSymbol.equals(WeightUnit.KG.getSymbol()))
+            return WeightUnit.KG;
         else
-            return WeightUnit.g;
+            return WeightUnit.G;
     }
 }

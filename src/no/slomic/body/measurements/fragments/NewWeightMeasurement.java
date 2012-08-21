@@ -68,7 +68,7 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
         if (savedInstanceState != null) {
             date = (Calendar) savedInstanceState.getSerializable("date");
             value = savedInstanceState.getDouble("value");
-            quantity = new Quantity(value, WeightUnit.kg);
+            quantity = new Quantity(value, WeightUnit.KG);
         } else {
             date = Calendar.getInstance();
             getInitialQuantity();
@@ -112,7 +112,7 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
             quantity = latestMeasurement.getQuantity();
         } else {
             // TODO: fast verdi 70 under bør flyttes ut fra denne klassen
-            quantity = new Quantity(70, WeightUnit.kg);
+            quantity = new Quantity(70, WeightUnit.KG);
         }
     }
 

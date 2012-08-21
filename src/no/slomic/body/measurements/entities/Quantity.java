@@ -6,27 +6,27 @@ import java.math.RoundingMode;
 import java.text.DecimalFormat;
 
 public class Quantity {
-    private Unit unit;
-    private double valueInRefUnit;
-    private double valueInCurrentUnit;
-    public static final DecimalFormat decimalFormat = new DecimalFormat("#,##0.00");
+    private Unit mUnit;
+    private double mValueInRefUnit;
+    private double mValueInCurrentUnit;
+    public static final DecimalFormat DECIMAL_FORMAT = new DecimalFormat("#,##0.00");
 
     /**
-     * @param unit
+     * @param mUnit
      * @param value
      */
     public Quantity(double value, Unit unit) {
-        this.unit = unit;
-        this.valueInRefUnit = value * unit.getMultipleFactor();
-        this.valueInCurrentUnit = value;
+        this.mUnit = unit;
+        this.mValueInRefUnit = value * unit.getMultipleFactor();
+        this.mValueInCurrentUnit = value;
     }
 
     public Unit getUnit() {
-        return this.unit;
+        return this.mUnit;
     }
 
     public double getValue() {
-        return this.valueInCurrentUnit;
+        return this.mValueInCurrentUnit;
     }
 
     /*
@@ -35,16 +35,16 @@ public class Quantity {
      */
     @Override
     public String toString() {
-        return decimalFormat.format(getValue()) + " " + unit;
+        return DECIMAL_FORMAT.format(getValue()) + " " + mUnit;
     }
 
     public String showInUnits(Unit u, int precision) {
-        double result = valueInRefUnit / u.getMultipleFactor();
+        double result = mValueInRefUnit / u.getMultipleFactor();
         return roundValue(precision, result) + " " + u;
     }
 
     public double showInUnits(Unit u) {
-        return valueInRefUnit / u.getMultipleFactor();
+        return mValueInRefUnit / u.getMultipleFactor();
     }
 
     public String roundValue(int precision) {
@@ -89,20 +89,20 @@ public class Quantity {
         // if units on both quantities are equal do the addition on both values
         if (this.getUnit() == quantity2.getUnit()) {
             unit = this.getUnit();
-            valueInRefUnit = this.valueInRefUnit + quantity2.valueInRefUnit;
-            valueInCurrentUnit = this.valueInCurrentUnit + quantity2.valueInCurrentUnit;
+            valueInRefUnit = this.mValueInRefUnit + quantity2.mValueInRefUnit;
+            valueInCurrentUnit = this.mValueInCurrentUnit + quantity2.mValueInCurrentUnit;
         }
         // if the units on the quantities are not equal do
-        // the addition on values in reference unit and set both
+        // the addition on values IN reference mUnit and set both
         // values-variables to same value
         else {
             unit = refUnit;
-            valueInRefUnit = this.valueInRefUnit + quantity2.valueInRefUnit;
+            valueInRefUnit = this.mValueInRefUnit + quantity2.mValueInRefUnit;
             valueInCurrentUnit = valueInRefUnit;
         }
 
         result = new Quantity(valueInCurrentUnit, unit);
-        result.valueInRefUnit = valueInRefUnit;
+        result.mValueInRefUnit = valueInRefUnit;
 
         return result;
     }
@@ -116,25 +116,25 @@ public class Quantity {
         // if units on both quantities are equal do the subtract on both values
         if (this.getUnit() == quantity2.getUnit()) {
             unit = this.getUnit();
-            valueInRefUnit = this.valueInRefUnit - quantity2.valueInRefUnit;
-            valueInCurrentUnit = this.valueInCurrentUnit - quantity2.valueInCurrentUnit;
+            valueInRefUnit = this.mValueInRefUnit - quantity2.mValueInRefUnit;
+            valueInCurrentUnit = this.mValueInCurrentUnit - quantity2.mValueInCurrentUnit;
         }
         // if the units on the quantities are not equal do
-        // the subtract on values in reference unit and set both
+        // the subtract on values IN reference mUnit and set both
         // values-variables to same value
         else {
             unit = refUnit;
-            valueInRefUnit = this.valueInRefUnit - quantity2.valueInRefUnit;
+            valueInRefUnit = this.mValueInRefUnit - quantity2.mValueInRefUnit;
             valueInCurrentUnit = valueInRefUnit;
         }
 
         result = new Quantity(valueInCurrentUnit, unit);
-        result.valueInRefUnit = valueInRefUnit;
+        result.mValueInRefUnit = valueInRefUnit;
 
         return result;
     }
 
     public Quantity convert(WeightUnit newUnit) {
-        return new Quantity(valueInRefUnit / newUnit.getMultipleFactor(), newUnit);
+        return new Quantity(mValueInRefUnit / newUnit.getMultipleFactor(), newUnit);
     }
 }

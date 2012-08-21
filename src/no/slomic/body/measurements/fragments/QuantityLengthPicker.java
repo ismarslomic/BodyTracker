@@ -96,7 +96,7 @@ public class QuantityLengthPicker extends DialogFragment implements DialogInterf
 
         @Override
         public String format(int value) {
-            return value + " " + LengthUnit.m.getSymbol().toString();
+            return value + " " + LengthUnit.M.getSymbol().toString();
         }
     }
 

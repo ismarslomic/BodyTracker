@@ -86,8 +86,8 @@ public class MainActivity extends FragmentActivity {
      * Intent that each tab will show. This is not sufficient for switching
      * between pages. So instead we make the content part of the tab host 0dp
      * high (it is not shown) and the TabsAdapter supplies its own dummy view to
-     * show as the tab content. It listens to changes in tabs, and takes care of
-     * switch to the correct paged in the ViewPager whenever the selected tab
+     * show as the tab content. It listens to changes IN tabs, and takes care of
+     * switch to the correct paged IN the ViewPager whenever the selected tab
      * changes.
      */
     public static class TabsAdapter extends FragmentPagerAdapter implements
@@ -171,7 +171,7 @@ public class MainActivity extends FragmentActivity {
         @Override
         public void onPageSelected(int position) {
             // Unfortunately when TabHost changes the current tab, it kindly
-            // also takes care of putting focus on it when not in touch mode.
+            // also takes care of putting focus on it when not IN touch mode.
             // The jerk.
             // This hack tries to prevent this from pulling focus out of our
             // ViewPager.

@@ -21,7 +21,7 @@ public class DateUtils {
             "dd.MM.yyyy HH:mm:ss");
 
     /**
-     * @param date String date in format dd.MM.yyyy
+     * @param date String date IN format dd.MM.yyyy
      * @return Calendar date representing date sent as input. Returns null if
      *         invalid date string
      */

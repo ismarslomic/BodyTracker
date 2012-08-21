@@ -175,11 +175,11 @@ public class HeightMeasurementDAO {
     }
 
     public LengthUnit getUnit(String unitSymbol) {
-        if (unitSymbol.equals(LengthUnit.m.getSymbol()))
-            return LengthUnit.m;
-        else if (unitSymbol.equals(LengthUnit.cm.getSymbol()))
-            return LengthUnit.cm;
+        if (unitSymbol.equals(LengthUnit.M.getSymbol()))
+            return LengthUnit.M;
+        else if (unitSymbol.equals(LengthUnit.CM.getSymbol()))
+            return LengthUnit.CM;
         else
-            return LengthUnit.in;
+            return LengthUnit.IN;
     }
 }

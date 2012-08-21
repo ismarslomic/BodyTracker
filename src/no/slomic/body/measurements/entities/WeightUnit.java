@@ -3,14 +3,15 @@ package no.slomic.body.measurements.entities;
 
 public class WeightUnit extends BaseUnit {
     // SI units
-    public static final WeightUnit g = new WeightUnit("g", "gram", 1.0);
-    public static final WeightUnit kg = new WeightUnit("kg", "kilogram", 1.0e+3);
+    public static final WeightUnit G = new WeightUnit("g", "gram", 1.0);
+    public static final WeightUnit KG = new WeightUnit("kg", "kilogram", 1.0e+3);
 
     // US customary units
-    public static final WeightUnit lb = new WeightUnit("lb", "pound", 453.59237);
-
+    public static final WeightUnit LB = new WeightUnit("lb", "pound", 453.59237);
+    public static final WeightUnit OZ = new WeightUnit("oz", "ounce", 28.349523125);
+    
     // Base SI unit
-    public static final WeightUnit REF_UNIT = g; // reference Unit
+    public static final WeightUnit REF_UNIT = G; // reference Unit
 
     public WeightUnit(String symbol, String name, double multipleFactor) {
         super(symbol, name, multipleFactor);

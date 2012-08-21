@@ -61,10 +61,10 @@ public class MeasurementStatistics {
 
         // No measurements last weeks
         if (latest == null)
-            return new Quantity(0.000, WeightUnit.kg);
+            return new Quantity(0.000, WeightUnit.KG);
         // Only one measurement last week
         else if (oldest == null || latest.equals(oldest))
-            return new Quantity(0.000, WeightUnit.kg);
+            return new Quantity(0.000, WeightUnit.KG);
         // At least two measurements last week
         else {
             Quantity diff = latest.getQuantity().subtract(oldest.getQuantity(),
