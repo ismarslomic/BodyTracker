@@ -1,34 +1,29 @@
+
 package no.slomic.body.measurements.entities;
 
+public abstract class BaseUnit implements Unit {
+    private String symbol; // e.g. "A"
+    private String name; // e.g. "Angstrom"
+    private double multipleFactor; // e.g. 1E-10
 
-public abstract class BaseUnit implements Unit
-{
-	private String symbol; // e.g. "A"
-	private String name; // e.g. "Angstrom"
-	private double multipleFactor; // e.g. 1E-10
-	
-    public BaseUnit(String symbol, String name, double multipleFactor) 
-	{
-		this.symbol = symbol;
+    public BaseUnit(String symbol, String name, double multipleFactor) {
+        this.symbol = symbol;
         this.name = name;
         this.multipleFactor = multipleFactor;
     }
 
-	public String getSymbol() 
-	{
-		return this.symbol;
-	}
-	
-	public double getMultipleFactor() 
-	{
-		return this.multipleFactor;
-	}
-	
-	public String getName()
-	{
-		return this.name;
-	}
-	
+    public String getSymbol() {
+        return this.symbol;
+    }
+
+    public double getMultipleFactor() {
+        return this.multipleFactor;
+    }
+
+    public String getName() {
+        return this.name;
+    }
+
     public Unit getSystemUnit() {
         return this;
     }
@@ -47,11 +42,12 @@ public abstract class BaseUnit implements Unit
         return symbol.hashCode();
     }
 
-	/* (non-Javadoc)
-	 * @see java.lang.Object#toString()
-	 */
-	@Override
-	public String toString() {
-		return getSymbol();
-	}
+    /*
+     * (non-Javadoc)
+     * @see java.lang.Object#toString()
+     */
+    @Override
+    public String toString() {
+        return getSymbol();
+    }
 }

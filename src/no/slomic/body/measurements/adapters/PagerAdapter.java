@@ -1,37 +1,35 @@
-package no.slomic.body.measurements.adapters;
 
-import java.util.List;
+package no.slomic.body.measurements.adapters;
 
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentPagerAdapter;
 
+import java.util.List;
 
-public class PagerAdapter extends FragmentPagerAdapter
-{
-	private List<Fragment> fragments;
+public class PagerAdapter extends FragmentPagerAdapter {
+    private List<Fragment> fragments;
 
-	public PagerAdapter(FragmentManager fm)
-	{
-		super(fm);
-	}
-	
-	/**
-	 * @param fm
-	 * @param fragments
-	 */
-	public PagerAdapter(FragmentManager fm, List<Fragment> fragments) {
-		super(fm);
-		this.fragments = fragments;
-	}
+    public PagerAdapter(FragmentManager fm) {
+        super(fm);
+    }
 
-	@Override
-	public Fragment getItem(int position) {
-		return this.fragments.get(position);
-	}
+    /**
+     * @param fm
+     * @param fragments
+     */
+    public PagerAdapter(FragmentManager fm, List<Fragment> fragments) {
+        super(fm);
+        this.fragments = fragments;
+    }
 
-	@Override
-	public int getCount() {
-		return this.fragments.size();
-	}
+    @Override
+    public Fragment getItem(int position) {
+        return this.fragments.get(position);
+    }
+
+    @Override
+    public int getCount() {
+        return this.fragments.size();
+    }
 }

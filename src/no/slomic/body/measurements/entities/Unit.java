@@ -1,13 +1,14 @@
+
 package no.slomic.body.measurements.entities;
 
 public interface Unit {
 
-	public String getSymbol();
+    public String getSymbol();
 
-	public double getMultipleFactor();
+    public double getMultipleFactor();
 
-	public String getName();
+    public String getName();
 
-	public Unit getSystemUnit();
+    public Unit getSystemUnit();
 
 }
