@@ -1,19 +1,30 @@
 <resources>
 
-    <string name="app_name">Body Measurement</string>
+    <string name="app_name">bdTracker</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="gen_placeholder">View placeholder</string>
+
     <string-array name="view_switch_list">
         <item>Table view</item>
         <item>Chart view</item>
     </string-array>
-    
+
     <string name="title_tab_chest">Chest</string>
     <string name="title_tab_waist">Waist</string>
     <string name="title_tab_weight">Weight</string>
     <string name="share">Share</string>
-    
     <string name="alert_dialog_ok">OK</string>
     <string name="alert_dialog_cancel">Cancel</string>
+    <string name="photo_preferences">Photo</string>
+    <string name="measurement_preferences">Measurements</string>
+    <string name="account_preferences">Account</string>
+    <string name="dialog_title_account_name_preferences">Account name</string>
+    <string name="title_account_name_preferences">Account name</string>
+    <string name="dialog_title_account_age_preferences">Age</string>
+    <string name="title_account_age_preferences">Age</string>
+
+    <color name="white_color">#fff</color>
+    <color name="gray_color">#aaa</color>
+
 </resources>

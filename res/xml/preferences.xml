@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bm="http://schemas.android.com/apk/res/no.slomic.body.measurements" >
+
+    <PreferenceCategory
+        encoding="utf-8"
+        android:title="@string/account_preferences" >
+        <EditTextPreference
+            android:dialogTitle="@string/dialog_title_account_name_preferences"
+            android:key="account_name"
+            android:title="@string/title_account_name_preferences" />
+
+        <no.slomic.body.measurements.preferences.NumberSeekBarPreference
+            android:defaultValue="20"
+            android:dialogTitle="@string/dialog_title_account_age_preferences"
+            android:key="account_age"
+            android:persistent="true"
+            android:summary="Summary"
+            android:title="@string/title_account_age_preferences"
+            bm:maxValue="100"
+            bm:minValue="0" />
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/measurement_preferences" >
+    </PreferenceCategory>
+    <PreferenceCategory android:title="@string/photo_preferences" >
+    </PreferenceCategory>
+
+</PreferenceScreen>

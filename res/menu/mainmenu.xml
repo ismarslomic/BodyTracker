@@ -8,13 +8,20 @@
         android:title="ADD"
         android:visible="true">
     </item>
-
     <item
         android:id="@+id/weekStat"
+        android:enabled="true"
         android:icon="@drawable/week_stat"
         android:showAsAction="always"
-        android:title="WEEK STAT" android:enabled="true" android:visible="true">
+        android:title="WEEK STAT"
+        android:visible="true">
     </item>
-    <item android:id="@+id/item1" android:title="SETTINGS" android:showAsAction="collapseActionView" android:visible="true" android:enabled="true"></item>
+    <item
+        android:id="@+id/settings"
+        android:enabled="true"
+        android:showAsAction="collapseActionView"
+        android:title="@string/menu_settings"
+        android:visible="true">
+    </item>
 
 </menu>

@@ -1,6 +1,7 @@
 
 package no.slomic.body.measurements.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.SparseBooleanArray;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import no.slomic.body.measurements.R;
+import no.slomic.body.measurements.activities.SettingsActivity;
 import no.slomic.body.measurements.adapters.MeasurementAdapter;
 import no.slomic.body.measurements.entities.Measurement;
 import no.slomic.body.measurements.entities.MeasurementStatistics;
@@ -140,6 +142,10 @@ public class WeightMeasurementList extends ListFragment implements OnMeasurement
             case R.id.addMeasurement:
                 NewWeightMeasurement newMeasurementDialog = NewWeightMeasurement.newInstance(this);
                 newMeasurementDialog.show(getFragmentManager(), "newWeightMeasurementDialog");
+                break;
+            case R.id.settings:
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
                 break;
             default:
                 break;
