@@ -9,6 +9,7 @@ package no.slomic.body.measurements;
 
 public final class R {
     public static final class array {
+        public static final int account_sex_preference=0x7f060001;
         public static final int view_switch_list=0x7f060000;
     }
     public static final class attr {
@@ -28,12 +29,20 @@ theme attribute (in the form
 containing a value of this type.
          */
         public static final int minValue=0x7f010000;
+        /** <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+         */
+        public static final int unit=0x7f010002;
     }
     public static final class color {
-        public static final int gray_color=0x7f070001;
-        public static final int list_view_background_selector=0x7f070002;
-        public static final int list_view_text_selector=0x7f070003;
-        public static final int white_color=0x7f070000;
+        public static final int gray_color=0x7f080001;
+        public static final int list_view_background_selector=0x7f080002;
+        public static final int list_view_text_selector=0x7f080003;
+        public static final int white_color=0x7f080000;
     }
     public static final class drawable {
         public static final int add=0x7f020000;
@@ -55,105 +64,119 @@ containing a value of this type.
         public static final int week_stat=0x7f020010;
     }
     public static final class id {
-        public static final int RelativeLayout1=0x7f0a0017;
-        public static final int addMeasurement=0x7f0a001e;
-        public static final int appNameTextView=0x7f0a0018;
-        public static final int chart=0x7f0a0019;
-        public static final int current_value=0x7f0a0006;
-        public static final int date_button=0x7f0a0003;
-        public static final int date_label=0x7f0a0002;
-        public static final int decimal_point_label=0x7f0a000b;
-        public static final int deleteMeasurement=0x7f0a001d;
-        public static final int diff_icon=0x7f0a0014;
-        public static final int diff_value=0x7f0a0013;
-        public static final int editText1=0x7f0a001c;
-        public static final int fractional_numbers_picker=0x7f0a000c;
-        public static final int icon=0x7f0a0015;
-        public static final int label=0x7f0a0016;
-        public static final int max_value=0x7f0a0009;
-        public static final int measurement_date=0x7f0a0012;
-        public static final int measurement_value=0x7f0a0011;
-        public static final int min_value=0x7f0a0008;
-        public static final int pager=0x7f0a0000;
-        public static final int pager_title_strip=0x7f0a0001;
-        public static final int seek_bar=0x7f0a0007;
-        public static final int settings=0x7f0a0020;
-        public static final int textView1=0x7f0a000d;
-        public static final int textView2=0x7f0a000e;
-        public static final int textView3=0x7f0a000f;
-        public static final int textView4=0x7f0a0010;
-        public static final int toast_layout_root=0x7f0a001b;
-        public static final int value_button=0x7f0a0005;
-        public static final int value_label=0x7f0a0004;
-        public static final int viewpager=0x7f0a001a;
-        public static final int weekStat=0x7f0a001f;
-        public static final int whole_numbers_picker=0x7f0a000a;
+        public static final int RelativeLayout1=0x7f0b0019;
+        public static final int addMeasurement=0x7f0b0020;
+        public static final int appNameTextView=0x7f0b001a;
+        public static final int chart=0x7f0b001b;
+        public static final int current_value=0x7f0b0008;
+        public static final int date_button=0x7f0b0004;
+        public static final int date_label=0x7f0b0003;
+        public static final int date_picker=0x7f0b0002;
+        public static final int decimal_point_label=0x7f0b000d;
+        public static final int deleteMeasurement=0x7f0b001f;
+        public static final int diff_icon=0x7f0b0016;
+        public static final int diff_value=0x7f0b0015;
+        public static final int editText1=0x7f0b001e;
+        public static final int fractional_numbers_picker=0x7f0b000e;
+        public static final int icon=0x7f0b0017;
+        public static final int label=0x7f0b0018;
+        public static final int max_value=0x7f0b000b;
+        public static final int measurement_date=0x7f0b0014;
+        public static final int measurement_value=0x7f0b0013;
+        public static final int min_value=0x7f0b000a;
+        public static final int number_picker=0x7f0b0007;
+        public static final int pager=0x7f0b0000;
+        public static final int pager_title_strip=0x7f0b0001;
+        public static final int seek_bar=0x7f0b0009;
+        public static final int settings=0x7f0b0022;
+        public static final int textView1=0x7f0b000f;
+        public static final int textView2=0x7f0b0010;
+        public static final int textView3=0x7f0b0011;
+        public static final int textView4=0x7f0b0012;
+        public static final int toast_layout_root=0x7f0b001d;
+        public static final int value_button=0x7f0b0006;
+        public static final int value_label=0x7f0b0005;
+        public static final int viewpager=0x7f0b001c;
+        public static final int weekStat=0x7f0b0021;
+        public static final int whole_numbers_picker=0x7f0b000c;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
         public static final int fragment_tabs_pager=0x7f030001;
-        public static final int layout_dialog_new_measurement=0x7f030002;
-        public static final int layout_dialog_numberseekbar=0x7f030003;
-        public static final int layout_dialog_quantity_picker=0x7f030004;
-        public static final int layout_grid_test=0x7f030005;
-        public static final int layout_measurement_list=0x7f030006;
-        public static final int layout_measurement_list_row=0x7f030007;
-        public static final int layout_row=0x7f030008;
-        public static final int layout_subtitled_spinner_item=0x7f030009;
-        public static final int layout_tab_weight_chart=0x7f03000a;
-        public static final int layout_tabs_viewpager=0x7f03000b;
-        public static final int layout_toast_stat=0x7f03000c;
+        public static final int layout_dialog_datepicker=0x7f030002;
+        public static final int layout_dialog_new_measurement=0x7f030003;
+        public static final int layout_dialog_numberpicker=0x7f030004;
+        public static final int layout_dialog_numberseekbar=0x7f030005;
+        public static final int layout_dialog_quantity_picker=0x7f030006;
+        public static final int layout_grid_test=0x7f030007;
+        public static final int layout_measurement_list=0x7f030008;
+        public static final int layout_measurement_list_row=0x7f030009;
+        public static final int layout_row=0x7f03000a;
+        public static final int layout_subtitled_spinner_item=0x7f03000b;
+        public static final int layout_tab_weight_chart=0x7f03000c;
+        public static final int layout_tabs_viewpager=0x7f03000d;
+        public static final int layout_toast_stat=0x7f03000e;
     }
     public static final class menu {
-        public static final int list_select_menu=0x7f090000;
-        public static final int mainmenu=0x7f090001;
+        public static final int list_select_menu=0x7f0a0000;
+        public static final int mainmenu=0x7f0a0001;
+    }
+    public static final class plurals {
+        public static final int numberOfMonths=0x7f070001;
+        public static final int numberOfYears=0x7f070000;
     }
     public static final class string {
         public static final int account_preferences=0x7f05000c;
         public static final int alert_dialog_cancel=0x7f050009;
         public static final int alert_dialog_ok=0x7f050008;
         public static final int app_name=0x7f050000;
-        public static final int dialog_title_account_age_preferences=0x7f05000f;
+        public static final int dialog_title_account_age_preferences=0x7f050011;
         public static final int dialog_title_account_name_preferences=0x7f05000d;
+        public static final int dialog_title_account_sex_preferences=0x7f05000f;
         public static final int gen_placeholder=0x7f050003;
         public static final int hello_world=0x7f050001;
         public static final int measurement_preferences=0x7f05000b;
         public static final int menu_settings=0x7f050002;
         public static final int photo_preferences=0x7f05000a;
         public static final int share=0x7f050007;
-        public static final int title_account_age_preferences=0x7f050010;
+        public static final int title_account_age_preferences=0x7f050012;
         public static final int title_account_name_preferences=0x7f05000e;
+        public static final int title_account_sex_preferences=0x7f050010;
         public static final int title_tab_chest=0x7f050004;
         public static final int title_tab_waist=0x7f050005;
         public static final int title_tab_weight=0x7f050006;
+        public static final int unit_years_preferences=0x7f050013;
+        public static final int update_toast_preferences=0x7f050014;
     }
     public static final class style {
-        public static final int AppTheme=0x7f080002;
-        public static final int AppThemeDark=0x7f080001;
-        public static final int AppThemeLight=0x7f080000;
+        public static final int AppTheme=0x7f090002;
+        public static final int AppThemeDark=0x7f090001;
+        public static final int AppThemeLight=0x7f090000;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;
     }
     public static final class styleable {
-        /** Attributes that can be used with a no_slomic_body_measurements_preferences_NumberSeekBarPreference.
+        /** Attributes that can be used with a no_slomic_body_measurements_preferences_NumberPickerPreference.
            <p>Includes the following attributes:</p>
            <table>
            <colgroup align="left" />
            <colgroup align="left" />
            <tr><th>Attribute</th><th>Description</th></tr>
-           <tr><td><code>{@link #no_slomic_body_measurements_preferences_NumberSeekBarPreference_maxValue no.slomic.body.measurements:maxValue}</code></td><td></td></tr>
-           <tr><td><code>{@link #no_slomic_body_measurements_preferences_NumberSeekBarPreference_minValue no.slomic.body.measurements:minValue}</code></td><td></td></tr>
+           <tr><td><code>{@link #no_slomic_body_measurements_preferences_NumberPickerPreference_maxValue no.slomic.body.measurements:maxValue}</code></td><td></td></tr>
+           <tr><td><code>{@link #no_slomic_body_measurements_preferences_NumberPickerPreference_minValue no.slomic.body.measurements:minValue}</code></td><td></td></tr>
+           <tr><td><code>{@link #no_slomic_body_measurements_preferences_NumberPickerPreference_unit no.slomic.body.measurements:unit}</code></td><td></td></tr>
            </table>
-           @see #no_slomic_body_measurements_preferences_NumberSeekBarPreference_maxValue
-           @see #no_slomic_body_measurements_preferences_NumberSeekBarPreference_minValue
+           @see #no_slomic_body_measurements_preferences_NumberPickerPreference_maxValue
+           @see #no_slomic_body_measurements_preferences_NumberPickerPreference_minValue
+           @see #no_slomic_body_measurements_preferences_NumberPickerPreference_unit
          */
-        public static final int[] no_slomic_body_measurements_preferences_NumberSeekBarPreference = {
-            0x7f010000, 0x7f010001
+        public static final int[] no_slomic_body_measurements_preferences_NumberPickerPreference = {
+            0x7f010000, 0x7f010001, 0x7f010002
         };
         /**
           <p>This symbol is the offset where the {@link no.slomic.body.measurements.R.attr#maxValue}
-          attribute's value can be found in the {@link #no_slomic_body_measurements_preferences_NumberSeekBarPreference} array.
+          attribute's value can be found in the {@link #no_slomic_body_measurements_preferences_NumberPickerPreference} array.
 
 
           <p>Must be an integer value, such as "<code>100</code>".
@@ -164,10 +187,10 @@ theme attribute (in the form
 containing a value of this type.
           @attr name android:maxValue
         */
-        public static final int no_slomic_body_measurements_preferences_NumberSeekBarPreference_maxValue = 1;
+        public static final int no_slomic_body_measurements_preferences_NumberPickerPreference_maxValue = 1;
         /**
           <p>This symbol is the offset where the {@link no.slomic.body.measurements.R.attr#minValue}
-          attribute's value can be found in the {@link #no_slomic_body_measurements_preferences_NumberSeekBarPreference} array.
+          attribute's value can be found in the {@link #no_slomic_body_measurements_preferences_NumberPickerPreference} array.
 
 
           <p>Must be an integer value, such as "<code>100</code>".
@@ -178,6 +201,20 @@ theme attribute (in the form
 containing a value of this type.
           @attr name android:minValue
         */
-        public static final int no_slomic_body_measurements_preferences_NumberSeekBarPreference_minValue = 0;
+        public static final int no_slomic_body_measurements_preferences_NumberPickerPreference_minValue = 0;
+        /**
+          <p>This symbol is the offset where the {@link no.slomic.body.measurements.R.attr#unit}
+          attribute's value can be found in the {@link #no_slomic_body_measurements_preferences_NumberPickerPreference} array.
+
+
+          <p>Must be a string value, using '\\;' to escape characters such as '\\n' or '\\uxxxx' for a unicode character.
+<p>This may also be a reference to a resource (in the form
+"<code>@[<i>package</i>:]<i>type</i>:<i>name</i></code>") or
+theme attribute (in the form
+"<code>?[<i>package</i>:][<i>type</i>:]<i>name</i></code>")
+containing a value of this type.
+          @attr name android:unit
+        */
+        public static final int no_slomic_body_measurements_preferences_NumberPickerPreference_unit = 2;
     };
 }
