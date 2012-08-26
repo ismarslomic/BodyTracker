@@ -10,15 +10,19 @@
             android:key="account_name"
             android:title="@string/title_account_name_preferences" />
 
-        <no.slomic.body.measurements.preferences.NumberSeekBarPreference
+        <no.slomic.body.measurements.preferences.AgePickerPreference
             android:defaultValue="20"
             android:dialogTitle="@string/dialog_title_account_age_preferences"
             android:key="account_age"
             android:persistent="true"
-            android:summary="Summary"
-            android:title="@string/title_account_age_preferences"
-            bm:maxValue="100"
-            bm:minValue="0" />
+            android:title="@string/title_account_age_preferences" />
+
+        <ListPreference
+            android:dialogTitle="@string/dialog_title_account_sex_preferences"
+            android:entries="@array/account_sex_preference"
+            android:entryValues="@array/account_sex_preference"
+            android:key="account_sex"
+            android:title="@string/title_account_sex_preferences" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/measurement_preferences" >
     </PreferenceCategory>

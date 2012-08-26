@@ -9,6 +9,10 @@
         <item>Table view</item>
         <item>Chart view</item>
     </string-array>
+    <string-array name="account_sex_preference">
+        <item>Male</item>
+        <item>Female</item>
+    </string-array>
 
     <string name="title_tab_chest">Chest</string>
     <string name="title_tab_waist">Waist</string>
@@ -21,8 +25,21 @@
     <string name="account_preferences">Account</string>
     <string name="dialog_title_account_name_preferences">Account name</string>
     <string name="title_account_name_preferences">Account name</string>
-    <string name="dialog_title_account_age_preferences">Age</string>
+    <string name="dialog_title_account_sex_preferences">Sex</string>
+    <string name="title_account_sex_preferences">Sex</string>
+    <string name="dialog_title_account_age_preferences">Your birth date</string>
     <string name="title_account_age_preferences">Age</string>
+    <string name="unit_years_preferences">years</string>
+    <string name="update_toast_preferences">Updated %1$d</string>
+
+    <plurals name="numberOfYears">
+        <item quantity="one">%d year</item>
+        <item quantity="other">%d years</item>
+    </plurals>
+    <plurals name="numberOfMonths">
+        <item quantity="one">%d month</item>
+        <item quantity="other">%d months</item>
+    </plurals>
 
     <color name="white_color">#fff</color>
     <color name="gray_color">#aaa</color>

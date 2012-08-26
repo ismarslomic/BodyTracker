@@ -1,6 +1,16 @@
 
 package no.slomic.body.measurements.utils;
 
+import android.content.Context;
+import android.content.res.Resources;
+
+import no.slomic.body.measurements.R;
+
+import org.joda.time.DateMidnight;
+import org.joda.time.DateTime;
+import org.joda.time.Months;
+import org.joda.time.Years;
+
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -84,5 +94,28 @@ public class DateUtils {
 
     public static String dateNowLongFormat() {
         return LONG_DATE_FORMAT.format(new Date());
+    }
+
+    /**
+     * @param birtdateInMillis date of birth in milliseconds from the java epoch
+     * @param res the resources to load strings from
+     * @return years if the age is 1 year or more, otherwise it returns only months
+     */
+    public static String getAge(long birtdateInMillis, Resources res)
+    {
+        DateMidnight birthdate = new DateMidnight(birtdateInMillis);
+        DateTime now = new DateTime();
+        Years years = Years.yearsBetween(birthdate, now);
+        
+        // If age is 1 year or more return only years
+        if( years.getYears() >= 1 )
+        {
+            return res.getQuantityString(R.plurals.numberOfYears, years.getYears(), years.getYears());
+        }
+        else
+        {
+            Months months = Months.monthsBetween(birthdate, now);
+            return res.getQuantityString(R.plurals.numberOfMonths, months.getMonths(), months.getMonths());
+        }
     }
 }
