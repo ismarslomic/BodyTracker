@@ -11,6 +11,7 @@ import android.view.View;
 import android.widget.DatePicker;
 
 import no.slomic.body.measurements.R;
+import no.slomic.body.measurements.utils.DateUtils;
 
 import java.util.Calendar;
 
@@ -128,8 +129,9 @@ public class DatePickerPreference extends DialogPreference implements
         String summary = "";
         if (isPersistent()) {
             long persistentDate = getPersistedLong(mCurrentDate);
-
-            // summary = DateUtils.formatToMediumFormat(c);
+            Calendar c = Calendar.getInstance();
+            c.setTimeInMillis(persistentDate);
+            summary = DateUtils.formatToMediumFormat(c);
         }
 
         return summary;

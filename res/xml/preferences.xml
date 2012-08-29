@@ -25,6 +25,75 @@
             android:title="@string/title_account_sex_preferences" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/measurement_preferences" >
+        <no.slomic.body.measurements.preferences.DatePickerPreference
+            android:dialogTitle="@string/dialog_title_period_start_preferences"
+            android:key="period_start"
+            android:persistent="true"
+            android:title="@string/title_period_start_preferences" />
+        <no.slomic.body.measurements.preferences.DatePickerPreference
+            android:dialogTitle="@string/dialog_title_period_end_preferences"
+            android:key="period_end"
+            android:persistent="true"
+            android:title="@string/title_period_end_preferences" />
+
+        <SwitchPreference
+            android:key="move_to_next_measurement"
+            android:switchTextOff="@string/no"
+            android:switchTextOn="@string/yes"
+            android:title="@string/title_move_to_next_measurement_preferences" 
+            android:summary="@string/summary_move_to_next_measurement_preferences"/>
+
+        <ListPreference
+            android:defaultValue="International System of Units (SI)"
+            android:dialogTitle="@string/dialog_title_metric_system_preferences"
+            android:entries="@array/metric_system_preference"
+            android:entryValues="@array/metric_system_preference"
+            android:key="metric_system"
+            android:title="@string/title_metric_system_preferences" />
+
+        <SwitchPreference
+            android:key="activate_weight_measurement"
+            android:switchTextOff="@string/no"
+            android:switchTextOn="@string/yes"
+            android:title="@string/title_weight_measurement_preferences" />
+
+        <EditTextPreference
+            android:dependency="activate_weight_measurement"
+            android:layout="?android:attr/preferenceLayoutChild"
+            android:title="@string/title_weight_goal_preferences" />
+
+        <SwitchPreference
+            android:key="activate_height_measurement"
+            android:switchTextOff="@string/no"
+            android:switchTextOn="@string/yes"
+            android:title="@string/title_height_measurement_preferences" />
+
+        <EditTextPreference
+            android:dependency="activate_height_measurement"
+            android:layout="?android:attr/preferenceLayoutChild"
+            android:title="@string/title_height_goal_preferences" />
+
+        <SwitchPreference
+            android:key="activate_weist_measurement"
+            android:switchTextOff="@string/no"
+            android:switchTextOn="@string/yes"
+            android:title="@string/title_weist_measurement_preferences" />
+
+        <EditTextPreference
+            android:dependency="activate_weist_measurement"
+            android:layout="?android:attr/preferenceLayoutChild"
+            android:title="@string/title_weist_goal_preferences" />
+
+        <SwitchPreference
+            android:key="activate_head_measurement"
+            android:switchTextOff="@string/no"
+            android:switchTextOn="@string/yes"
+            android:title="@string/title_head_measurement_preferences" />
+
+        <EditTextPreference
+            android:dependency="activate_head_measurement"
+            android:layout="?android:attr/preferenceLayoutChild"
+            android:title="@string/title_head_goal_preferences" />
     </PreferenceCategory>
     <PreferenceCategory android:title="@string/photo_preferences" >
     </PreferenceCategory>

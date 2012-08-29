@@ -21,6 +21,7 @@ import no.slomic.body.measurements.entities.Quantity;
 import no.slomic.body.measurements.fragments.QuantityLengthPicker.OnQuantitySetListener;
 import no.slomic.body.measurements.storage.HeightMeasurementDAO;
 import no.slomic.body.measurements.utils.DateUtils;
+import no.slomic.body.measurements.utils.QuantityStringFormat;
 
 import java.util.Calendar;
 
@@ -153,7 +154,7 @@ public class NewHeightMeasurement extends DialogFragment implements OnClickListe
 
     private void updateButtonText() {
         dateButton.setText(DateUtils.formatToMediumFormatExtended(date));
-        valueButton.setText(quantity.toString());
+        valueButton.setText(QuantityStringFormat.formatLengthToSi(quantity));
     }
 
     public interface OnMeasurementSetListener {

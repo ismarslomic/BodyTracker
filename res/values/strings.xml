@@ -13,6 +13,10 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+    <string-array name="metric_system_preference">
+        <item>International System of Units (SI)</item>
+        <item>English Units</item>
+    </string-array>
 
     <string name="title_tab_chest">Chest</string>
     <string name="title_tab_waist">Waist</string>
@@ -27,7 +31,7 @@
     <string name="title_account_name_preferences">Account name</string>
     <string name="dialog_title_account_sex_preferences">Sex</string>
     <string name="title_account_sex_preferences">Sex</string>
-    <string name="dialog_title_account_age_preferences">Your birth date</string>
+    <string name="dialog_title_account_age_preferences">Date of birth</string>
     <string name="title_account_age_preferences">Age</string>
     <string name="unit_years_preferences">years</string>
     <string name="update_toast_preferences">Updated %1$d</string>
@@ -43,5 +47,25 @@
 
     <color name="white_color">#fff</color>
     <color name="gray_color">#aaa</color>
+
+    <string name="title_weight_measurement_preferences">Measure weight</string>
+    <string name="title_weight_goal_preferences">Goal</string>
+    <string name="title_height_measurement_preferences">Measure height</string>
+    <string name="title_height_goal_preferences">Goal</string>
+    <string name="title_weist_measurement_preferences">Measure weist</string>
+    <string name="title_weist_goal_preferences">Goal</string>
+    <string name="title_head_measurement_preferences">Measure head</string>
+    <string name="title_head_goal_preferences">Goal</string>
+    <string name="dialog_title_period_start_preferences">Period start date</string>
+    <string name="title_period_start_preferences">Period starts</string>
+    <string name="dialog_title_period_end_preferences">Period end date</string>
+    <string name="title_period_end_preferences">Period ends</string>
+    <string name="dialog_title_metric_system_preferences">Metric system</string>
+    <string name="title_metric_system_preferences">Metric system</string>
+    <string name="no">NO</string>
+    <string name="yes">YES</string>
+    
+    <string name="title_move_to_next_measurement_preferences">Move to next measurement</string>
+    <string name="summary_move_to_next_measurement_preferences">Automatically after new registration</string>
 
 </resources>

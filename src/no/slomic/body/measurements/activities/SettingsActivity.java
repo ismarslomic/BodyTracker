@@ -21,6 +21,9 @@ public class SettingsActivity extends PreferenceActivity implements
     private static final String PREFERENCE_ACCOUNT_AGE_KEY = "account_age";
     private static final String PREFERENCE_ACCOUNT_NAME_KEY = "account_name";
     private static final String PREFERENCE_ACCOUNT_SEX_KEY = "account_sex";
+    private static final String PREFERENCE_PERIOD_START_KEY = "period_start";
+    private static final String PREFERENCE_PERIOD_END_KEY = "period_end";
+    private static final String PREFERENCE_METRIC_SYSTEM_KEY = "metric_system";
     
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -37,18 +40,25 @@ public class SettingsActivity extends PreferenceActivity implements
         
         Preference sexPreference = findPreference(PREFERENCE_ACCOUNT_SEX_KEY);
         sexPreference.setSummary(preferences.getString(PREFERENCE_ACCOUNT_SEX_KEY, ""));
+
+        Preference metricSystemPreference = findPreference(PREFERENCE_METRIC_SYSTEM_KEY);
+        metricSystemPreference.setSummary(preferences.getString(PREFERENCE_METRIC_SYSTEM_KEY, ""));
     }
 
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
 
         if (key.equals(PREFERENCE_ACCOUNT_NAME_KEY)) {
-            Preference namePreference = findPreference(key);
-            namePreference.setSummary(sharedPreferences.getString(key, ""));
+            Preference preference = findPreference(key);
+            preference.setSummary(sharedPreferences.getString(key, ""));
         }
         else if (key.equals(PREFERENCE_ACCOUNT_SEX_KEY)) {
-            Preference sexPreference = findPreference(PREFERENCE_ACCOUNT_SEX_KEY);
-            sexPreference.setSummary(sharedPreferences.getString(PREFERENCE_ACCOUNT_SEX_KEY, ""));
+            Preference preference = findPreference(PREFERENCE_ACCOUNT_SEX_KEY);
+            preference.setSummary(sharedPreferences.getString(PREFERENCE_ACCOUNT_SEX_KEY, ""));
+        }
+        else if (key.equals(PREFERENCE_METRIC_SYSTEM_KEY)) {
+            Preference preference = findPreference(PREFERENCE_METRIC_SYSTEM_KEY);
+            preference.setSummary(sharedPreferences.getString(PREFERENCE_METRIC_SYSTEM_KEY, ""));
         }
     }
 

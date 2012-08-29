@@ -10,6 +10,7 @@ package no.slomic.body.measurements;
 public final class R {
     public static final class array {
         public static final int account_sex_preference=0x7f060001;
+        public static final int metric_system_preference=0x7f060002;
         public static final int view_switch_list=0x7f060000;
     }
     public static final class attr {
@@ -133,20 +134,38 @@ containing a value of this type.
         public static final int dialog_title_account_age_preferences=0x7f050011;
         public static final int dialog_title_account_name_preferences=0x7f05000d;
         public static final int dialog_title_account_sex_preferences=0x7f05000f;
+        public static final int dialog_title_metric_system_preferences=0x7f050021;
+        public static final int dialog_title_period_end_preferences=0x7f05001f;
+        public static final int dialog_title_period_start_preferences=0x7f05001d;
         public static final int gen_placeholder=0x7f050003;
         public static final int hello_world=0x7f050001;
         public static final int measurement_preferences=0x7f05000b;
         public static final int menu_settings=0x7f050002;
+        public static final int no=0x7f050023;
         public static final int photo_preferences=0x7f05000a;
         public static final int share=0x7f050007;
+        public static final int summary_move_to_next_measurement_preferences=0x7f050026;
         public static final int title_account_age_preferences=0x7f050012;
         public static final int title_account_name_preferences=0x7f05000e;
         public static final int title_account_sex_preferences=0x7f050010;
+        public static final int title_head_goal_preferences=0x7f05001c;
+        public static final int title_head_measurement_preferences=0x7f05001b;
+        public static final int title_height_goal_preferences=0x7f050018;
+        public static final int title_height_measurement_preferences=0x7f050017;
+        public static final int title_metric_system_preferences=0x7f050022;
+        public static final int title_move_to_next_measurement_preferences=0x7f050025;
+        public static final int title_period_end_preferences=0x7f050020;
+        public static final int title_period_start_preferences=0x7f05001e;
         public static final int title_tab_chest=0x7f050004;
         public static final int title_tab_waist=0x7f050005;
         public static final int title_tab_weight=0x7f050006;
+        public static final int title_weight_goal_preferences=0x7f050016;
+        public static final int title_weight_measurement_preferences=0x7f050015;
+        public static final int title_weist_goal_preferences=0x7f05001a;
+        public static final int title_weist_measurement_preferences=0x7f050019;
         public static final int unit_years_preferences=0x7f050013;
         public static final int update_toast_preferences=0x7f050014;
+        public static final int yes=0x7f050024;
     }
     public static final class style {
         public static final int AppTheme=0x7f090002;

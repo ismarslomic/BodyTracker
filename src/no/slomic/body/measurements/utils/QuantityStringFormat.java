@@ -34,7 +34,9 @@ public class QuantityStringFormat {
      * @return
      */
     public static String formatLengthToSi(Quantity q) {
-        if ((int)q.showInUnits(LengthUnit.M) == 0)
+        if ((int)q.showInUnits(LengthUnit.MM) < 10)
+            return (int)q.showInUnits(LengthUnit.MM) + " " + LengthUnit.MM.toString();
+        if ((int)q.showInUnits(LengthUnit.CM) < 100)
             return (int)q.showInUnits(LengthUnit.CM) + " " + LengthUnit.CM.toString();
         else
             return LENGTH_DECIMAL_FORMAT.format(q.showInUnits(LengthUnit.M)) + " "

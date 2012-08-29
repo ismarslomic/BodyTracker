@@ -11,10 +11,13 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import no.slomic.body.measurements.R;
+import no.slomic.body.measurements.entities.LengthUnit;
 import no.slomic.body.measurements.entities.Measurement;
 import no.slomic.body.measurements.entities.Quantity;
+import no.slomic.body.measurements.entities.WeightUnit;
 import no.slomic.body.measurements.holders.MeasurementHolder;
 import no.slomic.body.measurements.utils.DateUtils;
+import no.slomic.body.measurements.utils.QuantityStringFormat;
 
 import java.util.Iterator;
 import java.util.List;
@@ -85,14 +88,27 @@ public class MeasurementAdapter extends ArrayAdapter<Measurement> {
         holder.getMeasurementDate().setText(date);
 
         // Set measured value
-        holder.getMeasurementValue().setText(measurement.getQuantity().toString());
 
+        if(measurement.getQuantity().getUnit() instanceof WeightUnit)
+            holder.getMeasurementValue().setText(QuantityStringFormat.formatWeightToSi(measurement.getQuantity()));
+        else if(measurement.getQuantity().getUnit() instanceof LengthUnit)
+            holder.getMeasurementValue().setText(QuantityStringFormat.formatLengthToSi(measurement.getQuantity()));
+        else
+            holder.getMeasurementValue().setText(measurement.getQuantity().toString());
+        
+        
         // Set diff value between this and previous measurement
         if (measurement.getPrevious() != null) {
             Quantity diff = measurement.getQuantity().subtract(
                     measurement.getPrevious().getQuantity(),
                     measurement.getQuantity().getUnit().getSystemUnit());
-            holder.getDiffValue().setText(diff.toString());
+            
+            if(diff.getUnit() instanceof WeightUnit)
+                holder.getDiffValue().setText(QuantityStringFormat.formatWeightToSi(diff));
+            else if(diff.getUnit() instanceof LengthUnit)
+                holder.getDiffValue().setText(QuantityStringFormat.formatLengthToSi(diff));
+            else
+                holder.getDiffValue().setText(diff.toString());
 
             // Set diff relational sign
             if (diff.getValue() < 0)
