@@ -38,11 +38,6 @@ public class Quantity {
         return DECIMAL_FORMAT.format(getValue()) + " " + mUnit;
     }
 
-    public String showInUnits(Unit u, int precision) {
-        double result = mValueInRefUnit / u.getMultipleFactor();
-        return roundValue(precision, result) + " " + u;
-    }
-
     public double showInUnits(Unit u) {
         return mValueInRefUnit / u.getMultipleFactor();
     }
@@ -134,7 +129,7 @@ public class Quantity {
         return result;
     }
 
-    public Quantity convert(WeightUnit newUnit) {
+    public Quantity convert(Unit newUnit) {
         return new Quantity(mValueInRefUnit / newUnit.getMultipleFactor(), newUnit);
     }
 }

@@ -8,6 +8,8 @@
         android:targetSdkVersion="15" />
 
     <application
+        android:allowBackup="true"
+        android:backupAgent="no.slomic.body.measurements.storage.DbBackupHelper"
         android:icon="@drawable/body_tracker_icon2"
         android:label="@string/app_name"
         android:theme="@style/AppThemeDark" >
@@ -26,9 +28,14 @@
             android:label="@string/app_name" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-                <category android:name="android.intent.category.SAMPLE_CODE" />
+
+                <category android:name="android.intent.category.SAMPLE_CODE" />
             </intent-filter>
         </activity>
+
+        <meta-data
+            android:name="com.google.android.backup.api_key"
+            android:value="AEdPqrEAAAAIJsw-XcJltX3HmVpCyqvEkv2tEahJS8gs6zFnsg" />
     </application>
 
 </manifest>

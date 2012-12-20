@@ -1,7 +1,7 @@
 
 package no.slomic.body.measurements.fragments;
 
-import android.content.Intent;
+import android.app.Activity;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.SparseBooleanArray;
@@ -18,7 +18,6 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import no.slomic.body.measurements.R;
-import no.slomic.body.measurements.activities.SettingsActivity;
 import no.slomic.body.measurements.adapters.MeasurementAdapter;
 import no.slomic.body.measurements.entities.Measurement;
 import no.slomic.body.measurements.entities.MeasurementStatistics;
@@ -34,12 +33,13 @@ import java.util.List;
 
 public class WeightMeasurementList extends ListFragment implements OnMeasurementSetListener {
     private WeightMeasurementDAO weightMeasurementDAO;
+    private Activity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return (LinearLayout) inflater.inflate(R.layout.layout_measurement_list, container, false);
     }
-
+    
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -48,24 +48,25 @@ public class WeightMeasurementList extends ListFragment implements OnMeasurement
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
         lv.setMultiChoiceModeListener(new ModeCallback());
 
-        weightMeasurementDAO = new WeightMeasurementDAO(getActivity());
+        activity = getActivity();
+        weightMeasurementDAO = new WeightMeasurementDAO(activity);
         weightMeasurementDAO.open();
 
         List<Measurement> measurements = weightMeasurementDAO.getAll();
 
         weightMeasurementDAO.close();
 
-        MeasurementAdapter wma = new MeasurementAdapter(getActivity(),
+        MeasurementAdapter wma = new MeasurementAdapter(activity,
                 R.layout.layout_measurement_list_row, measurements);
 
         setListAdapter(wma);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
     }
 
     private class ModeCallback implements ListView.MultiChoiceModeListener {
 
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            MenuInflater inflater = getActivity().getMenuInflater();
+            MenuInflater inflater = activity.getMenuInflater();
             inflater.inflate(R.menu.list_select_menu, menu);
             mode.setTitle("Select Items");
             setSubtitle(mode);
@@ -97,7 +98,7 @@ public class WeightMeasurementList extends ListFragment implements OnMeasurement
                     mode.finish();
                     break;
                 default:
-                    Toast.makeText(getActivity(), "Clicked " + item.getTitle(), Toast.LENGTH_SHORT)
+                    Toast.makeText(activity, "Clicked " + item.getTitle(), Toast.LENGTH_SHORT)
                             .show();
                     break;
             }
@@ -130,7 +131,7 @@ public class WeightMeasurementList extends ListFragment implements OnMeasurement
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.mainmenu, menu);
+        //inflater.inflate(R.menu.mainmenu, menu);
     }
 
     @Override
@@ -142,10 +143,6 @@ public class WeightMeasurementList extends ListFragment implements OnMeasurement
             case R.id.addMeasurement:
                 NewWeightMeasurement newMeasurementDialog = NewWeightMeasurement.newInstance(this);
                 newMeasurementDialog.show(getFragmentManager(), "newWeightMeasurementDialog");
-                break;
-            case R.id.settings:
-                Intent intent = new Intent(getActivity(), SettingsActivity.class);
-                startActivity(intent);
                 break;
             default:
                 break;
@@ -166,7 +163,7 @@ public class WeightMeasurementList extends ListFragment implements OnMeasurement
                                           */
 
         String text;
-        Quantity lastWeek = MeasurementStatistics.lastWeekWeight(getActivity());
+        Quantity lastWeek = MeasurementStatistics.lastWeekWeight(activity);
         if (lastWeek == null)
             text = "No measurements registered";
         if (lastWeek.getValue() < 0)
@@ -176,7 +173,7 @@ public class WeightMeasurementList extends ListFragment implements OnMeasurement
         else
             text = "Last week you increased weight with " + lastWeek.toString();
 
-        Toast toast = Toast.makeText(getActivity(), text, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(activity, text, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.show();
     }

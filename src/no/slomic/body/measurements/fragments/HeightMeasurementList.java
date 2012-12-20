@@ -1,6 +1,7 @@
 
 package no.slomic.body.measurements.fragments;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.ListFragment;
 import android.util.SparseBooleanArray;
@@ -17,6 +18,7 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import no.slomic.body.measurements.R;
+import no.slomic.body.measurements.activities.SettingsActivity;
 import no.slomic.body.measurements.adapters.MeasurementAdapter;
 import no.slomic.body.measurements.entities.Measurement;
 import no.slomic.body.measurements.entities.MeasurementStatistics;
@@ -54,7 +56,7 @@ public class HeightMeasurementList extends ListFragment implements OnMeasurement
                 R.layout.layout_measurement_list_row, measurements);
 
         setListAdapter(wma);
-        setHasOptionsMenu(true);
+        //setHasOptionsMenu(true);
     }
 
     private class ModeCallback implements ListView.MultiChoiceModeListener {
@@ -125,7 +127,7 @@ public class HeightMeasurementList extends ListFragment implements OnMeasurement
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.mainmenu, menu);
+        //inflater.inflate(R.menu.mainmenu, menu);
     }
 
     @Override

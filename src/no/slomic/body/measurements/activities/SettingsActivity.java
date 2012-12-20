@@ -18,12 +18,15 @@ import no.slomic.body.measurements.R;
 public class SettingsActivity extends PreferenceActivity implements
         OnSharedPreferenceChangeListener {
     // Check /res/xml/preferences.xml file for this preference
-    private static final String PREFERENCE_ACCOUNT_AGE_KEY = "account_age";
-    private static final String PREFERENCE_ACCOUNT_NAME_KEY = "account_name";
-    private static final String PREFERENCE_ACCOUNT_SEX_KEY = "account_sex";
-    private static final String PREFERENCE_PERIOD_START_KEY = "period_start";
-    private static final String PREFERENCE_PERIOD_END_KEY = "period_end";
-    private static final String PREFERENCE_METRIC_SYSTEM_KEY = "metric_system";
+    public static final String PREFERENCE_ACCOUNT_AGE_KEY = "account_age";
+    public static final String PREFERENCE_ACCOUNT_NAME_KEY = "account_name";
+    public static final String PREFERENCE_ACCOUNT_SEX_KEY = "account_sex";
+    public static final String PREFERENCE_PERIOD_START_KEY = "period_start";
+    public static final String PREFERENCE_PERIOD_END_KEY = "period_end";
+    public static final String PREFERENCE_METRIC_SYSTEM_KEY = "metric_system";
+    public static final String PREFERENCE_ACTIVATE_HEIGHT_MEASUREMENT = "activate_height_measurement";
+    public static final String PREFERENCE_ACTIVATE_WEIGHT_MEASUREMENT = "activate_weight_measurement";
+   
     
     @Override
     public void onCreate(Bundle savedInstanceState) {

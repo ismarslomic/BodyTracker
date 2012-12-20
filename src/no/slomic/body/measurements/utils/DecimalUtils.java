@@ -5,6 +5,7 @@ import java.math.BigDecimal;
 import java.math.RoundingMode;
 
 public class DecimalUtils {
+    
     public static int getWholePartOfValue(double value) {
         return (int) value;
     }

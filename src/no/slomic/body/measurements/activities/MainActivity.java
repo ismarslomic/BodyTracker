@@ -3,11 +3,19 @@ package no.slomic.body.measurements.activities;
 
 import android.app.ActionBar;
 import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.app.FragmentPagerAdapter;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -20,6 +28,7 @@ import no.slomic.body.measurements.fragments.WeightMeasurementList;
 import no.slomic.body.measurements.listeners.NavigationListener;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Demonstrates combining a TabHost with a ViewPager to implement a tab UI that
@@ -27,14 +36,26 @@ import java.util.ArrayList;
  * to move between the tabs.
  */
 public class MainActivity extends FragmentActivity {
-    TabHost mTabHost;
-    ViewPager mViewPager;
-    TabsAdapter mTabsAdapter;
+    private TabHost mTabHost;
+    private ViewPager mViewPager;
+    private TabsAdapter mTabsAdapter;
+
+    /*
+     * (non-Javadoc)
+     * @see android.app.Activity#onCreateOptionsMenu(android.view.Menu)
+     */
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        MenuInflater inflater = getMenuInflater();
+        inflater.inflate(R.menu.mainmenu, menu);
+        return true;
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-
+        Log.d(MainActivity.class.getName(), "OnCreate method called in MainActivity");
+        
         setContentView(R.layout.fragment_tabs_pager);
         mTabHost = (TabHost) findViewById(android.R.id.tabhost);
         mTabHost.setup();
@@ -44,23 +65,69 @@ public class MainActivity extends FragmentActivity {
         // Create our tab adapter
         mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
 
+        mTabHost.clearAllTabs();
+    
+        
         // add our tabs to the adapter
-        mTabsAdapter.addTab(mTabHost.newTabSpec("Weight").setIndicator("Weight"),
-                WeightMeasurementList.class, null);
-        mTabsAdapter.addTab(mTabHost.newTabSpec("Height").setIndicator("Height"),
-                HeightMeasurementList.class, null);
+        SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
+        Boolean activateHeightMeasurement = sharedPref.getBoolean(
+                SettingsActivity.PREFERENCE_ACTIVATE_HEIGHT_MEASUREMENT, true);
+        Boolean activateWeightMeasurement = sharedPref.getBoolean(
+                SettingsActivity.PREFERENCE_ACTIVATE_WEIGHT_MEASUREMENT, true);
+        mTabHost.clearAllTabs();
+        if (activateWeightMeasurement)
+            mTabsAdapter.addTab(mTabHost.newTabSpec("Weight").setIndicator("Weight"),
+                    WeightMeasurementList.class, null);
+        if (activateHeightMeasurement)
+            mTabsAdapter.addTab(mTabHost.newTabSpec("Height").setIndicator("Height"),
+                    HeightMeasurementList.class, null);
 
         if (savedInstanceState != null) {
             // restore the last selected tab if we can
             mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+            
+            Log.d(MainActivity.class.getName(), "Restoring last selected tab to: " + savedInstanceState.getString("tab"));
         }
 
         initialiseActionBar();
     }
 
     @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case R.id.settings:
+                Intent intent = new Intent(this, SettingsActivity.class);
+                startActivity(intent);
+                break;
+            default:
+                String currentTabTag = mTabHost.getCurrentTabTag();
+                Log.d(MainActivity.class.getName(), "Current tab tag is: " + currentTabTag);
+                
+                int currentPosition = mTabHost.getCurrentTab();
+                Log.d(MainActivity.class.getName(), "Current tab position is: " + currentPosition);
+                
+                Log.d(MainActivity.class.getName(), "Tab fragments in TabsAdapter: " + mTabsAdapter.fragments.size());
+
+                Fragment currentFragment = mTabsAdapter.getFragment(currentPosition);
+                
+                //TODO: dette er bare workaround for å slippe å få nullpointer når man endrer fra vertikal til horisontal. Posisjonen til fragment bør lagres før man endrer landscape
+                if( currentFragment != null )
+                {
+                    currentFragment.onOptionsItemSelected(item);
+                    Log.d(MainActivity.class.getName(), "onOptionsItemSelected: Current fragment found with tag: " + currentFragment.getTag() + ", id: " + currentFragment.getId() + " and content: " + currentFragment);
+                }
+                else
+                    Log.d(MainActivity.class.getName(), "onOptionsItemSelected: Current fragment is null");
+                break;
+        }
+
+        return true;
+    }
+
+    @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
+        Log.d(MainActivity.class.getName(), "OnSaveInstanceState method called.");
         outState.putString("tab", mTabHost.getCurrentTabTag());
     }
 
@@ -96,7 +163,8 @@ public class MainActivity extends FragmentActivity {
         private final TabHost mTabHost;
         private final ViewPager mViewPager;
         private final ArrayList<TabInfo> mTabs = new ArrayList<TabInfo>();
-
+        private List<Fragment> fragments;
+        
         static final class TabInfo {
             private final String tag;
             private final Class clss;
@@ -109,6 +177,7 @@ public class MainActivity extends FragmentActivity {
             }
         }
 
+        
         static class DummyTabFactory implements TabHost.TabContentFactory {
             private final Context mContext;
 
@@ -127,12 +196,14 @@ public class MainActivity extends FragmentActivity {
 
         public TabsAdapter(FragmentActivity activity, TabHost tabHost, ViewPager pager) {
             super(activity.getSupportFragmentManager());
+            Log.d(MainActivity.class.getName(), "TabsAdapter constructor is called");
             mContext = activity;
             mTabHost = tabHost;
             mViewPager = pager;
             mTabHost.setOnTabChangedListener(this);
             mViewPager.setAdapter(this);
             mViewPager.setOnPageChangeListener(this);
+            fragments = new ArrayList<Fragment>();
         }
 
         public void addTab(TabHost.TabSpec tabSpec, Class clss, Bundle args) {
@@ -154,7 +225,19 @@ public class MainActivity extends FragmentActivity {
         public Fragment getItem(int position) {
             TabInfo info = mTabs.get(position);
             // Create a new fragment if necessary.
-            return Fragment.instantiate(mContext, info.clss.getName(), info.args);
+            Fragment f = Fragment.instantiate(mContext, info.clss.getName(), info.args);
+            fragments.add(position, f);
+            
+            Log.d(MainActivity.class.getName(), "Creating fragment at position: " + position + ", tag: " + f.getTag() + ", id: " + f.getId() + ", and content: " + f);
+            return f;
+        }
+        
+        public Fragment getFragment(int position)
+        {
+            // TODO: dette er bare workaround for å ikke få nullpointer når landscape endres fra vertical til horisontal.
+            if(fragments != null && !fragments.isEmpty())
+                return fragments.get(position);
+            return null;
         }
 
         @Override
@@ -185,5 +268,6 @@ public class MainActivity extends FragmentActivity {
         @Override
         public void onPageScrollStateChanged(int state) {
         }
+
     }
 }

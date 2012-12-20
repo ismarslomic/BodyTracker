@@ -15,13 +15,12 @@ import no.slomic.body.measurements.R;
 import no.slomic.body.measurements.entities.LengthUnit;
 import no.slomic.body.measurements.entities.Quantity;
 import no.slomic.body.measurements.entities.Unit;
-import no.slomic.body.measurements.utils.DecimalUtils;
 
 // TODO: denne klassen er en duplikat av QuantityWeightPicker
 public class QuantityLengthPicker extends DialogFragment implements DialogInterface.OnClickListener {
 
     private OnQuantitySetListener listener;
-    private NumberPicker wholeNumbersPicker, fractionalNumbersPicker;
+    private NumberPicker meterPicker, centimeterPicker;
     private Quantity quantity;
 
     public QuantityLengthPicker() {
@@ -39,23 +38,26 @@ public class QuantityLengthPicker extends DialogFragment implements DialogInterf
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         LayoutInflater factory = LayoutInflater.from(getActivity());
         final View v = factory.inflate(R.layout.layout_dialog_quantity_picker, null);
-        wholeNumbersPicker = (NumberPicker) v.findViewById(R.id.whole_numbers_picker);
-        fractionalNumbersPicker = (NumberPicker) v.findViewById(R.id.fractional_numbers_picker);
+        meterPicker = (NumberPicker) v.findViewById(R.id.whole_numbers_picker);
+        centimeterPicker = (NumberPicker) v.findViewById(R.id.fractional_numbers_picker);
 
-        wholeNumbersPicker.setMaxValue(2);
-        wholeNumbersPicker.setMinValue(0);
-        wholeNumbersPicker.setFormatter(new WholeNumberFormatter(quantity.getUnit()));
-        wholeNumbersPicker.setWrapSelectorWheel(false);
+        meterPicker.setMaxValue(2);
+        meterPicker.setMinValue(0);
+        meterPicker.setFormatter(new WholeNumberFormatter(quantity.getUnit()));
+        meterPicker.setWrapSelectorWheel(false);
 
-        fractionalNumbersPicker.setMaxValue(999);
-        fractionalNumbersPicker.setMinValue(0);
-        fractionalNumbersPicker.setFormatter(new FractionalNumberFormatter(quantity.getUnit()));
-        fractionalNumbersPicker.setWrapSelectorWheel(false);
-        fractionalNumbersPicker.setOnLongPressUpdateInterval(20);
+        centimeterPicker.setMaxValue(99);
+        centimeterPicker.setMinValue(0);
+        centimeterPicker.setFormatter(new FractionalNumberFormatter(quantity.getUnit()));
+        centimeterPicker.setWrapSelectorWheel(false);
+        centimeterPicker.setOnLongPressUpdateInterval(20);
 
-        wholeNumbersPicker.setValue(DecimalUtils.getWholePartOfValue(quantity.getValue()));
-        fractionalNumbersPicker
-                .setValue(DecimalUtils.getFractionalPartOfValue(quantity.getValue()));
+        int meters = (int) quantity.convert(LengthUnit.M).getValue();
+        int centimeters = (int) quantity.subtract(new Quantity(meters, LengthUnit.M),
+                LengthUnit.REF_UNIT).getValue();
+
+        meterPicker.setValue(meters);
+        centimeterPicker.setValue(centimeters);
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
 
@@ -71,10 +73,14 @@ public class QuantityLengthPicker extends DialogFragment implements DialogInterf
     public void onClick(DialogInterface dialog, int which) {
         switch (which) {
             case DialogInterface.BUTTON_POSITIVE:
-                int wholeNumbers = wholeNumbersPicker.getValue();
-                int fractionalNumbers = fractionalNumbersPicker.getValue();
-                double value = DecimalUtils.getValue(wholeNumbers, fractionalNumbers);
-                quantity = new Quantity(value, quantity.getUnit());
+                int wholeNumbers = meterPicker.getValue();
+                int fractionalNumbers = centimeterPicker.getValue();
+
+                Quantity quantity = new Quantity(wholeNumbers, LengthUnit.M);
+                Quantity centimeters = new Quantity(fractionalNumbers, LengthUnit.CM);
+                quantity = quantity.add(centimeters, LengthUnit.REF_UNIT);
+
+                double value = quantity.getValue();
                 listener.onQuantitySet(quantity);
                 break;
             case DialogInterface.BUTTON_NEGATIVE:
