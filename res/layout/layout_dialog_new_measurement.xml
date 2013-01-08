@@ -24,23 +24,11 @@
         android:layout_marginRight="20dip"
         android:textAppearance="?android:attr/textAppearanceMedium" />
 
-    <TextView
-        android:id="@+id/value_label"
-        android:layout_width="wrap_content"
+    <no.slomic.body.measurements.views.CircularSeekBar
+        android:id="@+id/circularSeekBar"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="20dip"
-        android:layout_marginRight="20dip"
-        android:gravity="left"
-        android:text="@string/label_value"
-        android:textAppearance="?android:attr/textAppearanceMedium" />
-
-    <NumberPicker
-        android:id="@+id/number_picker"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="20dip"
-        android:layout_marginRight="20dip"
-        android:clickable="false"
-        android:gravity="center_horizontal" />
+        android:layout_marginTop="8dp" >
+    </no.slomic.body.measurements.views.CircularSeekBar>
 
 </LinearLayout>

@@ -70,6 +70,7 @@ containing a value of this type.
         public static final int RelativeLayout1=0x7f0b001a;
         public static final int addMeasurement=0x7f0b0020;
         public static final int appNameTextView=0x7f0b001b;
+        public static final int circularSeekBar=0x7f0b0005;
         public static final int current_value=0x7f0b0007;
         public static final int date_button=0x7f0b0004;
         public static final int date_label=0x7f0b0003;
@@ -100,7 +101,6 @@ containing a value of this type.
         public static final int textView3=0x7f0b0012;
         public static final int textView4=0x7f0b0013;
         public static final int toast_layout_root=0x7f0b001d;
-        public static final int value_label=0x7f0b0005;
         public static final int viewpager=0x7f0b001c;
         public static final int weekStat=0x7f0b0021;
         public static final int whole_numbers_picker=0x7f0b000b;

@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.NumberPicker;
 import android.widget.NumberPicker.Formatter;
 import android.widget.Toast;
 
@@ -57,7 +56,7 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
     private static final String TAG_DATE_PICKER = "datePicker";
 
     private String[] mQuantityValues = new String[3901];
-    private NumberPicker mQuantityValuePicker;
+    private CircularSeekBar seekBar = new CircularSeekBar();
 
     public static NewWeightMeasurement newInstance() {
         return new NewWeightMeasurement();
@@ -82,13 +81,6 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
         mDateButton = (Button) v.findViewById(R.id.date_button);
         mDateButton.setOnClickListener(this);
         mDateButton.setText(DateUtils.formatToMediumFormatExtended(mDate));
-
-        mQuantityValuePicker = (NumberPicker) v.findViewById(R.id.number_picker);
-        mQuantityValuePicker.setMaxValue(3900);
-        mQuantityValuePicker.setMinValue(0);
-        mQuantityValuePicker.setFormatter(new WeightQuantityValueNumberFormatter());
-        mQuantityValuePicker.setOnLongPressUpdateInterval(-10);
-        setQuantityValue();
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setTitle(R.string.title_alert_dialog_new_weight);
