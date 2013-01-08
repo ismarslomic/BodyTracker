@@ -24,16 +24,20 @@
             android:key="account_sex"
             android:title="@string/title_account_sex_preferences" />
     </PreferenceCategory>
+   
     <PreferenceCategory android:title="@string/measurement_preferences" >
         <no.slomic.body.measurements.preferences.DatePickerPreference
             android:dialogTitle="@string/dialog_title_period_start_preferences"
             android:key="period_start"
             android:persistent="true"
+            android:defaultValue="Now"
             android:title="@string/title_period_start_preferences" />
+        
         <no.slomic.body.measurements.preferences.DatePickerPreference
             android:dialogTitle="@string/dialog_title_period_end_preferences"
             android:key="period_end"
             android:persistent="true"
+            android:defaultValue="Now"
             android:title="@string/title_period_end_preferences" />
 
         <SwitchPreference
@@ -44,29 +48,31 @@
             android:summary="@string/summary_move_to_next_measurement_preferences"/>
 
         <ListPreference
-            android:defaultValue="International System of Units (SI)"
-            android:dialogTitle="@string/dialog_title_metric_system_preferences"
-            android:entries="@array/metric_system_preference"
-            android:entryValues="@array/metric_system_preference"
-            android:key="metric_system"
-            android:title="@string/title_metric_system_preferences" />
+            android:defaultValue="@string/metric_units"
+            android:dialogTitle="@string/dialog_title_system_of_measurement_preference"
+            android:entries="@array/system_of_measurement_preference"
+            android:entryValues="@array/system_of_measurement_preference"
+            android:key="system_of_measurement"
+            android:title="@string/title_system_of_measurement_preference" />
 
         <SwitchPreference
             android:key="activate_weight_measurement"
             android:switchTextOff="@string/no"
             android:switchTextOn="@string/yes"
-            android:title="@string/title_weight_measurement_preferences" />
+            android:title="@string/title_weight_measurement_preferences"
+            android:defaultValue="true" />
 
         <EditTextPreference
             android:dependency="activate_weight_measurement"
             android:layout="?android:attr/preferenceLayoutChild"
-            android:title="@string/title_weight_goal_preferences" />
+            android:title="@string/title_weight_goal_preferences"/>
 
         <SwitchPreference
             android:key="activate_height_measurement"
             android:switchTextOff="@string/no"
             android:switchTextOn="@string/yes"
-            android:title="@string/title_height_measurement_preferences" />
+            android:title="@string/title_height_measurement_preferences" 
+            android:defaultValue="true" />
 
         <EditTextPreference
             android:dependency="activate_height_measurement"

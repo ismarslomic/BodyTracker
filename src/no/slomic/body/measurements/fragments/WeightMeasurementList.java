@@ -2,8 +2,11 @@
 package no.slomic.body.measurements.fragments;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.os.Bundle;
+import android.os.Environment;
 import android.support.v4.app.ListFragment;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.ActionMode;
 import android.view.Gravity;
@@ -18,31 +21,43 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 import no.slomic.body.measurements.R;
+import no.slomic.body.measurements.activities.SettingsActivity;
 import no.slomic.body.measurements.adapters.MeasurementAdapter;
+import no.slomic.body.measurements.adapters.WeightMeasurementAdapter;
 import no.slomic.body.measurements.entities.Measurement;
-import no.slomic.body.measurements.entities.MeasurementStatistics;
 import no.slomic.body.measurements.entities.Quantity;
-import no.slomic.body.measurements.fragments.NewWeightMeasurement.OnMeasurementSetListener;
+import no.slomic.body.measurements.storage.SQLiteHelper;
 import no.slomic.body.measurements.storage.WeightMeasurementDAO;
 
+import org.joda.time.DateTime;
+
+import java.io.File;
+import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
 //TODO: hele denne klassen bør omstruktureres og avlastes. Spesielt klassene nederst
 //TODO: legg til LoaderManager i denne klassen (http://developer.android.com/guide/components/loaders.html). Se LoaderThrottleSupport i View pager tab test
-
-public class WeightMeasurementList extends ListFragment implements OnMeasurementSetListener {
+//TODO: bruk string.xml i stedet for faste tekster
+public class WeightMeasurementList extends ListFragment {
     private WeightMeasurementDAO weightMeasurementDAO;
     private Activity activity;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        String tag = getTag();
         return (LinearLayout) inflater.inflate(R.layout.layout_measurement_list, container, false);
     }
-    
+
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
+
+        // TODO: denne skaper IllegalStateException: Cant be used with a custom
+        // content view. Finn ut hvordan en slik tekst allikevel kan plasseres
+        // et sted.
+        // setEmptyText("No data. Add measurement by pressing add button.");
+        setHasOptionsMenu(true);
 
         ListView lv = getListView();
         lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
@@ -56,11 +71,10 @@ public class WeightMeasurementList extends ListFragment implements OnMeasurement
 
         weightMeasurementDAO.close();
 
-        MeasurementAdapter wma = new MeasurementAdapter(activity,
+        WeightMeasurementAdapter wma = new WeightMeasurementAdapter(activity,
                 R.layout.layout_measurement_list_row, measurements);
 
         setListAdapter(wma);
-        //setHasOptionsMenu(true);
     }
 
     private class ModeCallback implements ListView.MultiChoiceModeListener {
@@ -131,7 +145,7 @@ public class WeightMeasurementList extends ListFragment implements OnMeasurement
 
     @Override
     public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        //inflater.inflate(R.menu.mainmenu, menu);
+        inflater.inflate(R.menu.mainmenu, menu);
     }
 
     @Override
@@ -141,8 +155,15 @@ public class WeightMeasurementList extends ListFragment implements OnMeasurement
                 showWeeklyStatistics();
                 break;
             case R.id.addMeasurement:
-                NewWeightMeasurement newMeasurementDialog = NewWeightMeasurement.newInstance(this);
+                NewWeightMeasurement newMeasurementDialog = NewWeightMeasurement.newInstance();
                 newMeasurementDialog.show(getFragmentManager(), "newWeightMeasurementDialog");
+                break;
+            case R.id.settings:
+                Intent intent = new Intent(getActivity(), SettingsActivity.class);
+                startActivity(intent);
+                break;
+            case R.id.exportData:
+                exportData();
                 break;
             default:
                 break;
@@ -151,22 +172,55 @@ public class WeightMeasurementList extends ListFragment implements OnMeasurement
         return true;
     }
 
-    private void showWeeklyStatistics() {/*
-                                          * LayoutInflater inflater =
-                                          * getActivity().getLayoutInflater();
-                                          * View layout =
-                                          * inflater.inflate(R.layout
-                                          * .layout_toast_stat, (ViewGroup)
-                                          * getActivity
-                                          * ().findViewById(R.id.toast_layout_root
-                                          * ));
-                                          */
+    /**
+     * 
+     */
+    private void exportData() {
+        File dbFile = getActivity().getDatabasePath(SQLiteHelper.DATABASE_NAME);
+        if (dbFile != null && dbFile.exists()) {
+            Log.d(WeightMeasurementList.class.getName(), "exportData: Found the database file "
+                    + dbFile);
 
+            File exportDir = new File(Environment.getExternalStorageDirectory()
+                    + "/body.measurement.export");
+            if (!exportDir.exists()) {
+                boolean createdExportDir = exportDir.mkdirs();
+                Log.d(WeightMeasurementList.class.getName(), "exportData: The new directory "
+                        + exportDir + " was created: " + createdExportDir);
+            }
+
+            String exportFileName = "Body Measurement_" + DateTime.now() + ".csv";
+            File exportFile = new File(exportDir, exportFileName);
+            try {
+                boolean creteadExportFile = exportFile.createNewFile();
+                Log.d(WeightMeasurementList.class.getName(), "exportData: The new file "
+                        + exportFile + " was created: " + creteadExportFile);
+
+            } catch (IOException e) {
+                Log.e(WeightMeasurementList.class.getName(), e.getMessage());
+            }
+
+            weightMeasurementDAO.open();
+            try {
+                weightMeasurementDAO.exportAll(exportFile);
+            } catch (IOException e) {
+                // TODO Auto-generated catch block
+                Log.e(WeightMeasurementList.class.getName(), e.getMessage());
+            }
+            weightMeasurementDAO.close();
+        }
+
+    }
+
+    private void showWeeklyStatistics() {
         String text;
-        Quantity lastWeek = MeasurementStatistics.lastWeekWeight(activity);
+        weightMeasurementDAO.open();
+        Quantity lastWeek = weightMeasurementDAO.lastWeekStatistics();
+        weightMeasurementDAO.close();
+
         if (lastWeek == null)
             text = "No measurements registered";
-        if (lastWeek.getValue() < 0)
+        else if (lastWeek.getValue() < 0)
             text = "Last week you have reduced weight with " + lastWeek.toString();
         else if (lastWeek.getValue() == 0)
             text = "Equal weight as last week";
@@ -178,8 +232,7 @@ public class WeightMeasurementList extends ListFragment implements OnMeasurement
         toast.show();
     }
 
-    @Override
-    public void onMeasurementSet(Measurement measurement) {
+    public void addMeasurement(Measurement measurement) {
         MeasurementAdapter listAdapter = (MeasurementAdapter) getListAdapter();
         listAdapter.add(measurement);
     }

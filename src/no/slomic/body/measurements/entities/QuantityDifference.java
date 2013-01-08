@@ -1,14 +1,15 @@
+// Restrukturert: ok
 
 package no.slomic.body.measurements.entities;
 
 public class QuantityDifference {
     public static final int EQUAL_TO = 0, GREATER_THAN = 1, LESS_THAN = -1;
-    private Unit unit;
-    private Number value;
+    private Unit mUnit;
+    private Number mValue;
 
     public QuantityDifference(double value, Unit unit) {
-        this.value = value;
-        this.unit = unit;
+        this.mValue = value;
+        this.mUnit = unit;
     }
 
     public QuantityDifference() {
@@ -18,11 +19,11 @@ public class QuantityDifference {
      * @param value the value to set
      */
     public void setValue(Number value) {
-        this.value = value;
+        this.mValue = value;
     }
 
     public void setUnit(Unit unit) {
-        this.unit = unit;
+        this.mUnit = unit;
     }
 
     /**
@@ -34,9 +35,9 @@ public class QuantityDifference {
         int compareTo;
 
         // Set compareTo
-        if (this.value.doubleValue() == 0)
+        if (this.mValue.doubleValue() == 0)
             compareTo = QuantityDifference.EQUAL_TO;
-        else if (this.value.doubleValue() < 0)
+        else if (this.mValue.doubleValue() < 0)
             compareTo = QuantityDifference.LESS_THAN;
         else
             compareTo = QuantityDifference.GREATER_THAN;
@@ -48,14 +49,14 @@ public class QuantityDifference {
      * @return the unit of difference value
      */
     public Unit unit() {
-        return unit;
+        return mUnit;
     }
 
     /**
      * @return the difference value, can be positive or negative
      */
     public Number value() {
-        return value;
+        return mValue;
     }
 
     /*
@@ -64,6 +65,6 @@ public class QuantityDifference {
      */
     @Override
     public String toString() {
-        return this.value + " " + unit;
+        return this.mValue + " " + mUnit;
     }
 }

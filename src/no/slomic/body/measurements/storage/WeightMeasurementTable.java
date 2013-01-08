@@ -1,3 +1,4 @@
+// Restrukturert: ok
 
 package no.slomic.body.measurements.storage;
 
@@ -10,6 +11,8 @@ public class WeightMeasurementTable {
     public static final String COLUMN_QUANTITY_VALUE = "QuantityValue";
     public static final String COLUMN_UNIT_SYMBOL = "UnitSymbol";
     public static final String COLUMN_CREATED_DATE = "CreatedDate";
+    private static final String LOG_TAG = "WeightMeasurementTable";
+    private static final boolean DEBUG = true;
 
     private static final String CREATE_TABLE = "create table " + TABLE_NAME + " ("
             + COLUMN_MEASUREMENT_DATE + " integer primary key, " + COLUMN_QUANTITY_VALUE
@@ -17,12 +20,13 @@ public class WeightMeasurementTable {
 
     public static void onCreate(SQLiteDatabase database) {
         database.execSQL(CREATE_TABLE);
-        Log.d(SQLiteHelper.class.getName(), "Creating new table " + TABLE_NAME);
+        if (DEBUG)
+            Log.d(LOG_TAG, "Creating new table " + TABLE_NAME);
     }
 
     public static void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
-        Log.w(SQLiteHelper.class.getName(), "Upgrading database from version " + oldVersion
-                + " to " + newVersion + ", which will destroy all old data");
+        Log.w(LOG_TAG, "Upgrading database from version " + oldVersion + " to " + newVersion
+                + ", which will destroy all old data");
         db.execSQL("DROP TABLE IF EXISTS " + TABLE_NAME);
         onCreate(db);
     }

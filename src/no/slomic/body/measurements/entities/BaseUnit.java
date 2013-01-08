@@ -1,27 +1,56 @@
+// Restrukturert: ok
 
 package no.slomic.body.measurements.entities;
 
 public abstract class BaseUnit implements Unit {
-    private String symbol; // e.g. "A"
-    private String name; // e.g. "Angstrom"
-    private double multipleFactor; // e.g. 1E-10
+    private String mSymbol; // e.g. "A"
+    private String mName; // e.g. "Angstrom"
+    private String mSymbolPlural;
+    private String mNamePlural; // e.g. "Angstrom"
+    private double mMultipleFactor; // e.g. 1E-10
 
     public BaseUnit(String symbol, String name, double multipleFactor) {
-        this.symbol = symbol;
-        this.name = name;
-        this.multipleFactor = multipleFactor;
+        this.mSymbol = symbol;
+        this.mName = name;
+        this.mSymbolPlural = symbol;
+        this.mNamePlural = name;
+        this.mMultipleFactor = multipleFactor;
+    }
+
+    /**
+     * @param symbol - the symbol of the unit
+     * @param symbolPlural - the symbol of the unit in plural form
+     * @param name - the name of the unit
+     * @param namePlural - the name of the unit in plural form
+     * @param multipleFactor - factor to multiple
+     */
+    public BaseUnit(String symbol, String symbolPlural, String name, String namePlural,
+            double multipleFactor) {
+        this.mSymbol = symbol;
+        this.mName = name;
+        this.mSymbolPlural = symbolPlural;
+        this.mNamePlural = namePlural;
+        this.mMultipleFactor = multipleFactor;
     }
 
     public String getSymbol() {
-        return this.symbol;
+        return this.mSymbol;
+    }
+
+    public String getSymbolPlural() {
+        return this.mSymbolPlural;
     }
 
     public double getMultipleFactor() {
-        return this.multipleFactor;
+        return this.mMultipleFactor;
     }
 
     public String getName() {
-        return this.name;
+        return this.mName;
+    }
+
+    public String getNamePlural() {
+        return this.mNamePlural;
     }
 
     public Unit getSystemUnit() {
@@ -34,12 +63,12 @@ public abstract class BaseUnit implements Unit {
         if (!(that instanceof BaseUnit))
             return false;
         BaseUnit thatUnit = (BaseUnit) that;
-        return this.symbol.equals(thatUnit.symbol);
+        return this.mSymbol.equals(thatUnit.mSymbol);
     }
 
     @Override
     public int hashCode() {
-        return symbol.hashCode();
+        return mSymbol.hashCode();
     }
 
     /*

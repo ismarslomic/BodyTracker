@@ -1,7 +1,9 @@
+// Restrukturert: ok
 
 package no.slomic.body.measurements.preferences;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.os.Parcel;
 import android.os.Parcelable;
 import android.preference.DialogPreference;
@@ -13,166 +15,179 @@ import android.widget.DatePicker;
 import no.slomic.body.measurements.R;
 import no.slomic.body.measurements.utils.DateUtils;
 
-import java.util.Calendar;
+import org.joda.time.DateTime;
 
 public class DatePickerPreference extends DialogPreference implements
         DatePicker.OnDateChangedListener {
 
-    // Real defaults
-    protected final long mDefaultDate;
-
-    // Current value
-    private long mCurrentDate;
-
-    public DatePickerPreference(Context context, AttributeSet attrs) {
+    protected DateTime mSelectedDate;
+    protected DateTime mDefaultDate;
+    private static final String DATE_TIME_NOW = "Now";
+    private DatePicker mDatePicker;
+    
+    public DatePickerPreference(Context context, AttributeSet attrs) 
+    {
         super(context, attrs);
-        mDefaultDate = Calendar.getInstance().getTimeInMillis();
-
     }
 
     @Override
     protected View onCreateDialogView() {
-        // Inflate layout
+        // Inflate the layout
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
                 Context.LAYOUT_INFLATER_SERVICE);
         View view = inflater.inflate(R.layout.layout_dialog_datepicker, null);
-
-        final DatePicker datePicker = (DatePicker) view.findViewById(R.id.date_picker);
-        Calendar c = Calendar.getInstance();
-        c.setTimeInMillis(mCurrentDate);
-        int date = c.get(Calendar.DATE);
-        int month = c.get(Calendar.MONTH);
-        int year = c.get(Calendar.YEAR);
-
-        datePicker.init(year, month, date, this);
-
+       
+        // Initialize new date picker
+        mDatePicker = (DatePicker) view.findViewById(R.id.date_picker);
+        int day = mSelectedDate.getDayOfMonth();
+        int month = mSelectedDate.getMonthOfYear()-1; // date picker months 0-11
+        int year = mSelectedDate.getYear();
+        mDatePicker.init(year, month, day, this);
+        
         return view;
     }
-
+    
     @Override
-    protected void onSetInitialValue(boolean restoreValue, Object defaultValue) {
-        if (restoreValue) {
-            // Restore state
-            mCurrentDate = getPersistedLong(mDefaultDate);
-        } else {
-            // Set state
-            mCurrentDate = (Long) defaultValue;
-            persistLong(mCurrentDate);
-        }
-    }
-
-    /*
-     * @Override protected void onBindView(View view) { super.onBindView(view);
-     * // Set value to the date picker widget final DatePicker datePicker =
-     * (DatePicker) view.findViewById(R.id.date_picker); if (datePicker != null)
-     * { Calendar c = Calendar.getInstance(); c.setTimeInMillis(mCurrentDate);
-     * int date = c.get(Calendar.DATE); int month = c.get(Calendar.MONTH); int
-     * year = c.get(Calendar.YEAR); datePicker.init(year, month, date, this); }
-     * }
-     */
-
-    @Override
-    protected void onDialogClosed(boolean positiveResult) {
-        super.onDialogClosed(positiveResult);
-
-        // Return if change was cancelled
-        if (!positiveResult) {
-            return;
-        }
-
-        // Persist current value if needed
-        if (shouldPersist()) {
-            persistLong(mCurrentDate);
-        }
-
-        // Notify activity about changes (to update preference summary line)
-        notifyChanged();
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see
-     * android.preference.DialogPreference#onRestoreInstanceState(android.os
-     * .Parcelable)
-     */
-    @Override
-    protected void onRestoreInstanceState(Parcelable state) {
-        if (!(state instanceof SavedState)) {
-            super.onRestoreInstanceState(state);
-            return;
-        }
-
-        SavedState ss = (SavedState) state;
-        super.onRestoreInstanceState(ss.getSuperState());
-        // end
-
-        this.mCurrentDate = ss.stateToSave;
-        notifyChanged();
-    }
-
-    /*
-     * (non-Javadoc)
-     * @see android.preference.DialogPreference#onSaveInstanceState()
-     */
-    @Override
-    protected Parcelable onSaveInstanceState() {
-        Parcelable superState = super.onSaveInstanceState();
-
-        SavedState ss = new SavedState(superState);
-        ss.stateToSave = this.mCurrentDate;
-
-        return ss;
-    }
-
-    @Override
-    public CharSequence getSummary() {
+    public CharSequence getSummary() 
+    {
         String summary = "";
         if (isPersistent()) {
-            long persistentDate = getPersistedLong(mCurrentDate);
-            Calendar c = Calendar.getInstance();
-            c.setTimeInMillis(persistentDate);
-            summary = DateUtils.formatToMediumFormat(c);
+            long persistedDateInMillis = getPersistedLong(mSelectedDate.getMillis());
+            DateTime persistedDate = new DateTime(persistedDateInMillis);
+            summary = DateUtils.formatToMediumFormat(persistedDate);
         }
 
         return summary;
     }
 
-    // TODO: det er strengt tatt ikke nødvendig å lagre verdien hver gang den
-    // oppdateres, kan bare hente ut ved lukking av dialog
-    /*
-     * (non-Javadoc)
-     * @see
-     * android.widget.DatePicker.OnDateChangedListener#onDateChanged(android
-     * .widget.DatePicker, int, int, int)
-     */
     @Override
-    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
-        Calendar c = Calendar.getInstance();
-        c.set(year, monthOfYear, dayOfMonth);
+    protected void onSetInitialValue(boolean restorePersistedValue, Object defaultValue) 
+    {
+        if (restorePersistedValue) // user has already set date, get persisted value
+        {
+            // Restore existing state
+            long persistedDate = this.getPersistedLong(mDefaultDate.getMillis());
+            mSelectedDate = new DateTime(persistedDate);
+        } 
+        else 
+        {
+            // Set default state from the XML attribute
+            long defaultDate = (Long) defaultValue;
+            mSelectedDate = new DateTime(defaultDate);
+            persistLong(defaultDate);
+        }
+    }
+    
+    @Override
+    protected Object onGetDefaultValue(TypedArray a, int index) 
+    {
+        String defaultDateSpecifiedInPref = a.getString(index);
+        
+        if(defaultDateSpecifiedInPref != null) // if the default date is specified in the preferences
+        {
+            if(defaultDateSpecifiedInPref.equals(DATE_TIME_NOW)) // if todays date should be as default
+                mDefaultDate = DateTime.now();
+            
+            else // given date is specificed in the preferences
+            {
+                try // try to parse it
+                {
+                    mDefaultDate = DateTime.parse(defaultDateSpecifiedInPref, DateUtils.SHORT_DATE_FORMAT);
+                }
+                catch(Exception e) // if the parsing fails, just initiate the defafult date variable
+                {
+                    mDefaultDate = new DateTime();
+                }
+             }
+        }
+        else // no default date is specified in the preferences
+        {
+            mDefaultDate = new DateTime();
+        }
+        
+        return mDefaultDate.getMillis(); // return the date in millisecunds
+    }
+    
+    @Override
+    protected void onDialogClosed(boolean positiveResult) 
+    {
+        super.onDialogClosed(positiveResult);
 
-        mCurrentDate = c.getTimeInMillis();
+        // If the user clicks CANCEL
+        if (!positiveResult) {
+            return;
+        }
+
+        // Persist current value if needed
+        if (shouldPersist()) 
+        {
+            persistLong(mSelectedDate.getMillis());
+        }
+
+        // Notify activity about changes (to update preference summary line)
         notifyChanged();
     }
+    
+    @Override
+    protected Parcelable onSaveInstanceState() 
+    {
+        Parcelable superState = super.onSaveInstanceState();
 
-    static class SavedState extends BaseSavedState {
+        SavedState savedState = new SavedState(superState);
+        savedState.stateToSave = this.mSelectedDate.getMillis();
+
+        return savedState;
+    }
+    
+    @Override
+    protected void onRestoreInstanceState(Parcelable state) 
+    {
+        if (!(state instanceof SavedState)) {
+            super.onRestoreInstanceState(state);
+            return;
+        }
+
+        // get saved state
+        SavedState savedState = (SavedState) state;
+        super.onRestoreInstanceState(savedState.getSuperState());
+
+        // set saved state to the class variables
+        this.mSelectedDate = new DateTime(savedState.stateToSave);
+        
+        // is this necessary?
+        //notifyChanged();
+    }
+    
+    @Override
+    public void onDateChanged(DatePicker view, int year, int monthOfYear, int dayOfMonth) 
+    {
+        monthOfYear++; // Joda Datetime months 1-12, picker 0-11
+        mSelectedDate = new DateTime(year, monthOfYear, dayOfMonth, 0, 0);
+    }
+
+    // More information at http://developer.android.com/guide/topics/ui/settings.html#CustomSaveState
+    private static class SavedState extends BaseSavedState {
+        // Member that holds the setting's value
         long stateToSave;
 
         SavedState(Parcelable superState) {
             super(superState);
         }
 
-        private SavedState(Parcel in) {
-            super(in);
-            this.stateToSave = in.readLong();
+        private SavedState(Parcel source) {
+            super(source);
+            // Get the current preference's value
+            this.stateToSave = source.readLong();
         }
 
         @Override
-        public void writeToParcel(Parcel out, int flags) {
-            super.writeToParcel(out, flags);
-            out.writeLong(this.stateToSave);
+        public void writeToParcel(Parcel dest, int flags) {
+            super.writeToParcel(dest, flags);
+            // Write the preference's value
+            dest.writeLong(this.stateToSave);
         }
 
-        // required field that makes Parcelables from a Parcel
+        // Standard creator object using an instance of this class
         public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
@@ -183,5 +198,4 @@ public class DatePickerPreference extends DialogPreference implements
             }
         };
     }
-
 }

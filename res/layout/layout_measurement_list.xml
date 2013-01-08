@@ -12,4 +12,10 @@
         android1:layout_height="wrap_content" >
     </ListView>
 
+    <TextView
+        android:id="@android:id/empty"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:text="No data. Add new measurement." />
+
 </LinearLayout>

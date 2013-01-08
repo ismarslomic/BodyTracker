@@ -1,3 +1,4 @@
+// Restrukturert: ok
 
 package no.slomic.body.measurements.entities;
 

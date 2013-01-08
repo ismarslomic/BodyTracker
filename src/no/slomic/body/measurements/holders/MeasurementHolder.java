@@ -1,3 +1,4 @@
+// Restrukturert: ok
 
 package no.slomic.body.measurements.holders;
 
@@ -8,39 +9,39 @@ import android.widget.TextView;
 import no.slomic.body.measurements.R;
 
 public class MeasurementHolder {
-    private View row;
-    private TextView measurementValue = null, measurementDate = null, diffValue = null;
-    private ImageView diffIcon = null;
+    private View mRow;
+    private TextView mMeasurementValue = null, mMeasurementDate = null, mDiffValue = null;
+    private ImageView mDiffIcon = null;
 
     public MeasurementHolder(View row) {
-        this.row = row;
+        this.mRow = row;
     }
 
     public TextView getMeasurementValue() {
-        if (this.measurementValue == null) {
-            this.measurementValue = (TextView) row.findViewById(R.id.measurement_value);
+        if (this.mMeasurementValue == null) {
+            this.mMeasurementValue = (TextView) mRow.findViewById(R.id.measurement_value);
         }
-        return this.measurementValue;
+        return this.mMeasurementValue;
     }
 
     public TextView getMeasurementDate() {
-        if (this.measurementDate == null) {
-            this.measurementDate = (TextView) row.findViewById(R.id.measurement_date);
+        if (this.mMeasurementDate == null) {
+            this.mMeasurementDate = (TextView) mRow.findViewById(R.id.measurement_date);
         }
-        return this.measurementDate;
+        return this.mMeasurementDate;
     }
 
     public TextView getDiffValue() {
-        if (this.diffValue == null) {
-            this.diffValue = (TextView) row.findViewById(R.id.diff_value);
+        if (this.mDiffValue == null) {
+            this.mDiffValue = (TextView) mRow.findViewById(R.id.diff_value);
         }
-        return this.diffValue;
+        return this.mDiffValue;
     }
 
     public ImageView getDiffIcon() {
-        if (this.diffIcon == null) {
-            this.diffIcon = (ImageView) row.findViewById(R.id.diff_icon);
+        if (this.mDiffIcon == null) {
+            this.mDiffIcon = (ImageView) mRow.findViewById(R.id.diff_icon);
         }
-        return this.diffIcon;
+        return this.mDiffIcon;
     }
 }

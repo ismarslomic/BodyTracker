@@ -13,8 +13,9 @@ import no.slomic.body.measurements.entities.Measurement;
 import no.slomic.body.measurements.entities.Quantity;
 import no.slomic.body.measurements.entities.Unit;
 
+import org.joda.time.DateTime;
+
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -41,22 +42,19 @@ public class HeightMeasurementDAO {
     }
 
     public Measurement create(Measurement newMeasurement) {
-        long l = newMeasurement.getDate().getTimeInMillis();
+        long l = newMeasurement.getDate().getMillis();
         ContentValues values = new ContentValues();
         values.put(HeightMeasurementTable.COLUMN_QUANTITY_VALUE, newMeasurement.getQuantity()
                 .getValue());
         values.put(HeightMeasurementTable.COLUMN_MEASUREMENT_DATE, l);
         values.put(HeightMeasurementTable.COLUMN_UNIT_SYMBOL, newMeasurement.getQuantity()
                 .getUnit().getSymbol());
-        values.put(HeightMeasurementTable.COLUMN_CREATED_DATE, Calendar.getInstance()
-                .getTimeInMillis());
+        values.put(HeightMeasurementTable.COLUMN_CREATED_DATE, DateTime.now().getMillis());
 
         database.insert(HeightMeasurementTable.TABLE_NAME, null, values);
-        Cursor cursor = database
-                .query(HeightMeasurementTable.TABLE_NAME, allColumns,
-                        HeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " = '"
-                                + newMeasurement.getDate().getTimeInMillis() + "' ", null, null,
-                        null, null);
+        Cursor cursor = database.query(HeightMeasurementTable.TABLE_NAME, allColumns,
+                HeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " = '"
+                        + newMeasurement.getDate().getMillis() + "' ", null, null, null, null);
         cursor.moveToFirst();
 
         newMeasurement = cursorToMeasurement(cursor);
@@ -70,7 +68,7 @@ public class HeightMeasurementDAO {
     public void delete(Measurement measurement) {
         database.delete(HeightMeasurementTable.TABLE_NAME,
                 HeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " = "
-                        + measurement.getDate().getTimeInMillis() + " ", null);
+                        + measurement.getDate().getMillis() + " ", null);
 
         Log.d(SQLiteHelper.class.getName(), "Deleted Height Measurement " + measurement);
     }
@@ -103,14 +101,12 @@ public class HeightMeasurementDAO {
     }
 
     public TreeSet<Measurement> getAllLastWeek() {
-        Calendar today = Calendar.getInstance();
-        Calendar sevenDaysAgo = Calendar.getInstance();
-        sevenDaysAgo.add(Calendar.DATE, -8);
+        DateTime today = DateTime.now();
+        DateTime sevenDaysAgo = today.minusDays(8);
 
         String selection = HeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " >= "
-                + sevenDaysAgo.getTimeInMillis() + " AND "
-                + HeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " <= " + today.getTimeInMillis()
-                + " ";
+                + sevenDaysAgo.getMillis() + " AND "
+                + HeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " <= " + today.getMillis() + " ";
 
         Log.d("DAO", "selection = " + selection);
 
@@ -160,8 +156,7 @@ public class HeightMeasurementDAO {
     private Measurement cursorToMeasurement(Cursor cursor) {
         // Measurement date
         long milliseconds = cursor.getLong(0);
-        Calendar measurementDate = Calendar.getInstance();
-        measurementDate.setTimeInMillis(milliseconds);
+        DateTime measurementDate = new DateTime(milliseconds);
 
         // Quantity value
         double value = cursor.getDouble(1);

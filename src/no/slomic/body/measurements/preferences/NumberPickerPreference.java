@@ -16,7 +16,6 @@ public class NumberPickerPreference extends DialogPreference implements
         NumberPicker.OnValueChangeListener {
 
     // Namespaces to read attributes
-    private static final String PREFERENCE_NS = "http://schemas.android.com/apk/res/no.slomic.body.measurements";
     private static final String ANDROID_NS = "http://schemas.android.com/apk/res/android";
 
     // Attribute names
@@ -45,8 +44,10 @@ public class NumberPickerPreference extends DialogPreference implements
         super(context, attrs);
 
         // Read parameters from attributes
-        mMinValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MIN_VALUE, DEFAULT_MIN_VALUE);
-        mMaxValue = attrs.getAttributeIntValue(PREFERENCE_NS, ATTR_MAX_VALUE, DEFAULT_MAX_VALUE);
+        mMinValue = attrs.getAttributeIntValue(StaticPreferences.APP_PREFERENCE_NS, ATTR_MIN_VALUE,
+                DEFAULT_MIN_VALUE);
+        mMaxValue = attrs.getAttributeIntValue(StaticPreferences.APP_PREFERENCE_NS, ATTR_MAX_VALUE,
+                DEFAULT_MAX_VALUE);
         mDefaultValue = attrs.getAttributeIntValue(ANDROID_NS, ATTR_DEFAULT_VALUE,
                 DEFAULT_CURRENT_VALUE);
     }

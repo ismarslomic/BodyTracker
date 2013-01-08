@@ -1,23 +1,39 @@
 <resources>
 
-    <string name="app_name">bdTracker</string>
+    <string name="app_name">Body tracker</string>
     <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
+    <string name="menu_import_data">Import data</string>
+    <string name="menu_export_data">Export data</string>
     <string name="gen_placeholder">View placeholder</string>
+    <string name="yesterday">Yesterday</string>
+    <string name="today">Today</string>
+    <string name="tomorrow">Tomorrow</string>
 
     <string-array name="view_switch_list">
         <item>Table view</item>
         <item>Chart view</item>
     </string-array>
     <string-array name="account_sex_preference">
-        <item>Male</item>
-        <item>Female</item>
+        <item>@string/sex_male</item>
+        <item>@string/sex_female</item>
     </string-array>
-    <string-array name="metric_system_preference">
-        <item>International System of Units (SI)</item>
-        <item>English Units</item>
+    
+    <!-- System of measurement preference strings -->
+    <string-array name="system_of_measurement_preference">
+        <item>@string/metric_units</item>
+        <item>@string/imperial_units</item>
     </string-array>
+    <string name="metric_units">Metric units (kg, m)</string>
+    <string name="imperial_units">Imperial units (lbs, ft)</string>
+    <string name="dialog_title_system_of_measurement_preference">System of measurement</string>
+    <string name="title_system_of_measurement_preference">System of measurement</string>
 
+    <string name="title_alert_dialog_new_weight">Add weight measurement</string>
+    <string name="message_toast_add_new_measurement_positive">Measurement added.</string>
+    <string name="message_toast_add_new_measurement_negative">Invalid values. No new measurement added.</string>
+    <string name="sex_female">Female</string>
+    <string name="sex_male">Male</string>
     <string name="title_tab_chest">Chest</string>
     <string name="title_tab_waist">Waist</string>
     <string name="title_tab_weight">Weight</string>
@@ -60,12 +76,14 @@
     <string name="title_period_start_preferences">Period starts</string>
     <string name="dialog_title_period_end_preferences">Period end date</string>
     <string name="title_period_end_preferences">Period ends</string>
-    <string name="dialog_title_metric_system_preferences">Metric system</string>
-    <string name="title_metric_system_preferences">Metric system</string>
+
     <string name="no">NO</string>
     <string name="yes">YES</string>
-    
     <string name="title_move_to_next_measurement_preferences">Move to next measurement</string>
     <string name="summary_move_to_next_measurement_preferences">Automatically after new registration</string>
 
+    <!--  Dialog - New Measurement -->
+    <string name="label_date">Date</string>
+    <string name="label_value">Value</string>
+    
 </resources>

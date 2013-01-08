@@ -1,62 +1,63 @@
+// Restrukturert: ok
 
 package no.slomic.body.measurements.entities;
 
-import java.util.Calendar;
+import org.joda.time.DateTime;
 
 public class Measurement implements Comparable<Measurement> {
-    private Quantity quantity;
-    private Calendar date;
-    private Measurement previous;
+    private Quantity mQuantity;
+    private DateTime mDate;
+    private Measurement mPrevious;
 
     /**
      * @param quantity the value of the measurement
      * @param date the date when measurement were taken
      */
-    public Measurement(Quantity quantity, Calendar date) {
-        this.quantity = quantity;
-        this.date = date;
+    public Measurement(Quantity quantity, DateTime date) {
+        this.mQuantity = quantity;
+        this.mDate = date;
     }
 
     /**
      * @return the previous measurement
      */
     public Measurement getPrevious() {
-        return previous;
+        return mPrevious;
     }
 
     /**
      * @param previous measurement
      */
     public void setPrevious(Measurement previous) {
-        this.previous = previous;
+        this.mPrevious = previous;
     }
 
     /**
      * @return the quantity
      */
     public Quantity getQuantity() {
-        return quantity;
+        return mQuantity;
     }
 
     /**
      * @param quantity the quantity to set
      */
     public void setQuantity(Quantity quantity) {
-        this.quantity = quantity;
+        this.mQuantity = quantity;
     }
 
     /**
      * @return the measurement date
      */
-    public Calendar getDate() {
-        return date;
+    public DateTime getDate() {
+        return mDate;
     }
 
     /**
      * @param measurement date the date to set
      */
-    public void setDate(Calendar date) {
-        this.date = date;
+    public void setDate(DateTime date) {
+        this.mDate = date;
     }
 
     /*

@@ -1,3 +1,4 @@
+// Restrukturert: ok
 
 package no.slomic.body.measurements.storage;
 
@@ -29,5 +30,4 @@ public class SQLiteHelper extends SQLiteOpenHelper {
         WeightMeasurementTable.onUpgrade(db, oldVersion, newVersion);
         HeightMeasurementTable.onUpgrade(db, oldVersion, newVersion);
     }
-
 }

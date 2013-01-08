@@ -1,22 +1,20 @@
+// Restrukturert: OK
 
 package no.slomic.body.measurements.tabs;
 
 import android.os.Bundle;
-import android.support.v4.app.Fragment;
 
 /**
  * Maintains extrinsic info of a tab's construct
  */
 public class TabInfo {
-    public String tag;
-    private Class<?> clss;
-    private Bundle args;
-    private Fragment fragment;
+    public final String tag;
+    public final Class clss;
+    public final Bundle args;
 
-    public TabInfo(String tag, Class<?> clazz, Bundle args) {
-        this.tag = tag;
-        this.clss = clazz;
-        this.args = args;
+    TabInfo(String _tag, Class _class, Bundle _args) {
+        tag = _tag;
+        clss = _class;
+        args = _args;
     }
-
 }

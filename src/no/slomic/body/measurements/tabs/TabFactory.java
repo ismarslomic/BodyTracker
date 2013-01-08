@@ -1,3 +1,4 @@
+// Restrukturert: OK
 
 package no.slomic.body.measurements.tabs;
 
@@ -30,5 +31,4 @@ public class TabFactory implements TabContentFactory {
         v.setMinimumHeight(0);
         return v;
     }
-
 }

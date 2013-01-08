@@ -17,6 +17,20 @@
         android:visible="true">
     </item>
     <item
+        android:id="@+id/importData"
+        android:enabled="true"
+        android:showAsAction="collapseActionView"
+        android:title="@string/menu_import_data"
+        android:visible="true">
+    </item>
+    <item
+        android:id="@+id/exportData"
+        android:enabled="true"
+        android:showAsAction="collapseActionView"
+        android:title="@string/menu_export_data"
+        android:visible="true">
+    </item>
+    <item
         android:id="@+id/settings"
         android:enabled="true"
         android:showAsAction="collapseActionView"

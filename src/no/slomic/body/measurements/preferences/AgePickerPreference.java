@@ -1,19 +1,16 @@
-/**
- * 
- */
+// Restrukturert: ok
 
 package no.slomic.body.measurements.preferences;
 
 import android.content.Context;
+import android.content.res.TypedArray;
 import android.util.AttributeSet;
 
 import no.slomic.body.measurements.utils.DateUtils;
 
-/**
- * @author ismar.slomic
- */
-public class AgePickerPreference extends DatePickerPreference {
+import org.joda.time.DateTime;
 
+public class AgePickerPreference extends DatePickerPreference {
 
     /**
      * @param context
@@ -23,16 +20,33 @@ public class AgePickerPreference extends DatePickerPreference {
         super(context, attrs);
     }
 
-    /*
-     * (non-Javadoc)
-     * @see
-     * no.slomic.body.measurements.preferences.NumberPickerPreference#getSummary
-     * ()
-     */
     @Override
     public CharSequence getSummary() {
-        long birtdateInMillis = getPersistedLong(super.mDefaultDate);
+        long birtdateInMillis = getPersistedLong(mSelectedDate.getMillis());
         return DateUtils.getAge(birtdateInMillis, getContext().getResources());
     }
 
+    @Override
+    protected Object onGetDefaultValue(TypedArray a, int index) {
+        String defaultAgeSpecifiedInPref = a.getString(index);
+
+        if (defaultAgeSpecifiedInPref != null) // if the default age is
+                                               // specified in the preferences
+        {
+            try // try to parse it
+            {
+                int age = Integer.parseInt(defaultAgeSpecifiedInPref);
+                mDefaultDate = DateTime.now().minusYears(age);
+            } catch (Exception e) // if the parsing fails, just initiate the
+                                  // default date variable
+            {
+                mDefaultDate = new DateTime();
+            }
+        } else // no default age is specified in the preferences
+        {
+            mDefaultDate = new DateTime();
+        }
+
+        return mDefaultDate.getMillis(); // return the date in millisecunds
+    }
 }

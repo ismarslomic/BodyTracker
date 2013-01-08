@@ -1,27 +1,28 @@
-//Restrukturert: OK
+// Restrukturert: ok
 
-package no.slomic.body.measurements.activities;
+package no.slomic.body.measurements.fragments;
 
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
-import android.preference.PreferenceActivity;
+import android.preference.PreferenceFragment;
 
 import no.slomic.body.measurements.R;
 
 /**
- * Check /res/xml/preferences.xml file preferences and keys (variables below)
+ * @author ismar.slomic
  */
-
-public class SettingsActivity extends PreferenceActivity implements
-        OnSharedPreferenceChangeListener {
+public class SettingsFragment extends PreferenceFragment implements
+        OnSharedPreferenceChangeListener
+{
+    // Check /res/xml/preferences.xml file for this preference
     public static final String PREFERENCE_ACCOUNT_AGE_KEY = "account_age";
     public static final String PREFERENCE_ACCOUNT_NAME_KEY = "account_name";
     public static final String PREFERENCE_ACCOUNT_SEX_KEY = "account_sex";
     public static final String PREFERENCE_PERIOD_START_KEY = "period_start";
     public static final String PREFERENCE_PERIOD_END_KEY = "period_end";
-    public static final String PREFERENCE_METRIC_SYSTEM_KEY = "system_of_measurement";
+    public static final String PREFERENCE_METRIC_SYSTEM_KEY = "metric_system";
     public static final String PREFERENCE_ACTIVATE_HEIGHT_MEASUREMENT = "activate_height_measurement";
     public static final String PREFERENCE_ACTIVATE_WEIGHT_MEASUREMENT = "activate_weight_measurement";
 
@@ -60,24 +61,4 @@ public class SettingsActivity extends PreferenceActivity implements
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        // Unregister from changes
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(
-                this);
-        super.onDestroy();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        getPreferenceScreen().getSharedPreferences().registerOnSharedPreferenceChangeListener(this);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        getPreferenceScreen().getSharedPreferences().unregisterOnSharedPreferenceChangeListener(
-                this);
-    }
 }
