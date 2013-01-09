@@ -1,4 +1,4 @@
-//Restrukturert: OK
+// Restrukturert: OK
 
 package no.slomic.body.measurements.activities;
 

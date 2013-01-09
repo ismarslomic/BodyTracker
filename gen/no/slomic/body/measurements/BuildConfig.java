@@ -1,4 +1,5 @@
 /** Automatically generated file. DO NOT MODIFY */
+
 package no.slomic.body.measurements;
 
 public final class BuildConfig {
