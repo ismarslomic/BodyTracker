@@ -22,7 +22,7 @@ public class AgePickerPreference extends DatePickerPreference {
 
     @Override
     public CharSequence getSummary() {
-        long birtdateInMillis = getPersistedLong(mSelectedDate.getMillis());
+        long birtdateInMillis = getPersistedLong(this.mSelectedDate.getMillis());
         return DateUtils.getAge(birtdateInMillis, getContext().getResources());
     }
 
@@ -36,17 +36,17 @@ public class AgePickerPreference extends DatePickerPreference {
             try // try to parse it
             {
                 int age = Integer.parseInt(defaultAgeSpecifiedInPref);
-                mDefaultDate = DateTime.now().minusYears(age);
+                this.mDefaultDate = DateTime.now().minusYears(age);
             } catch (Exception e) // if the parsing fails, just initiate the
                                   // default date variable
             {
-                mDefaultDate = new DateTime();
+                this.mDefaultDate = new DateTime();
             }
         } else // no default age is specified in the preferences
         {
-            mDefaultDate = new DateTime();
+            this.mDefaultDate = new DateTime();
         }
 
-        return mDefaultDate.getMillis(); // return the date in millisecunds
+        return this.mDefaultDate.getMillis(); // return the date in millisecunds
     }
 }

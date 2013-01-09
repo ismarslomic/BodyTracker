@@ -36,11 +36,11 @@ public class Quantity {
      */
     @Override
     public String toString() {
-        return DECIMAL_FORMAT.format(getValue()) + " " + mUnit;
+        return DECIMAL_FORMAT.format(getValue()) + " " + this.mUnit;
     }
 
     public double showInUnits(Unit u) {
-        return mValueInRefUnit / u.getMultipleFactor();
+        return this.mValueInRefUnit / u.getMultipleFactor();
     }
 
     public String roundValue(int precision) {
@@ -131,6 +131,6 @@ public class Quantity {
     }
 
     public Quantity convert(Unit newUnit) {
-        return new Quantity(mValueInRefUnit / newUnit.getMultipleFactor(), newUnit);
+        return new Quantity(this.mValueInRefUnit / newUnit.getMultipleFactor(), newUnit);
     }
 }

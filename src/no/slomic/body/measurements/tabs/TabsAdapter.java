@@ -33,32 +33,32 @@ public class TabsAdapter extends FragmentPagerAdapter implements TabHost.OnTabCh
 
     public TabsAdapter(FragmentActivity activity, TabHost tabHost, ViewPager pager) {
         super(activity.getSupportFragmentManager());
-        mContext = activity;
-        mTabHost = tabHost;
-        mViewPager = pager;
-        mTabHost.setOnTabChangedListener(this);
-        mViewPager.setAdapter(this);
-        mViewPager.setOnPageChangeListener(this);
+        this.mContext = activity;
+        this.mTabHost = tabHost;
+        this.mViewPager = pager;
+        this.mTabHost.setOnTabChangedListener(this);
+        this.mViewPager.setAdapter(this);
+        this.mViewPager.setOnPageChangeListener(this);
     }
 
     public void clearAll() {
-        mTabHost.clearAllTabs();
-        mTabs.clear();
+        this.mTabHost.clearAllTabs();
+        this.mTabs.clear();
     }
 
     public void addTab(TabHost.TabSpec tabSpec, Class clss, Bundle args) {
-        tabSpec.setContent(new TabFactory(mContext));
+        tabSpec.setContent(new TabFactory(this.mContext));
         String tag = tabSpec.getTag();
 
         TabInfo info = new TabInfo(tag, clss, args);
-        mTabs.add(info);
-        mTabHost.addTab(tabSpec);
+        this.mTabs.add(info);
+        this.mTabHost.addTab(tabSpec);
         notifyDataSetChanged();
     }
 
     @Override
     public int getCount() {
-        return mTabs.size();
+        return this.mTabs.size();
     }
 
     /**
@@ -70,8 +70,8 @@ public class TabsAdapter extends FragmentPagerAdapter implements TabHost.OnTabCh
      */
     @Override
     public Fragment getItem(int position) {
-        TabInfo info = mTabs.get(position);
-        Fragment f = Fragment.instantiate(mContext, info.clss.getName(), info.args);
+        TabInfo info = this.mTabs.get(position);
+        Fragment f = Fragment.instantiate(this.mContext, info.clss.getName(), info.args);
         return f;
     }
 
@@ -84,14 +84,14 @@ public class TabsAdapter extends FragmentPagerAdapter implements TabHost.OnTabCh
      * @return tag of the fragment
      */
     public String getFragmentTag(int position) {
-        return "android:switcher:" + mViewPager.getId() + ":" + position;
+        return "android:switcher:" + this.mViewPager.getId() + ":" + position;
     }
 
     @Override
     public void onTabChanged(String tabId) {
         // called when the user clicks on a tab.
-        int position = mTabHost.getCurrentTab();
-        mViewPager.setCurrentItem(position);
+        int position = this.mTabHost.getCurrentTab();
+        this.mViewPager.setCurrentItem(position);
     }
 
     @Override
@@ -105,10 +105,10 @@ public class TabsAdapter extends FragmentPagerAdapter implements TabHost.OnTabCh
         // The jerk.
         // This hack tries to prevent this from pulling focus out of our
         // ViewPager.
-        TabWidget widget = mTabHost.getTabWidget();
+        TabWidget widget = this.mTabHost.getTabWidget();
         int oldFocusability = widget.getDescendantFocusability();
         widget.setDescendantFocusability(ViewGroup.FOCUS_BLOCK_DESCENDANTS);
-        mTabHost.setCurrentTab(position);
+        this.mTabHost.setCurrentTab(position);
         widget.setDescendantFocusability(oldFocusability);
     }
 

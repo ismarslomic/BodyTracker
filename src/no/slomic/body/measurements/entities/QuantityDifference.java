@@ -49,14 +49,14 @@ public class QuantityDifference {
      * @return the unit of difference value
      */
     public Unit unit() {
-        return mUnit;
+        return this.mUnit;
     }
 
     /**
      * @return the difference value, can be positive or negative
      */
     public Number value() {
-        return mValue;
+        return this.mValue;
     }
 
     /*
@@ -65,6 +65,6 @@ public class QuantityDifference {
      */
     @Override
     public String toString() {
-        return this.mValue + " " + mUnit;
+        return this.mValue + " " + this.mUnit;
     }
 }

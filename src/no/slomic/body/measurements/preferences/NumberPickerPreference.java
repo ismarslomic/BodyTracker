@@ -44,18 +44,18 @@ public class NumberPickerPreference extends DialogPreference implements
         super(context, attrs);
 
         // Read parameters from attributes
-        mMinValue = attrs.getAttributeIntValue(StaticPreferences.APP_PREFERENCE_NS, ATTR_MIN_VALUE,
-                DEFAULT_MIN_VALUE);
-        mMaxValue = attrs.getAttributeIntValue(StaticPreferences.APP_PREFERENCE_NS, ATTR_MAX_VALUE,
-                DEFAULT_MAX_VALUE);
-        mDefaultValue = attrs.getAttributeIntValue(ANDROID_NS, ATTR_DEFAULT_VALUE,
+        this.mMinValue = attrs.getAttributeIntValue(StaticPreferences.APP_PREFERENCE_NS,
+                ATTR_MIN_VALUE, DEFAULT_MIN_VALUE);
+        this.mMaxValue = attrs.getAttributeIntValue(StaticPreferences.APP_PREFERENCE_NS,
+                ATTR_MAX_VALUE, DEFAULT_MAX_VALUE);
+        this.mDefaultValue = attrs.getAttributeIntValue(ANDROID_NS, ATTR_DEFAULT_VALUE,
                 DEFAULT_CURRENT_VALUE);
     }
 
     @Override
     protected View onCreateDialogView() {
         // Get current value from preferences
-        mCurrentValue = getPersistedInt(mDefaultValue);
+        this.mCurrentValue = getPersistedInt(this.mDefaultValue);
 
         // Inflate layout
         LayoutInflater inflater = (LayoutInflater) getContext().getSystemService(
@@ -63,13 +63,13 @@ public class NumberPickerPreference extends DialogPreference implements
         View view = inflater.inflate(R.layout.layout_dialog_numberpicker, null);
 
         // Setup NumberPicker
-        mNumberPicker = (NumberPicker) view.findViewById(R.id.number_picker);
-        mNumberPicker.setOnValueChangedListener(this);
+        this.mNumberPicker = (NumberPicker) view.findViewById(R.id.number_picker);
+        this.mNumberPicker.setOnValueChangedListener(this);
 
         // Setup min, max and current value
-        mNumberPicker.setMaxValue(mMaxValue);
-        mNumberPicker.setMinValue(mMinValue);
-        mNumberPicker.setValue(mCurrentValue);
+        this.mNumberPicker.setMaxValue(this.mMaxValue);
+        this.mNumberPicker.setMinValue(this.mMinValue);
+        this.mNumberPicker.setValue(this.mCurrentValue);
 
         return view;
     }
@@ -85,7 +85,7 @@ public class NumberPickerPreference extends DialogPreference implements
 
         // Persist current value if needed
         if (shouldPersist()) {
-            persistInt(mCurrentValue);
+            persistInt(this.mCurrentValue);
         }
 
         // Notify activity about changes (to update preference summary line)
@@ -110,7 +110,7 @@ public class NumberPickerPreference extends DialogPreference implements
         // end
 
         this.mCurrentValue = ss.stateToSave;
-        mNumberPicker.setValue(mCurrentValue);
+        this.mNumberPicker.setValue(this.mCurrentValue);
 
     }
 
@@ -132,7 +132,7 @@ public class NumberPickerPreference extends DialogPreference implements
     public CharSequence getSummary() {
         // Format summary string with current value
         String summary = super.getSummary().toString();
-        int value = getPersistedInt(mDefaultValue);
+        int value = getPersistedInt(this.mDefaultValue);
         return String.format(summary, value);
     }
 
@@ -145,7 +145,7 @@ public class NumberPickerPreference extends DialogPreference implements
     @Override
     public void onValueChange(NumberPicker picker, int oldValue, int newValue) {
         // Update current value
-        mCurrentValue = newValue;
+        this.mCurrentValue = newValue;
 
     }
 
@@ -169,10 +169,12 @@ public class NumberPickerPreference extends DialogPreference implements
 
         // required field that makes Parcelables from a Parcel
         public static final Parcelable.Creator<SavedState> CREATOR = new Parcelable.Creator<SavedState>() {
+            @Override
             public SavedState createFromParcel(Parcel in) {
                 return new SavedState(in);
             }
 
+            @Override
             public SavedState[] newArray(int size) {
                 return new SavedState[size];
             }

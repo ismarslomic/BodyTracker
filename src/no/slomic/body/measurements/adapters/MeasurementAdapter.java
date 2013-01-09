@@ -39,9 +39,9 @@ public abstract class MeasurementAdapter extends ArrayAdapter<Measurement> imple
         this.mMeasurementSet.addAll(measurements);
 
         // init the icons
-        mUpIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.up);
-        mDownIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.down);
-        mEqualIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.equal);
+        this.mUpIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.up);
+        this.mDownIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.down);
+        this.mEqualIcon = BitmapFactory.decodeResource(context.getResources(), R.drawable.equal);
 
         // sort the measurement and set what was the previous measurement
         sortAndSetPrevious();
@@ -51,18 +51,18 @@ public abstract class MeasurementAdapter extends ArrayAdapter<Measurement> imple
 
         // init the mSharedPreferences variable and listen to changes in the
         // shared preferences
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
-        mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
-        mMetricUnits = context.getResources().getString(R.string.metric_units);
-        mImperialUnits = context.getResources().getString(R.string.imperial_units);
-        mSystemOfMeasurement = mSharedPreferences.getString(SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY,
-                mMetricUnits);
+        this.mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(context);
+        this.mSharedPreferences.registerOnSharedPreferenceChangeListener(this);
+        this.mMetricUnits = context.getResources().getString(R.string.metric_units);
+        this.mImperialUnits = context.getResources().getString(R.string.imperial_units);
+        this.mSystemOfMeasurement = this.mSharedPreferences.getString(
+                SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY, this.mMetricUnits);
     }
 
     private void sortAndSetPrevious() {
-        mMeasurements.clear();
+        this.mMeasurements.clear();
 
-        Iterator<Measurement> it = mMeasurementSet.descendingIterator();
+        Iterator<Measurement> it = this.mMeasurementSet.descendingIterator();
         Measurement previous = null;
 
         while (it.hasNext()) {
@@ -71,36 +71,35 @@ public abstract class MeasurementAdapter extends ArrayAdapter<Measurement> imple
             previous = current;
         }
 
-        mMeasurements.addAll(mMeasurementSet);
+        this.mMeasurements.addAll(this.mMeasurementSet);
         this.notifyDataSetChanged();
     }
 
     @Override
     public void add(Measurement measurement) {
-        mMeasurementSet.add(measurement);
+        this.mMeasurementSet.add(measurement);
         sortAndSetPrevious();
     }
 
     @Override
     public void remove(Measurement measurement) {
-        mMeasurementSet.remove(measurement);
+        this.mMeasurementSet.remove(measurement);
         sortAndSetPrevious();
     }
 
     public void removeAll(List<Measurement> measurementList) {
-        mMeasurementSet.removeAll(measurementList);
+        this.mMeasurementSet.removeAll(measurementList);
         sortAndSetPrevious();
     }
-    
+
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY)) 
-        {
+        if (key.equals(SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY)) {
             if (DEBUG)
                 Log.d(LOG_TAG, "Preference changed. Key: " + key);
-            
-            mSystemOfMeasurement = mSharedPreferences.getString(SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY,
-                    mMetricUnits);
+
+            this.mSystemOfMeasurement = this.mSharedPreferences.getString(
+                    SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY, this.mMetricUnits);
             this.notifyDataSetChanged();
         }
     }

@@ -17,7 +17,7 @@ public class TabFactory implements TabContentFactory {
      * @param context
      */
     public TabFactory(Context context) {
-        mContext = context;
+        this.mContext = context;
     }
 
     /**
@@ -25,8 +25,9 @@ public class TabFactory implements TabContentFactory {
      * 
      * @see android.widget.TabHost.TabContentFactory#createTabContent(java.lang.String)
      */
+    @Override
     public View createTabContent(String tag) {
-        View v = new View(mContext);
+        View v = new View(this.mContext);
         v.setMinimumWidth(0);
         v.setMinimumHeight(0);
         return v;

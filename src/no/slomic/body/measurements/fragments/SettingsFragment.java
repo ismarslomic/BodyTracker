@@ -14,8 +14,7 @@ import no.slomic.body.measurements.R;
  * @author ismar.slomic
  */
 public class SettingsFragment extends PreferenceFragment implements
-        OnSharedPreferenceChangeListener
-{
+        OnSharedPreferenceChangeListener {
     // Check /res/xml/preferences.xml file for this preference
     public static final String PREFERENCE_ACCOUNT_AGE_KEY = "account_age";
     public static final String PREFERENCE_ACCOUNT_NAME_KEY = "account_name";

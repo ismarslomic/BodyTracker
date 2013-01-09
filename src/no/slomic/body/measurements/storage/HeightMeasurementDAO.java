@@ -30,15 +30,15 @@ public class HeightMeasurementDAO {
     };
 
     public HeightMeasurementDAO(Context context) {
-        dbHelper = new SQLiteHelper(context);
+        this.dbHelper = new SQLiteHelper(context);
     }
 
     public void open() throws SQLException {
-        database = dbHelper.getWritableDatabase();
+        this.database = this.dbHelper.getWritableDatabase();
     }
 
     public void close() {
-        dbHelper.close();
+        this.dbHelper.close();
     }
 
     public Measurement create(Measurement newMeasurement) {
@@ -51,8 +51,8 @@ public class HeightMeasurementDAO {
                 .getUnit().getSymbol());
         values.put(HeightMeasurementTable.COLUMN_CREATED_DATE, DateTime.now().getMillis());
 
-        database.insert(HeightMeasurementTable.TABLE_NAME, null, values);
-        Cursor cursor = database.query(HeightMeasurementTable.TABLE_NAME, allColumns,
+        this.database.insert(HeightMeasurementTable.TABLE_NAME, null, values);
+        Cursor cursor = this.database.query(HeightMeasurementTable.TABLE_NAME, this.allColumns,
                 HeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " = '"
                         + newMeasurement.getDate().getMillis() + "' ", null, null, null, null);
         cursor.moveToFirst();
@@ -66,7 +66,7 @@ public class HeightMeasurementDAO {
     }
 
     public void delete(Measurement measurement) {
-        database.delete(HeightMeasurementTable.TABLE_NAME,
+        this.database.delete(HeightMeasurementTable.TABLE_NAME,
                 HeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " = "
                         + measurement.getDate().getMillis() + " ", null);
 
@@ -83,8 +83,8 @@ public class HeightMeasurementDAO {
     public List<Measurement> getAll() {
         List<Measurement> measurements = new ArrayList<Measurement>();
 
-        Cursor cursor = database.query(HeightMeasurementTable.TABLE_NAME, allColumns, null, null,
-                null, null, HeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " ASC");
+        Cursor cursor = this.database.query(HeightMeasurementTable.TABLE_NAME, this.allColumns,
+                null, null, null, null, HeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " ASC");
 
         cursor.moveToFirst();
 
@@ -112,8 +112,9 @@ public class HeightMeasurementDAO {
 
         TreeSet<Measurement> measurements = new TreeSet<Measurement>();
 
-        Cursor cursor = database.query(HeightMeasurementTable.TABLE_NAME, allColumns, selection,
-                null, null, null, HeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " ASC");
+        Cursor cursor = this.database.query(HeightMeasurementTable.TABLE_NAME, this.allColumns,
+                selection, null, null, null, HeightMeasurementTable.COLUMN_MEASUREMENT_DATE
+                        + " ASC");
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -133,8 +134,9 @@ public class HeightMeasurementDAO {
      * @return the latest measurement of Height or null if none registered
      */
     public Measurement getLatest() {
-        Cursor cursor = database.query(HeightMeasurementTable.TABLE_NAME, allColumns, null, null,
-                null, null, HeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " desc LIMIT 1");
+        Cursor cursor = this.database.query(HeightMeasurementTable.TABLE_NAME, this.allColumns,
+                null, null, null, null, HeightMeasurementTable.COLUMN_MEASUREMENT_DATE
+                        + " desc LIMIT 1");
 
         Log.d(SQLiteHelper.class.getName(), "Found latest items: " + cursor.getCount());
 

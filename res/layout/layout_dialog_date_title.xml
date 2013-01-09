@@ -2,14 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:clickable="false"
     android:orientation="vertical" >
 
-    <no.slomic.body.measurements.views.CircularSeekBar
-        android:id="@+id/circularSeekBar"
+    <Button
+        android:id="@+id/dialog_date_button"
+        style="?android:attr/borderlessButtonStyle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="8dp" >
-    </no.slomic.body.measurements.views.CircularSeekBar>
+        android:textAppearance="@android:style/TextAppearance.DialogWindowTitle"
+        android:gravity="left|center" />
 
 </LinearLayout>

@@ -13,8 +13,8 @@ public class TabInfo {
     public final Bundle args;
 
     TabInfo(String _tag, Class _class, Bundle _args) {
-        tag = _tag;
-        clss = _class;
-        args = _args;
+        this.tag = _tag;
+        this.clss = _class;
+        this.args = _args;
     }
 }

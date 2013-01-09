@@ -22,7 +22,7 @@ public class Measurement implements Comparable<Measurement> {
      * @return the previous measurement
      */
     public Measurement getPrevious() {
-        return mPrevious;
+        return this.mPrevious;
     }
 
     /**
@@ -36,7 +36,7 @@ public class Measurement implements Comparable<Measurement> {
      * @return the quantity
      */
     public Quantity getQuantity() {
-        return mQuantity;
+        return this.mQuantity;
     }
 
     /**
@@ -50,7 +50,7 @@ public class Measurement implements Comparable<Measurement> {
      * @return the measurement date
      */
     public DateTime getDate() {
-        return mDate;
+        return this.mDate;
     }
 
     /**

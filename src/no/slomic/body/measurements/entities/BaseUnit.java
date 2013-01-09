@@ -33,6 +33,7 @@ public abstract class BaseUnit implements Unit {
         this.mMultipleFactor = multipleFactor;
     }
 
+    @Override
     public String getSymbol() {
         return this.mSymbol;
     }
@@ -41,10 +42,12 @@ public abstract class BaseUnit implements Unit {
         return this.mSymbolPlural;
     }
 
+    @Override
     public double getMultipleFactor() {
         return this.mMultipleFactor;
     }
 
+    @Override
     public String getName() {
         return this.mName;
     }
@@ -53,10 +56,12 @@ public abstract class BaseUnit implements Unit {
         return this.mNamePlural;
     }
 
+    @Override
     public Unit getSystemUnit() {
         return this;
     }
 
+    @Override
     public boolean equals(Object that) {
         if (this == that)
             return true;
@@ -68,7 +73,7 @@ public abstract class BaseUnit implements Unit {
 
     @Override
     public int hashCode() {
-        return mSymbol.hashCode();
+        return this.mSymbol.hashCode();
     }
 
     /*

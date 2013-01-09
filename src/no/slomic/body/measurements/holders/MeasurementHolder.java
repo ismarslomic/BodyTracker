@@ -19,28 +19,28 @@ public class MeasurementHolder {
 
     public TextView getMeasurementValue() {
         if (this.mMeasurementValue == null) {
-            this.mMeasurementValue = (TextView) mRow.findViewById(R.id.measurement_value);
+            this.mMeasurementValue = (TextView) this.mRow.findViewById(R.id.measurement_value);
         }
         return this.mMeasurementValue;
     }
 
     public TextView getMeasurementDate() {
         if (this.mMeasurementDate == null) {
-            this.mMeasurementDate = (TextView) mRow.findViewById(R.id.measurement_date);
+            this.mMeasurementDate = (TextView) this.mRow.findViewById(R.id.measurement_date);
         }
         return this.mMeasurementDate;
     }
 
     public TextView getDiffValue() {
         if (this.mDiffValue == null) {
-            this.mDiffValue = (TextView) mRow.findViewById(R.id.diff_value);
+            this.mDiffValue = (TextView) this.mRow.findViewById(R.id.diff_value);
         }
         return this.mDiffValue;
     }
 
     public ImageView getDiffIcon() {
         if (this.mDiffIcon == null) {
-            this.mDiffIcon = (ImageView) mRow.findViewById(R.id.diff_icon);
+            this.mDiffIcon = (ImageView) this.mRow.findViewById(R.id.diff_icon);
         }
         return this.mDiffIcon;
     }

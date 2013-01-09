@@ -37,29 +37,29 @@ public class MainActivity extends FragmentActivity implements OnSharedPreference
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.fragment_tabs_pager);
-        mTabHost = (TabHost) findViewById(android.R.id.tabhost);
-        mTabHost.setup();
+        this.mTabHost = (TabHost) findViewById(android.R.id.tabhost);
+        this.mTabHost.setup();
 
-        mViewPager = (ViewPager) findViewById(R.id.pager);
+        this.mViewPager = (ViewPager) findViewById(R.id.pager);
 
         // Create our tab adapter
-        mTabsAdapter = new TabsAdapter(this, mTabHost, mViewPager);
+        this.mTabsAdapter = new TabsAdapter(this, this.mTabHost, this.mViewPager);
 
         addTabs();
 
         if (savedInstanceState != null) {
             // restore the last selected tab if we can
-            mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
+            this.mTabHost.setCurrentTabByTag(savedInstanceState.getString("tab"));
         }
     }
 
     public void addTabs() {
         // Clear all existing tabs
-        mTabsAdapter.clearAll();
+        this.mTabsAdapter.clearAll();
 
         // Clear all existing fragments;
         if (DEBUG)
-            Log.d(LOG_TAG, "Count of tabs: " + mTabsAdapter.getCount() + " after clearAll");
+            Log.d(LOG_TAG, "Count of tabs: " + this.mTabsAdapter.getCount() + " after clearAll");
 
         // Get shared preferences to determine what tabs should be visible
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
@@ -72,25 +72,24 @@ public class MainActivity extends FragmentActivity implements OnSharedPreference
 
         // Add visible tabs to the tabs adapter
         if (activateWeightMeasurement)
-            mTabsAdapter.addTab(mTabHost.newTabSpec("Weight").setIndicator("Weight"),
+            this.mTabsAdapter.addTab(this.mTabHost.newTabSpec("Weight").setIndicator("Weight"),
                     WeightMeasurementList.class, null);
 
         /*
-        if (activateHeightMeasurement)
-            mTabsAdapter.addTab(mTabHost.newTabSpec("Height").setIndicator("Height"),
-                    HeightMeasurementList.class, null);
-        */
+         * if (activateHeightMeasurement)
+         * mTabsAdapter.addTab(mTabHost.newTabSpec
+         * ("Height").setIndicator("Height"), HeightMeasurementList.class,
+         * null);
+         */
         if (DEBUG)
-            Log.d(LOG_TAG, "Count of tabs: " + mTabsAdapter.getCount() + " after adding tabs");
+            Log.d(LOG_TAG, "Count of tabs: " + this.mTabsAdapter.getCount() + " after adding tabs");
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putString("tab", mTabHost.getCurrentTabTag());
+        outState.putString("tab", this.mTabHost.getCurrentTabTag());
     }
-
-    
 
     /*
      * (non-Javadoc)
@@ -112,8 +111,8 @@ public class MainActivity extends FragmentActivity implements OnSharedPreference
     @Override
     public void onWeightMeasurementCreated(Measurement measurement) {
         // Get the fragment of the current tab (Weight tab)
-        int currentTabPosition = mTabHost.getCurrentTab();
-        String tag = mTabsAdapter.getFragmentTag(currentTabPosition);
+        int currentTabPosition = this.mTabHost.getCurrentTab();
+        String tag = this.mTabsAdapter.getFragmentTag(currentTabPosition);
         Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
 
         if (f != null && f instanceof WeightMeasurementList) {

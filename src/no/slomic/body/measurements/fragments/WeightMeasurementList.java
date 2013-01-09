@@ -16,7 +16,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.AbsListView;
 import android.widget.ListView;
 import android.widget.Toast;
 
@@ -46,7 +46,7 @@ public class WeightMeasurementList extends ListFragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         String tag = getTag();
-        return (LinearLayout) inflater.inflate(R.layout.layout_measurement_list, container, false);
+        return inflater.inflate(R.layout.layout_measurement_list, container, false);
     }
 
     @Override
@@ -60,18 +60,18 @@ public class WeightMeasurementList extends ListFragment {
         setHasOptionsMenu(true);
 
         ListView lv = getListView();
-        lv.setChoiceMode(ListView.CHOICE_MODE_MULTIPLE_MODAL);
+        lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);
         lv.setMultiChoiceModeListener(new ModeCallback());
 
-        activity = getActivity();
-        weightMeasurementDAO = new WeightMeasurementDAO(activity);
-        weightMeasurementDAO.open();
+        this.activity = getActivity();
+        this.weightMeasurementDAO = new WeightMeasurementDAO(this.activity);
+        this.weightMeasurementDAO.open();
 
-        List<Measurement> measurements = weightMeasurementDAO.getAll();
+        List<Measurement> measurements = this.weightMeasurementDAO.getAll();
 
-        weightMeasurementDAO.close();
+        this.weightMeasurementDAO.close();
 
-        WeightMeasurementAdapter wma = new WeightMeasurementAdapter(activity,
+        WeightMeasurementAdapter wma = new WeightMeasurementAdapter(this.activity,
                 R.layout.layout_measurement_list_row, measurements);
 
         setListAdapter(wma);
@@ -79,18 +79,21 @@ public class WeightMeasurementList extends ListFragment {
 
     private class ModeCallback implements ListView.MultiChoiceModeListener {
 
+        @Override
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
-            MenuInflater inflater = activity.getMenuInflater();
+            MenuInflater inflater = WeightMeasurementList.this.activity.getMenuInflater();
             inflater.inflate(R.menu.list_select_menu, menu);
             mode.setTitle("Select Items");
             setSubtitle(mode);
             return true;
         }
 
+        @Override
         public boolean onPrepareActionMode(ActionMode mode, Menu menu) {
             return true;
         }
 
+        @Override
         public boolean onActionItemClicked(ActionMode mode, MenuItem item) {
             switch (item.getItemId()) {
                 case R.id.deleteMeasurement:
@@ -106,22 +109,24 @@ public class WeightMeasurementList extends ListFragment {
                         }
                     }
                     lAdapter.removeAll(selectedMeasurements);
-                    weightMeasurementDAO.open();
-                    weightMeasurementDAO.deleteAll(selectedMeasurements);
-                    weightMeasurementDAO.close();
+                    WeightMeasurementList.this.weightMeasurementDAO.open();
+                    WeightMeasurementList.this.weightMeasurementDAO.deleteAll(selectedMeasurements);
+                    WeightMeasurementList.this.weightMeasurementDAO.close();
                     mode.finish();
                     break;
                 default:
-                    Toast.makeText(activity, "Clicked " + item.getTitle(), Toast.LENGTH_SHORT)
-                            .show();
+                    Toast.makeText(WeightMeasurementList.this.activity,
+                            "Clicked " + item.getTitle(), Toast.LENGTH_SHORT).show();
                     break;
             }
             return true;
         }
 
+        @Override
         public void onDestroyActionMode(ActionMode mode) {
         }
 
+        @Override
         public void onItemCheckedStateChanged(ActionMode mode, int position, long id,
                 boolean checked) {
             setSubtitle(mode);
@@ -200,23 +205,23 @@ public class WeightMeasurementList extends ListFragment {
                 Log.e(WeightMeasurementList.class.getName(), e.getMessage());
             }
 
-            weightMeasurementDAO.open();
+            this.weightMeasurementDAO.open();
             try {
-                weightMeasurementDAO.exportAll(exportFile);
+                this.weightMeasurementDAO.exportAll(exportFile);
             } catch (IOException e) {
                 // TODO Auto-generated catch block
                 Log.e(WeightMeasurementList.class.getName(), e.getMessage());
             }
-            weightMeasurementDAO.close();
+            this.weightMeasurementDAO.close();
         }
 
     }
 
     private void showWeeklyStatistics() {
         String text;
-        weightMeasurementDAO.open();
-        Quantity lastWeek = weightMeasurementDAO.lastWeekStatistics();
-        weightMeasurementDAO.close();
+        this.weightMeasurementDAO.open();
+        Quantity lastWeek = this.weightMeasurementDAO.lastWeekStatistics();
+        this.weightMeasurementDAO.close();
 
         if (lastWeek == null)
             text = "No measurements registered";
@@ -227,7 +232,7 @@ public class WeightMeasurementList extends ListFragment {
         else
             text = "Last week you increased weight with " + lastWeek.toString();
 
-        Toast toast = Toast.makeText(activity, text, Toast.LENGTH_LONG);
+        Toast toast = Toast.makeText(this.activity, text, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);
         toast.show();
     }

@@ -18,9 +18,7 @@ public class DatePickerFragment extends DialogFragment {
     public int mYear, mMonth, mDay;
     public static OnDateSetListener mListener;
 
-
-    public static DatePickerFragment newInstance(OnDateSetListener listener, DateTime initialDate) 
-    {
+    public static DatePickerFragment newInstance(OnDateSetListener listener, DateTime initialDate) {
         DatePickerFragment dpf = new DatePickerFragment();
         dpf.setListener(listener);
         Bundle bundle = new Bundle();
@@ -30,36 +28,34 @@ public class DatePickerFragment extends DialogFragment {
     }
 
     @Override
-    public Dialog onCreateDialog(Bundle savedInstanceState) 
-    {
-        if (savedInstanceState != null) 
-        {
-            mYear =  savedInstanceState.getInt(ARGS_YEAR);
-            mMonth = savedInstanceState.getInt(ARGS_MONTH);
-            mDay = savedInstanceState.getInt(ARGS_DAY);
-        }
-        else
-        {
+    public Dialog onCreateDialog(Bundle savedInstanceState) {
+        if (savedInstanceState != null) {
+            this.mYear = savedInstanceState.getInt(ARGS_YEAR);
+            this.mMonth = savedInstanceState.getInt(ARGS_MONTH);
+            this.mDay = savedInstanceState.getInt(ARGS_DAY);
+        } else {
             Bundle arguments = getArguments();
             DateTime initialDate = (DateTime) arguments.getSerializable(ARGS_INITIAL_DATE);
-            mYear = initialDate.getYear();
-            mMonth = initialDate.getMonthOfYear()-1; // DatePickerFragment months goes from 0-11 while Joda DateTime 1-12
-            mDay = initialDate.getDayOfMonth();
+            this.mYear = initialDate.getYear();
+            this.mMonth = initialDate.getMonthOfYear() - 1; // DatePickerFragment
+                                                            // months goes from
+                                                            // 0-11 while Joda
+                                                            // DateTime 1-12
+            this.mDay = initialDate.getDayOfMonth();
         }
-        
-        return new DatePickerDialog(getActivity(), mListener, mYear, mMonth, mDay);
+
+        return new DatePickerDialog(getActivity(), mListener, this.mYear, this.mMonth, this.mDay);
     }
-    
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putInt(ARGS_YEAR, mYear);
-        outState.putInt(ARGS_MONTH, mMonth);
-        outState.putInt(ARGS_DAY, mDay);
+        outState.putInt(ARGS_YEAR, this.mYear);
+        outState.putInt(ARGS_MONTH, this.mMonth);
+        outState.putInt(ARGS_DAY, this.mDay);
     }
-    
-    public void setListener(OnDateSetListener listener)
-    {
+
+    public void setListener(OnDateSetListener listener) {
         mListener = listener;
     }
 }

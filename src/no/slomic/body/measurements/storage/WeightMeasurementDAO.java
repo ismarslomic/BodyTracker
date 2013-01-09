@@ -44,15 +44,15 @@ public class WeightMeasurementDAO {
     private static final boolean DEBUG = true;
 
     public WeightMeasurementDAO(Context context) {
-        mDbHelper = new SQLiteHelper(context);
+        this.mDbHelper = new SQLiteHelper(context);
     }
 
     public void open() throws SQLException {
-        mDatabase = mDbHelper.getWritableDatabase();
+        this.mDatabase = this.mDbHelper.getWritableDatabase();
     }
 
     public void close() {
-        mDbHelper.close();
+        this.mDbHelper.close();
     }
 
     public Measurement create(Measurement newMeasurement) {
@@ -65,8 +65,8 @@ public class WeightMeasurementDAO {
                 .getUnit().getSymbol());
         values.put(WeightMeasurementTable.COLUMN_CREATED_DATE, DateTime.now().getMillis());
 
-        mDatabase.insert(WeightMeasurementTable.TABLE_NAME, null, values);
-        Cursor cursor = mDatabase.query(WeightMeasurementTable.TABLE_NAME, mAllColumns,
+        this.mDatabase.insert(WeightMeasurementTable.TABLE_NAME, null, values);
+        Cursor cursor = this.mDatabase.query(WeightMeasurementTable.TABLE_NAME, this.mAllColumns,
                 WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " = '"
                         + newMeasurement.getDate().getMillis() + "' ", null, null, null, null);
         cursor.moveToFirst();
@@ -80,7 +80,7 @@ public class WeightMeasurementDAO {
     }
 
     public void delete(Measurement measurement) {
-        mDatabase.delete(WeightMeasurementTable.TABLE_NAME,
+        this.mDatabase.delete(WeightMeasurementTable.TABLE_NAME,
                 WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " = "
                         + measurement.getDate().getMillis() + " ", null);
         if (DEBUG)
@@ -97,8 +97,8 @@ public class WeightMeasurementDAO {
     public List<Measurement> getAll() {
         List<Measurement> measurements = new ArrayList<Measurement>();
 
-        Cursor cursor = mDatabase.query(WeightMeasurementTable.TABLE_NAME, mAllColumns, null, null,
-                null, null, WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " ASC");
+        Cursor cursor = this.mDatabase.query(WeightMeasurementTable.TABLE_NAME, this.mAllColumns,
+                null, null, null, null, WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " ASC");
 
         cursor.moveToFirst();
 
@@ -117,8 +117,8 @@ public class WeightMeasurementDAO {
         final String[] header = new String[] {
                 "MeasurementDate", "QuantityValue", "UnitSymbol", "CreatedDate"
         };
-        Cursor cursor = mDatabase.query(WeightMeasurementTable.TABLE_NAME, mAllColumns, null, null,
-                null, null, WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " ASC");
+        Cursor cursor = this.mDatabase.query(WeightMeasurementTable.TABLE_NAME, this.mAllColumns,
+                null, null, null, null, WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " ASC");
 
         ICsvMapWriter mapWriter = null;
         int count = 0;
@@ -184,8 +184,9 @@ public class WeightMeasurementDAO {
 
         TreeSet<Measurement> measurements = new TreeSet<Measurement>();
 
-        Cursor cursor = mDatabase.query(WeightMeasurementTable.TABLE_NAME, mAllColumns, selection,
-                null, null, null, WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " ASC");
+        Cursor cursor = this.mDatabase.query(WeightMeasurementTable.TABLE_NAME, this.mAllColumns,
+                selection, null, null, null, WeightMeasurementTable.COLUMN_MEASUREMENT_DATE
+                        + " ASC");
 
         cursor.moveToFirst();
         while (!cursor.isAfterLast()) {
@@ -228,8 +229,9 @@ public class WeightMeasurementDAO {
      * @return the latest measurement of weight or null if none registered
      */
     public Measurement getLatest() {
-        Cursor cursor = mDatabase.query(WeightMeasurementTable.TABLE_NAME, mAllColumns, null, null,
-                null, null, WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " desc LIMIT 1");
+        Cursor cursor = this.mDatabase.query(WeightMeasurementTable.TABLE_NAME, this.mAllColumns,
+                null, null, null, null, WeightMeasurementTable.COLUMN_MEASUREMENT_DATE
+                        + " desc LIMIT 1");
 
         if (DEBUG)
             Log.d(LOG_TAG, "Found latest items: " + cursor.getCount());

@@ -8,6 +8,7 @@ import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.content.DialogInterface;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v4.app.DialogFragment;
@@ -16,7 +17,6 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.DatePicker;
-import android.widget.NumberPicker.Formatter;
 import android.widget.Toast;
 
 import no.slomic.body.measurements.R;
@@ -28,6 +28,7 @@ import no.slomic.body.measurements.preferences.StaticPreferences;
 import no.slomic.body.measurements.storage.WeightMeasurementDAO;
 import no.slomic.body.measurements.utils.DateUtils;
 import no.slomic.body.measurements.utils.QuantityStringFormat;
+import no.slomic.body.measurements.views.CircularSeekBar;
 
 import org.joda.time.DateTime;
 
@@ -55,8 +56,8 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
 
     private static final String TAG_DATE_PICKER = "datePicker";
 
-    private String[] mQuantityValues = new String[3901];
-    private CircularSeekBar seekBar = new CircularSeekBar();
+    private double[] mQuantityValues = new double[3901];
+    private CircularSeekBar mSeekBar;
 
     public static NewWeightMeasurement newInstance() {
         return new NewWeightMeasurement();
@@ -68,22 +69,37 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
         final View v = factory.inflate(R.layout.layout_dialog_new_measurement, null);
 
         // Shared preferences
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        mMetricUnits = getActivity().getResources().getString(R.string.metric_units);
-        mImperialUnits = getActivity().getResources().getString(R.string.imperial_units);
-        mSystemOfMeasurement = mSharedPreferences.getString(
-                SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY, mMetricUnits);
+        this.mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        this.mMetricUnits = getActivity().getResources().getString(R.string.metric_units);
+        this.mImperialUnits = getActivity().getResources().getString(R.string.imperial_units);
+        this.mSystemOfMeasurement = this.mSharedPreferences.getString(
+                SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY, this.mMetricUnits);
 
-        generateQuantityValues();
+        // Initialize the circular seek bar widget
+        this.mSeekBar = (CircularSeekBar) v.findViewById(R.id.circularSeekBar);
+        this.mSeekBar.setEmptyCircleColor(Color.GRAY);
+        this.mSeekBar.setSelectedCircleColor(Color.WHITE);
+        this.mSeekBar.setSeekBarThumsColor(Color.BLACK);
+        this.mSeekBar.setButtonPushedColor(Color.LTGRAY);
+
+        // Setting the values that seek bar will iterate through
+        generateValueArray();
+        this.mSeekBar.setValueArray(this.mQuantityValues);
+
+        // Sets how many steps should be changed when pressing + and - buttons
+        this.mSeekBar.setButtonChangeInterval(10);
+
         initializeMeasurement(savedInstanceState);
 
-        // Initialize the UI controller for measurement date
-        mDateButton = (Button) v.findViewById(R.id.date_button);
-        mDateButton.setOnClickListener(this);
-        mDateButton.setText(DateUtils.formatToMediumFormatExtended(mDate));
+        // Initialize the UI controller for measurement date which is in the
+        // title of the alertdialog
+        final View dateView = factory.inflate(R.layout.layout_dialog_date_title, null);
+        this.mDateButton = (Button) dateView.findViewById(R.id.dialog_date_button);
+        this.mDateButton.setOnClickListener(this);
+        this.mDateButton.setText(DateUtils.formatToMediumFormatExtended(this.mDate));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-        builder.setTitle(R.string.title_alert_dialog_new_weight);
+        builder.setCustomTitle(dateView);
         builder.setIconAttribute(R.drawable.add);
         builder.setView(v);
         builder.setPositiveButton(R.string.alert_dialog_ok, this);
@@ -91,50 +107,21 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
         return builder.create();
     }
 
-    /**
-     * 
-     */
-    private void setQuantityValue() {
-        String quantityValue = mQuantity.getValue() + "";
-        int index = 0;
-
-        for (int i = 0; i < mQuantityValues.length; i++) {
-            if (mQuantityValues[i].equals(quantityValue)) {
-                index = i;
-                break;
-            }
-        }
-        mQuantityValuePicker.setValue(index);
-    }
-
-    private void generateQuantityValues() {
+    /** Generates the values in the valueArray **/
+    private void generateValueArray() {
         int arrayIndex = 0;
         double arrayValue = 0;
-        Quantity q;
 
         while (arrayValue < 10) {
-            q = new Quantity(arrayValue, WeightUnit.KG);
-            mQuantityValues[arrayIndex] = (Math.round(arrayValue * 100.0) / 100.0) + "";
-            // mSeekBarValues2.add(arrayIndex, Math.round(arrayValue * 100.0) /
-            // 100.0);
+            this.mQuantityValues[arrayIndex] = (Math.round(arrayValue * 100.0) / 100.0);
             arrayValue += 0.01;
             arrayIndex++;
         }
 
-        q = new Quantity(arrayValue, WeightUnit.KG);
-        mQuantityValues[arrayIndex] = (Math.round(arrayValue * 10.0) / 10.0) + "";
-        // mSeekBarValues[arrayIndex] = Double.toString(Math.round(arrayValue *
-        // 100.0) / 100.0);
-        // mSeekBarValues2.add(arrayIndex, Math.round(arrayValue * 100.0) /
-        // 100.0);
+        this.mQuantityValues[arrayIndex] = (Math.round(arrayValue * 10.0) / 10.0);
 
         while (arrayValue < 300) {
-            q = new Quantity(arrayValue, WeightUnit.KG);
-            mQuantityValues[arrayIndex] = (Math.round(arrayValue * 10.0) / 10.0) + "";
-            // mSeekBarValues[arrayIndex] =
-            // Double.toString(Math.round(arrayValue * 100.0) / 100.0);
-            // mSeekBarValues2.add(arrayIndex, Math.round(arrayValue * 100.0) /
-            // 100.0);
+            this.mQuantityValues[arrayIndex] = (Math.round(arrayValue * 10.0) / 10.0);
             arrayValue += 0.1;
             arrayIndex++;
         }
@@ -143,20 +130,22 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
     public void initializeMeasurement(Bundle savedInstanceState) {
         // the fragment is restored
         if (savedInstanceState != null) {
-            mDate = (DateTime) savedInstanceState.getSerializable(ARGS_DATE);
-            mValueArrayIndex = savedInstanceState.getInt(ARGS_VALUE_ARRAY_INDEX);
-            double value = Double.parseDouble(mQuantityValues[mValueArrayIndex]);
-            mQuantity = new Quantity(value, WeightUnit.KG);
+            this.mDate = (DateTime) savedInstanceState.getSerializable(ARGS_DATE);
+            this.mValueArrayIndex = savedInstanceState.getInt(ARGS_VALUE_ARRAY_INDEX);
+            double value = this.mQuantityValues[this.mValueArrayIndex];
+            this.mQuantity = new Quantity(value, WeightUnit.KG);
 
             DatePickerFragment dpf = (DatePickerFragment) getActivity().getSupportFragmentManager()
                     .findFragmentByTag(TAG_DATE_PICKER);
             if (dpf != null) {
                 dpf.setListener(this);
             }
+
+            this.mSeekBar.setSelectedStep(this.mValueArrayIndex);
         }
         // the fragment is created for the first time
         else {
-            mDate = DateTime.now();
+            this.mDate = DateTime.now();
 
             // get the latest measurement from storage
             WeightMeasurementDAO mDao = new WeightMeasurementDAO(getActivity());
@@ -166,19 +155,21 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
 
             // if latest measurement found set this as default
             if (latestMeasurement != null)
-                mQuantity = latestMeasurement.getQuantity();
+                this.mQuantity = latestMeasurement.getQuantity();
             // no measurement registered, use avarage weight for given sex as
             // default
             else
-                mQuantity = getAvarageWeight();
+                this.mQuantity = getAvarageWeight();
+
+            this.mSeekBar.setSelectedStepForValue(this.mQuantity.getValue());
         }
     }
 
     private Quantity getAvarageWeight() {
         // get the sex of current user (male or female) from shared preferences
         String male = getResources().getString(R.string.sex_male);
-        String sex = mSharedPreferences
-                .getString(SettingsActivity.PREFERENCE_ACCOUNT_SEX_KEY, male);
+        String sex = this.mSharedPreferences.getString(SettingsActivity.PREFERENCE_ACCOUNT_SEX_KEY,
+                male);
 
         // get avarage weight for given sex
         if (sex.equals(male)) // male
@@ -189,15 +180,15 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
     }
 
     private boolean save() {
-        double value = Double.parseDouble(mQuantityValues[mQuantityValuePicker.getValue()]);
-        Measurement measurement = new Measurement(new Quantity(value, WeightUnit.KG), mDate);
+        double value = this.mSeekBar.getSelectedValue();
+        Measurement measurement = new Measurement(new Quantity(value, WeightUnit.KG), this.mDate);
 
         WeightMeasurementDAO mDAO = new WeightMeasurementDAO(getActivity());
         mDAO.open();
         mDAO.create(measurement);
         mDAO.close();
 
-        mListener.onWeightMeasurementCreated(measurement);
+        this.mListener.onWeightMeasurementCreated(measurement);
         return true;
     }
 
@@ -206,16 +197,16 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putSerializable(ARGS_DATE, mDate);
-        outState.putSerializable(ARGS_VALUE_ARRAY_INDEX, mQuantityValuePicker.getValue());
+        outState.putSerializable(ARGS_DATE, this.mDate);
+        outState.putSerializable(ARGS_VALUE_ARRAY_INDEX, this.mSeekBar.getSelectedStep());
     }
 
     // When user clicks on the measurement date text field open new date picker
     // dialog
     @Override
     public void onClick(View v) {
-        if (v == mDateButton) {
-            DatePickerFragment datePickerDialog = DatePickerFragment.newInstance(this, mDate);
+        if (v == this.mDateButton) {
+            DatePickerFragment datePickerDialog = DatePickerFragment.newInstance(this, this.mDate);
             datePickerDialog.show(getFragmentManager(), TAG_DATE_PICKER);
         }
     }
@@ -225,7 +216,7 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
     public void onAttach(Activity activity) {
         super.onAttach(activity);
         try {
-            mListener = (OnWeightMeasurementCreatedListener) activity;
+            this.mListener = (OnWeightMeasurementCreatedListener) activity;
         } catch (ClassCastException e) {
             throw new ClassCastException(activity.toString()
                     + " must implement OnMeasurementCreatedListener");
@@ -262,8 +253,8 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
     public void onDateSet(DatePicker view, int year, int monthOfYear, int dayOfMonth) {
         monthOfYear++; // DatePickerFragment months goes from 0-11 while Joda
                        // DateTime 1-12
-        mDate = new DateTime(year, monthOfYear, dayOfMonth, 0, 0);
-        mDateButton.setText(DateUtils.formatToMediumFormatExtended(mDate));
+        this.mDate = new DateTime(year, monthOfYear, dayOfMonth, 0, 0);
+        this.mDateButton.setText(DateUtils.formatToMediumFormatExtended(this.mDate));
     }
 
     // Callback interface when new measurement is created (and saved)
@@ -272,24 +263,9 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
     }
 
     public String getFormattedValue(Quantity q) {
-        if (mSystemOfMeasurement.equals(mMetricUnits))
+        if (this.mSystemOfMeasurement.equals(this.mMetricUnits))
             return QuantityStringFormat.formatWeightToMetric(q);
         else
             return QuantityStringFormat.formatWeightToImperial(q);
-    }
-
-    class WeightQuantityValueNumberFormatter implements Formatter {
-        public WeightQuantityValueNumberFormatter() {
-        }
-
-        @Override
-        public String format(int value) {
-            Quantity q = new Quantity(Double.parseDouble(mQuantityValues[value]), WeightUnit.KG);
-
-            if (mSystemOfMeasurement.equals(mMetricUnits))
-                return QuantityStringFormat.formatWeightToMetric(q);
-            else
-                return QuantityStringFormat.formatWeightToImperial(q);
-        }
     }
 }

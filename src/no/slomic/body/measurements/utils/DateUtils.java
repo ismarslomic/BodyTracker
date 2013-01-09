@@ -27,9 +27,8 @@ public class DateUtils {
     public final static DateTimeFormatter MEDIUM_DATE_FORMAT_EX_YEAR = DateTimeFormat
             .forPattern("EEEE d. MMMMM");
 
-    public final static DateTimeFormatter LONG_DATE_FORMAT = DateTimeFormat.forPattern(
-            "dd.MM.yyyy HH:mm:ss");
-
+    public final static DateTimeFormatter LONG_DATE_FORMAT = DateTimeFormat
+            .forPattern("dd.MM.yyyy HH:mm:ss");
 
     public static String formatToLongFormat(DateTime date) {
         return date.toString(LONG_DATE_FORMAT);

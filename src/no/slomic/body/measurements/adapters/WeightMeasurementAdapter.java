@@ -38,8 +38,8 @@ public class WeightMeasurementAdapter extends MeasurementAdapter {
         MeasurementHolder holder = null;
 
         if (row == null) {
-            LayoutInflater inflater = ((Activity) mContext).getLayoutInflater();
-            row = inflater.inflate(mLayoutResourceId, parent, false);
+            LayoutInflater inflater = ((Activity) this.mContext).getLayoutInflater();
+            row = inflater.inflate(this.mLayoutResourceId, parent, false);
 
             holder = new MeasurementHolder(row);
             row.setTag(holder);
@@ -47,7 +47,7 @@ public class WeightMeasurementAdapter extends MeasurementAdapter {
             holder = (MeasurementHolder) row.getTag();
         }
 
-        Measurement measurement = mMeasurements.get(position);
+        Measurement measurement = this.mMeasurements.get(position);
         bindDataToViews(holder, measurement);
 
         return row;
@@ -73,11 +73,11 @@ public class WeightMeasurementAdapter extends MeasurementAdapter {
 
             // Set diff relational sign/icon
             if (diff.getValue() < 0)
-                holder.getDiffIcon().setImageBitmap(mDownIcon);
+                holder.getDiffIcon().setImageBitmap(this.mDownIcon);
             else if (diff.getValue() == 0)
-                holder.getDiffIcon().setImageBitmap(mEqualIcon);
+                holder.getDiffIcon().setImageBitmap(this.mEqualIcon);
             else
-                holder.getDiffIcon().setImageBitmap(mUpIcon);
+                holder.getDiffIcon().setImageBitmap(this.mUpIcon);
         } else {
             holder.getDiffValue().setText("");
             holder.getDiffIcon().setImageDrawable(null);
@@ -85,9 +85,9 @@ public class WeightMeasurementAdapter extends MeasurementAdapter {
     }
 
     public String getFormattedQuantityValue(Quantity q) {
-        if (mSystemOfMeasurement.equals(mMetricUnits))
+        if (this.mSystemOfMeasurement.equals(this.mMetricUnits))
             return QuantityStringFormat.formatWeightToMetric(q);
-        else if (mSystemOfMeasurement.equals(mImperialUnits))
+        else if (this.mSystemOfMeasurement.equals(this.mImperialUnits))
             return QuantityStringFormat.formatWeightToImperial(q);
         else
             return "";

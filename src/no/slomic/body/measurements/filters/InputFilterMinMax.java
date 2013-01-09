@@ -24,7 +24,7 @@ public class InputFilterMinMax implements InputFilter {
             int dend) {
         try {
             double input = Double.parseDouble(dest.toString() + source.toString());
-            if (isInRange(mMin, mMax, input))
+            if (isInRange(this.mMin, this.mMax, input))
                 return null;
         } catch (NumberFormatException nfe) {
         }
