@@ -21,13 +21,20 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.RectF;
+import android.text.Layout;
+import android.text.StaticLayout;
+import android.text.TextPaint;
 import android.util.AttributeSet;
 import android.util.DisplayMetrics;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.NumberPicker;
 
+/**
+ * @author ismar.slomic
+ */
 public final class CircularSeekBar extends View {
     /** Dimensions and graphical shapes of the circle and buttons **/
     private int mWidth;
@@ -48,7 +55,7 @@ public final class CircularSeekBar extends View {
     private Paint mSelectedCircleColor = new Paint();
 
     /** Text syle for the text in the midle of the circle **/
-    private Paint mTextStyle = new Paint();
+    private TextPaint mTextStyle = new TextPaint();
 
     /** Buttons **/
     private boolean mIsIncreasePushed;
@@ -62,39 +69,40 @@ public final class CircularSeekBar extends View {
 
     /** Steps **/
     private int mSelectedStep = 0;
-    private int mTotalSteps = 360 / this.mAngleIncrement; // 360 degrees
+    private int mTotalSteps = 360 / mAngleIncrement; // 360 degrees
     private int mRoundTrips = 0; // count of round trips in the circle
 
     /** Array of values that the slider iterates through **/
     private double[] mValueArray = new double[0];
-    private String mValueUnitName = "kg";
 
     /** Logging **/
     private String TAG = CircularSeekBar.class.getName();
+
+    /** Formatter **/
+    private Formatter mFormatter;
 
     public CircularSeekBar(Context context, AttributeSet attrs) {
         super(context, attrs);
 
         /** Initialize colors of the circles **/
-        this.mEmptyCircleColor.setColor(Color.rgb(115, 115, 115)); // grey color
-        this.mEmptyCircleColor.setAntiAlias(true);
-        this.mSelectedCircleColor.setColor(Color.rgb(255, 0, 165)); // pink
-                                                                    // color
-        this.mSelectedCircleColor.setAntiAlias(true);
-        this.mThumbColor.setColor(Color.WHITE);
-        this.mThumbColor.setAntiAlias(true);
+        mEmptyCircleColor.setColor(Color.rgb(115, 115, 115)); // grey color
+        mEmptyCircleColor.setAntiAlias(true);
+        mSelectedCircleColor.setColor(Color.rgb(255, 0, 165)); // pink color
+        mSelectedCircleColor.setAntiAlias(true);
+        mThumbColor.setColor(Color.WHITE);
+        mThumbColor.setAntiAlias(true);
 
         /** Initialize the text paint **/
-        this.mTextStyle.setSubpixelText(true);
-        this.mTextStyle.setAntiAlias(true);
-        this.mTextStyle.setColor(Color.WHITE);
-        this.mTextStyle.setTextAlign(Paint.Align.CENTER);
+        mTextStyle.setSubpixelText(true);
+        mTextStyle.setAntiAlias(true);
+        mTextStyle.setColor(Color.WHITE);
+        mTextStyle.setTextAlign(Paint.Align.CENTER);
 
         /** Initialize the buttons **/
-        this.mButtonPushedColor.setColor(Color.argb(102, 115, 115, 115)); // light
-                                                                          // grey
-                                                                          // color
-        this.mButtonPushedColor.setAntiAlias(true);
+        mButtonPushedColor.setColor(Color.argb(102, 115, 115, 115)); // light
+                                                                     // grey
+                                                                     // color
+        mButtonPushedColor.setAntiAlias(true);
     }
 
     /****************** INTERFACE METHODS ****************/
@@ -108,31 +116,31 @@ public final class CircularSeekBar extends View {
         super.onDraw(canvas);
 
         /** A. Calculates dimension of the circular seek bar */
-        if (getWidth() != this.mWidth || getHeight() != this.mHeight) {
-            this.mWidth = getWidth();
-            this.mHeight = getHeight();
-            this.mCenterX = this.mWidth / 2;
-            this.mCenterY = this.mHeight / 2;
+        if (getWidth() != mWidth || getHeight() != mHeight) {
+            mWidth = getWidth();
+            mHeight = getHeight();
+            mCenterX = mWidth / 2;
+            mCenterY = mHeight / 2;
 
-            this.mDiameter = Math.min(this.mWidth, this.mHeight) - (2 * INSETS);
-            int thickness = this.mDiameter / 15;
+            mDiameter = Math.min(mWidth, mHeight) - (2 * INSETS);
+            int thickness = mDiameter / 15;
 
-            int left = (this.mWidth - this.mDiameter) / 2;
-            int top = (this.mHeight - this.mDiameter) / 2;
-            int bottom = top + this.mDiameter;
-            int right = left + this.mDiameter;
-            this.mOuterCircle = new RectF(left, top, right, bottom);
+            int left = (mWidth - mDiameter) / 2;
+            int top = (mHeight - mDiameter) / 2;
+            int bottom = top + mDiameter;
+            int right = left + mDiameter;
+            mOuterCircle = new RectF(left, top, right, bottom);
 
-            int innerDiameter = this.mDiameter - thickness * 2;
-            this.mInnerCircle = new RectF(left + thickness, top + thickness, left + thickness
+            int innerDiameter = mDiameter - thickness * 2;
+            mInnerCircle = new RectF(left + thickness, top + thickness, left + thickness
                     + innerDiameter, top + thickness + innerDiameter);
 
             int offset = thickness * 2;
-            int buttonDiameter = this.mDiameter - offset * 2;
-            this.mButtonCircle = new RectF(left + offset, top + offset, left + offset
-                    + buttonDiameter, top + offset + buttonDiameter);
+            int buttonDiameter = mDiameter - offset * 2;
+            mButtonCircle = new RectF(left + offset, top + offset, left + offset + buttonDiameter,
+                    top + offset + buttonDiameter);
 
-            this.mTextStyle.setTextSize(this.mDiameter * 0.20f);
+            mTextStyle.setTextSize(mDiameter * 0.18f);
         }
 
         /** B. Calls the helper method to draw the circular seek bar **/
@@ -151,37 +159,37 @@ public final class CircularSeekBar extends View {
      */
     @Override
     public boolean onTouchEvent(MotionEvent event) {
-        Log.d(this.TAG, "onTouchEvent() called");
+        Log.d(TAG, "onTouchEvent() called");
 
-        if (this.mOuterCircle == null) {
+        if (mOuterCircle == null) {
             return true; // ignore all events until the canvas is drawn
         }
 
         int touchX = (int) event.getX();
         int touchY = (int) event.getY();
 
-        this.mIsIncreasePushed = false;
-        this.mIsDecreasePushed = false;
+        mIsIncreasePushed = false;
+        mIsDecreasePushed = false;
 
-        int distanceFromCenterX = this.mCenterX - touchX;
-        int distanceFromCenterY = this.mCenterY - touchY;
+        int distanceFromCenterX = mCenterX - touchX;
+        int distanceFromCenterY = mCenterY - touchY;
         int distanceFromCenterSquared = distanceFromCenterX * distanceFromCenterX
                 + distanceFromCenterY * distanceFromCenterY;
-        float maxSlider = (this.mDiameter * 1.3f) / 2;
-        float maxUpDown = (this.mDiameter * 0.8f) / 2;
+        float maxSlider = (mDiameter * 1.3f) / 2;
+        float maxUpDown = (mDiameter * 0.8f) / 2;
 
         // handle increment/decrement button events
         if (distanceFromCenterSquared < (maxUpDown * maxUpDown)) {
-            boolean isIncrease = touchX > this.mCenterX;
+            boolean isIncrease = touchX > mCenterX;
 
             if (event.getAction() == MotionEvent.ACTION_DOWN
                     || event.getAction() == MotionEvent.ACTION_MOVE) {
                 if (isIncrease) {
-                    this.mIsIncreasePushed = true;
-                    increaseStep(this.mButtonChangeInterval);
+                    mIsIncreasePushed = true;
+                    increaseStep(mButtonChangeInterval);
                 } else {
-                    this.mIsDecreasePushed = true;
-                    decreaseStep(this.mButtonChangeInterval);
+                    mIsDecreasePushed = true;
+                    decreaseStep(mButtonChangeInterval);
                 }
             }
 
@@ -204,7 +212,7 @@ public final class CircularSeekBar extends View {
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-        Log.d(this.TAG, "onMeasure() called");
+        Log.d(TAG, "onMeasure() called");
 
         int width = MeasureSpec.getSize(widthMeasureSpec);
         int height = MeasureSpec.getSize(heightMeasureSpec);
@@ -226,7 +234,7 @@ public final class CircularSeekBar extends View {
 
     /** Sets the color of the remaining/empty circle in the middle **/
     public void setEmptyCircleColor(int color) {
-        this.mEmptyCircleColor.setColor(color);
+        mEmptyCircleColor.setColor(color);
     }
 
     /**
@@ -234,17 +242,17 @@ public final class CircularSeekBar extends View {
      * to selected step
      **/
     public void setSelectedCircleColor(int color) {
-        this.mSelectedCircleColor.setColor(color);
+        mSelectedCircleColor.setColor(color);
     }
 
     /** Sets the color of the seek bar thumb **/
     public void setSeekBarThumsColor(int color) {
-        this.mThumbColor.setColor(color);
+        mThumbColor.setColor(color);
     }
 
     /** Sets the color of the buttons in the middle when they are pushed **/
     public void setButtonPushedColor(int color) {
-        this.mButtonPushedColor.setColor(color);
+        mButtonPushedColor.setColor(color);
     }
 
     /**************** DRAWING HELPER METHODS ****************/
@@ -253,76 +261,80 @@ public final class CircularSeekBar extends View {
      * Draw a circle and an arc of the selected step, from start thru end.
      */
     private void drawCircularSeekBar(Canvas canvas) {
-        int sweepDegrees = getSweepAngleForStep(this.mSelectedStep) - 1;
-        int startAngle = this.mStartAngle;
+        int sweepDegrees = getSweepAngleForStep(mSelectedStep) - 1;
+        int startAngle = mStartAngle;
 
         // the colored "filled" part of the circle
-        drawArc(canvas, startAngle, sweepDegrees, this.mSelectedCircleColor);
-        Log.d(this.TAG, "drawCircularSeekBar() selected part startAngle: " + this.mStartAngle
+        drawArc(canvas, startAngle, sweepDegrees, mSelectedCircleColor);
+        Log.d(TAG, "drawCircularSeekBar() selected part startAngle: " + mStartAngle
                 + " sweepDegrees: " + sweepDegrees);
 
         // the white selected part of the circle
         startAngle += sweepDegrees;
-        drawArc(canvas, startAngle, this.mStepThumbTickness, this.mThumbColor);
-        Log.d(this.TAG, "drawCircularSeekBar() thumb startAngle:"
-                + (this.mStartAngle + sweepDegrees) + " sweepDegrees: " + this.mStepThumbTickness);
+        drawArc(canvas, startAngle, mStepThumbTickness, mThumbColor);
+        Log.d(TAG, "drawCircularSeekBar() thumb startAngle:" + (mStartAngle + sweepDegrees)
+                + " sweepDegrees: " + mStepThumbTickness);
 
         // the grey empty part of the circle
-        startAngle += this.mStepThumbTickness;
-        drawArc(canvas, startAngle, 360 - sweepDegrees - this.mStepThumbTickness,
-                this.mEmptyCircleColor);
-        Log.d(this.TAG, "drawCircularSeekBar() empty part startAngle: "
-                + (this.mStartAngle + sweepDegrees + this.mStepThumbTickness) + " sweepDegrees: "
-                + (360 - sweepDegrees - this.mStepThumbTickness));
+        startAngle += mStepThumbTickness;
+        drawArc(canvas, startAngle, 360 - sweepDegrees - mStepThumbTickness, mEmptyCircleColor);
+        Log.d(TAG, "drawCircularSeekBar() empty part startAngle: "
+                + (mStartAngle + sweepDegrees + mStepThumbTickness) + " sweepDegrees: "
+                + (360 - sweepDegrees - mStepThumbTickness));
+    }
+
+    private String formatValue(double value) {
+        return (mFormatter != null) ? mFormatter.format(value) : String.valueOf(value);
     }
 
     /**
      * Write labels in the middle of the circle
      */
     private void drawTextAndButtons(Canvas canvas) {
-        Log.d(this.TAG, "drawClockTextAndButtons() called");
+        Log.d(TAG, "drawClockTextAndButtons() called");
 
         // up/down button backgrounds
-        if (this.mIsIncreasePushed) {
-            canvas.drawArc(this.mButtonCircle, 270, 180, true, this.mButtonPushedColor);
+        if (mIsIncreasePushed) {
+            canvas.drawArc(mButtonCircle, 270, 180, true, mButtonPushedColor);
         }
-        if (this.mIsDecreasePushed) {
-            canvas.drawArc(this.mButtonCircle, 90, 180, true, this.mButtonPushedColor);
+        if (mIsDecreasePushed) {
+            canvas.drawArc(mButtonCircle, 90, 180, true, mButtonPushedColor);
         }
 
         // Writing the text in the middle
-        canvas.drawText(getValueAtStep(this.mSelectedStep) + "", this.mCenterX, this.mCenterY
-                - (this.mDiameter * 0.08f), this.mTextStyle);
-        canvas.drawText(this.mValueUnitName, this.mCenterX, this.mCenterY
-                + (this.mDiameter * 0.08f), this.mTextStyle);
+        String formattedValue = formatValue(mValueArray[mSelectedStep]);
+        StaticLayout sl = new StaticLayout(formattedValue, mTextStyle, 280,
+                Layout.Alignment.ALIGN_NORMAL, 1.f, 0, true);
+
+        canvas.save();
+        canvas.translate(mCenterX, mCenterY - (mDiameter * 0.30f));
+        sl.draw(canvas);
+        canvas.restore();
 
         // up/down buttons
-        Paint downPaint = this.mIsDecreasePushed ? this.mThumbColor : this.mEmptyCircleColor;
-        canvas.drawRect(this.mCenterX - this.mDiameter * 0.32f, this.mCenterY - this.mDiameter
-                * 0.01f, this.mCenterX - this.mDiameter * 0.22f, this.mCenterY + this.mDiameter
-                * 0.01f, downPaint);
+        Paint downPaint = mIsDecreasePushed ? mThumbColor : mEmptyCircleColor;
+        canvas.drawRect(mCenterX - mDiameter * 0.32f, mCenterY - mDiameter * 0.01f, mCenterX
+                - mDiameter * 0.22f, mCenterY + mDiameter * 0.01f, downPaint);
 
-        Paint upPaint = this.mIsIncreasePushed ? this.mThumbColor : this.mEmptyCircleColor;
-        canvas.drawRect(this.mCenterX + this.mDiameter * 0.22f, this.mCenterY - this.mDiameter
-                * 0.01f, this.mCenterX + this.mDiameter * 0.32f, this.mCenterY + this.mDiameter
-                * 0.01f, upPaint);
-        canvas.drawRect(this.mCenterX + this.mDiameter * 0.26f, this.mCenterY - this.mDiameter
-                * 0.05f, this.mCenterX + this.mDiameter * 0.28f, this.mCenterY + this.mDiameter
-                * 0.05f, upPaint);
+        Paint upPaint = mIsIncreasePushed ? mThumbColor : mEmptyCircleColor;
+        canvas.drawRect(mCenterX + mDiameter * 0.22f, mCenterY - mDiameter * 0.01f, mCenterX
+                + mDiameter * 0.32f, mCenterY + mDiameter * 0.01f, upPaint);
+        canvas.drawRect(mCenterX + mDiameter * 0.26f, mCenterY - mDiameter * 0.05f, mCenterX
+                + mDiameter * 0.28f, mCenterY + mDiameter * 0.05f, upPaint);
     }
 
     /** Generic method for drawing arcs **/
     private void drawArc(Canvas canvas, int startAngle, int sweepDegrees, Paint paint) {
-        Log.d(this.TAG, "drawArc() called");
+        Log.d(TAG, "drawArc() called");
 
         if (sweepDegrees <= 0)
             return;
 
-        this.mPath.reset();
-        this.mPath.arcTo(this.mOuterCircle, startAngle, sweepDegrees);
-        this.mPath.arcTo(this.mInnerCircle, startAngle + sweepDegrees, -sweepDegrees);
-        this.mPath.close();
-        canvas.drawPath(this.mPath, paint);
+        mPath.reset();
+        mPath.arcTo(mOuterCircle, startAngle, sweepDegrees);
+        mPath.arcTo(mInnerCircle, startAngle + sweepDegrees, -sweepDegrees);
+        mPath.close();
+        canvas.drawPath(mPath, paint);
     }
 
     /******************* GETTERS AND SETTES *************/
@@ -332,9 +344,9 @@ public final class CircularSeekBar extends View {
      * 120
      */
     public int getSweepAngleForStep(int step) {
-        step = step % this.mTotalSteps; // in case the current step belong to
-                                        // other round trips
-        return step * this.mAngleIncrement;
+        step = step % mTotalSteps; // in case the current step belong to other
+                                   // round trips
+        return step * mAngleIncrement;
     }
 
     /**
@@ -342,7 +354,7 @@ public final class CircularSeekBar extends View {
      * 12
      */
     public int getStepForSweepAngle(int sweepAngle) {
-        return sweepAngle / this.mAngleIncrement;
+        return sweepAngle / mAngleIncrement;
     }
 
     /** Returns the round trips in the circle seek bar **/
@@ -369,56 +381,50 @@ public final class CircularSeekBar extends View {
         if (step < 0) // ignore negative steps
             step = 0;
 
-        if (step > this.mTotalSteps) // the step is set from the code
+        if (step > mTotalSteps) // the step is set from the code
         {
-            this.mRoundTrips = (step / this.mTotalSteps); // set round trips
-            this.mSelectedStep = step; // set selected step
-            Log.d(this.TAG, "Setting selected step to: " + this.mSelectedStep
-                    + " and round trips is now: " + this.mRoundTrips);
+            mRoundTrips = (step / mTotalSteps); // set round trips
+            mSelectedStep = step; // set selected step
+            Log.d(TAG, "Setting selected step to: " + mSelectedStep + " and round trips is now: "
+                    + mRoundTrips);
         } else // the step is set from seek bar
         {
-            step += (this.mRoundTrips * this.mTotalSteps);
+            step += (mRoundTrips * mTotalSteps);
 
-            if (this.mSelectedStep == step || step > this.mValueArray.length) // do
-                                                                              // nothing
-                                                                              // if
-                                                                              // the
-                                                                              // step
-                                                                              // is
-                                                                              // the
-                                                                              // same
-                                                                              // as
-                                                                              // the
-                                                                              // current
-                                                                              // selected
-                                                                              // step
-                                                                              // or
-                                                                              // greater
-                                                                              // then
-                                                                              // array
-                                                                              // lenght
+            if (mSelectedStep == step || step > mValueArray.length) // do
+                                                                    // nothing
+                                                                    // if the
+                                                                    // step is
+                                                                    // the same
+                                                                    // as the
+                                                                    // current
+                                                                    // selected
+                                                                    // step or
+                                                                    // greater
+                                                                    // then
+                                                                    // array
+                                                                    // lenght
             {
                 step = 0;
                 return;
             }
 
-            Log.d(this.TAG, "Selected step: " + this.mSelectedStep + ", new step: " + step
-                    + ", total steps: " + this.mTotalSteps + ", round trips: " + this.mRoundTrips
-                    + ", modulus: " + (this.mSelectedStep % this.mTotalSteps));
+            Log.d(TAG, "Selected step: " + mSelectedStep + ", new step: " + step
+                    + ", total steps: " + mTotalSteps + ", round trips: " + mRoundTrips
+                    + ", modulus: " + (mSelectedStep % mTotalSteps));
 
-            if (this.mSelectedStep - step == this.mTotalSteps - 1) // add one
-                                                                   // round trip
-                this.mRoundTrips++;
-            else if (this.mSelectedStep - step == -(this.mTotalSteps - 1) && this.mRoundTrips != 0) // reduce
-                                                                                                    // one
-                                                                                                    // round
-                                                                                                    // trip
-                this.mRoundTrips--;
+            if (mSelectedStep - step == mTotalSteps - 1) // add one round trip
+                mRoundTrips++;
+            else if (mSelectedStep - step == -(mTotalSteps - 1) && mRoundTrips != 0) // reduce
+                                                                                     // one
+                                                                                     // round
+                                                                                     // trip
+                mRoundTrips--;
 
             this.mSelectedStep = step;
 
-            Log.d(this.TAG, "Setting selected step to: " + this.mSelectedStep
-                    + " and round trips is now: " + this.mRoundTrips);
+            Log.d(TAG, "Setting selected step to: " + mSelectedStep + " and round trips is now: "
+                    + mRoundTrips);
         }
         postInvalidate();
     }
@@ -431,11 +437,11 @@ public final class CircularSeekBar extends View {
      *         valueArray 0.00 will be returned
      */
     public double getValueAtStep(int step) {
-        if (step < 0 || this.mValueArray == null || this.mValueArray.length == 0
-                || step >= this.mValueArray.length)
+        if (step < 0 || mValueArray == null || mValueArray.length == 0
+                || step >= mValueArray.length)
             return 0.00;
 
-        return this.mValueArray[step];
+        return mValueArray[step];
     }
 
     /**
@@ -444,8 +450,8 @@ public final class CircularSeekBar extends View {
      * @return value for the selected step or 0.00 if the valueArray is empty
      **/
     public double getSelectedValue() {
-        if (this.mValueArray != null && this.mValueArray.length > 0)
-            return this.mValueArray[this.mSelectedStep];
+        if (mValueArray != null && mValueArray.length > 0)
+            return mValueArray[mSelectedStep];
         else
             return 0.00;
     }
@@ -459,9 +465,9 @@ public final class CircularSeekBar extends View {
      */
     public void setSelectedStepForValue(double value) {
         // find the first index/step of the value in the valueArray
-        if (this.mValueArray != null && this.mValueArray.length > 0) {
-            for (int step = 0; step < this.mValueArray.length; step++) {
-                if (this.mValueArray[step] == value) {
+        if (mValueArray != null && mValueArray.length > 0) {
+            for (int step = 0; step < mValueArray.length; step++) {
+                if (mValueArray[step] == value) {
                     // set the selected step to the value index/step
                     setSelectedStep(step);
                     return;
@@ -470,22 +476,9 @@ public final class CircularSeekBar extends View {
         }
     }
 
-    /**
-     * The unit name of the values. This name is displayed in the middle of the
-     * circle
-     **/
-    public void setValueUnitName(String name) {
-        this.mValueUnitName = name;
-    }
-
-    /** Returns the unit name of the values in the seek bar **/
-    public String getValueUnitName() {
-        return this.mValueUnitName;
-    }
-
     /** Returns the selected step in the seek bar **/
     public int getSelectedStep() {
-        return this.mSelectedStep;
+        return mSelectedStep;
     }
 
     /**
@@ -497,7 +490,15 @@ public final class CircularSeekBar extends View {
         if (stepInterval < 0)
             return;
 
-        this.mButtonChangeInterval = stepInterval;
+        mButtonChangeInterval = stepInterval;
+    }
+
+    public void setFormatter(Formatter formatter) {
+        if (formatter == mFormatter)
+            return;
+
+        mFormatter = formatter;
+        postInvalidate();
     }
 
     /*********************** STEP MANAGEMENT METHODS ******************/
@@ -511,13 +512,13 @@ public final class CircularSeekBar extends View {
         if (increment < 0)
             return;
 
-        int step = this.mSelectedStep + increment;
+        int step = mSelectedStep + increment;
 
-        if (step >= this.mValueArray.length)
-            step = this.mValueArray.length - 1;
+        if (step >= mValueArray.length)
+            step = mValueArray.length - 1;
 
-        this.mRoundTrips = (step / this.mTotalSteps);
-        this.mSelectedStep = step;
+        mRoundTrips = (step / mTotalSteps);
+        mSelectedStep = step;
 
         postInvalidate();
     }
@@ -528,13 +529,13 @@ public final class CircularSeekBar extends View {
      * @param decrement positive value. Will not decrease to step below zero.
      **/
     public void decreaseStep(int decrement) {
-        int step = this.mSelectedStep - decrement;
+        int step = mSelectedStep - decrement;
 
         if (step < 0)
             step = 0;
 
-        this.mRoundTrips = (step / this.mTotalSteps);
-        this.mSelectedStep = step;
+        mRoundTrips = (step / mTotalSteps);
+        mSelectedStep = step;
 
         postInvalidate();
     }
@@ -546,13 +547,13 @@ public final class CircularSeekBar extends View {
      * between the start angle and the touched angle.
      */
     public int convertToSweepAngle(int angle) {
-        int sweepAngle = 360 + angle - this.mStartAngle;
+        int sweepAngle = 360 + angle - mStartAngle;
         sweepAngle = roundToNearest(sweepAngle);
         if (sweepAngle > 360) {
             sweepAngle = sweepAngle - 360;
         }
 
-        Log.d(this.TAG, "Converting from angle: " + angle + " to sweepAngle: " + sweepAngle);
+        Log.d(TAG, "Converting from angle: " + angle + " to sweepAngle: " + sweepAngle);
 
         return sweepAngle;
     }
@@ -570,33 +571,33 @@ public final class CircularSeekBar extends View {
          * adj
          */
 
-        if (x >= this.mCenterX && y < this.mCenterY) // [0..90]
+        if (x >= mCenterX && y < mCenterY) // [0..90]
         {
-            double opp = x - this.mCenterX;
-            double adj = this.mCenterY - y;
-            Log.d(this.TAG, "pointToAngle(): [0..90] called. opp: " + opp + ", adj: " + adj + " = "
+            double opp = x - mCenterX;
+            double adj = mCenterY - y;
+            Log.d(TAG, "pointToAngle(): [0..90] called. opp: " + opp + ", adj: " + adj + " = "
                     + (270 + (int) Math.toDegrees(Math.atan(opp / adj))));
             return 270 + (int) Math.toDegrees(Math.atan(opp / adj));
-        } else if (x > this.mCenterX && y >= this.mCenterY) // [90..180]
+        } else if (x > mCenterX && y >= mCenterY) // [90..180]
         {
-            double opp = y - this.mCenterY;
-            double adj = x - this.mCenterX;
-            Log.d(this.TAG, "pointToAngle() [90..180] called. opp: " + opp + ", adj: " + adj
-                    + " = " + (int) Math.toDegrees(Math.atan(opp / adj)));
+            double opp = y - mCenterY;
+            double adj = x - mCenterX;
+            Log.d(TAG, "pointToAngle() [90..180] called. opp: " + opp + ", adj: " + adj + " = "
+                    + (int) Math.toDegrees(Math.atan(opp / adj)));
             return (int) Math.toDegrees(Math.atan(opp / adj));
-        } else if (x <= this.mCenterX && y > this.mCenterY) // [180..270]
+        } else if (x <= mCenterX && y > mCenterY) // [180..270]
         {
-            double opp = this.mCenterX - x;
-            double adj = y - this.mCenterY;
-            Log.d(this.TAG, "pointToAngle() // [180..270] called. opp: " + opp + ", adj: " + adj
-                    + " = " + (90 + (int) Math.toDegrees(Math.atan(opp / adj))));
+            double opp = mCenterX - x;
+            double adj = y - mCenterY;
+            Log.d(TAG, "pointToAngle() // [180..270] called. opp: " + opp + ", adj: " + adj + " = "
+                    + (90 + (int) Math.toDegrees(Math.atan(opp / adj))));
             return 90 + (int) Math.toDegrees(Math.atan(opp / adj));
-        } else if (x < this.mCenterX && y <= this.mCenterY) // [270..359]
+        } else if (x < mCenterX && y <= mCenterY) // [270..359]
         {
-            double opp = this.mCenterY - y;
-            double adj = this.mCenterX - x;
-            Log.d(this.TAG, "pointToAngle() // [270..360] called. opp: " + opp + ", adj: " + adj
-                    + " = " + (180 + (int) Math.toDegrees(Math.atan(opp / adj))));
+            double opp = mCenterY - y;
+            double adj = mCenterX - x;
+            Log.d(TAG, "pointToAngle() // [270..360] called. opp: " + opp + ", adj: " + adj + " = "
+                    + (180 + (int) Math.toDegrees(Math.atan(opp / adj))));
             return 180 + (int) Math.toDegrees(Math.atan(opp / adj));
         }
 
@@ -609,6 +610,21 @@ public final class CircularSeekBar extends View {
      * users from being frustrated when trying to select a fine-grained period.
      */
     private int roundToNearest(int angle) {
+        NumberPicker.Formatter f;
+
         return ((angle + 5) / 10) * 10;
+    }
+
+    /**
+     * Interface used to format current value into a string for presentation.
+     */
+    public interface Formatter {
+        /**
+         * Formats a string representation of the current value.
+         * 
+         * @param value The currently selected value.
+         * @return A formatted string representation.
+         */
+        public String format(double value);
     }
 }
