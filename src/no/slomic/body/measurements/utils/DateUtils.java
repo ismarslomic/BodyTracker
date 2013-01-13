@@ -1,6 +1,7 @@
 
 package no.slomic.body.measurements.utils;
 
+import android.content.Context;
 import android.content.res.Resources;
 
 import no.slomic.body.measurements.R;
@@ -49,18 +50,22 @@ public class DateUtils {
      *         Wednesday 9. july - if the date is this mYear<br>
      *         Wednesday 9. july 2011 - if the date is not this mYear
      */
-    public static String formatToMediumFormatExtended(DateTime d) {
+    public static String formatToMediumFormatExtended(DateTime d, Resources resources) {
         DateTime today = DateTime.now();
         DateTime yesterday = today.minusDays(1);
+        DateTime tomorrow = today.plusDays(1);
 
         String todayDateString = today.toString(SHORT_DATE_FORMAT);
         String yesterdayDateString = yesterday.toString(SHORT_DATE_FORMAT);
+        String tomorrowDateString = tomorrow.toString(SHORT_DATE_FORMAT);
         String dateString = d.toString(SHORT_DATE_FORMAT);
 
         if (dateString.equals(todayDateString))
-            return "Today";
+            return resources.getString(R.string.today);
         else if (dateString.equals(yesterdayDateString))
-            return "Yesterday";
+            return resources.getString(R.string.yesterday);
+        else if (dateString.equals(tomorrowDateString))
+            return resources.getString(R.string.tomorrow);
         else if (d.getYear() == today.getYear())
             return d.toString(MEDIUM_DATE_FORMAT_EX_YEAR);
         else

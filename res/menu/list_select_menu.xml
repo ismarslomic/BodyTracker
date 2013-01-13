@@ -5,7 +5,7 @@
         android:enabled="true"
         android:icon="@drawable/delete"
         android:showAsAction="always"
-        android:title="DELETE"
+        android:title="@string/delete"
         android:visible="true">
     </item>
 

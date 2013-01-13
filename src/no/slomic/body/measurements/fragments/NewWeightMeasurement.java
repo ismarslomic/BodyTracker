@@ -7,7 +7,6 @@ import android.app.AlertDialog;
 import android.app.DatePickerDialog.OnDateSetListener;
 import android.app.Dialog;
 import android.content.DialogInterface;
-import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
@@ -36,12 +35,6 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
         OnDateSetListener, DialogInterface.OnClickListener {
     private Button mDateButton; // the measurement date UI controller
 
-    // shared preference
-    private SharedPreferences mSharedPreferences;
-    private String mMetricUnits;
-    private String mImperialUnits;
-    private String mSystemOfMeasurement;
-
     // bundle arguments
     private static final String ARGS_DATE = "date";
     private static final String ARGS_VALUE_ARRAY_INDEX = "value_index";
@@ -68,13 +61,6 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
         LayoutInflater factory = LayoutInflater.from(getActivity());
         final View v = factory.inflate(R.layout.layout_dialog_new_measurement, null);
 
-        // Shared preferences
-        this.mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
-        this.mMetricUnits = getActivity().getResources().getString(R.string.metric_units);
-        this.mImperialUnits = getActivity().getResources().getString(R.string.imperial_units);
-        this.mSystemOfMeasurement = this.mSharedPreferences.getString(
-                SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY, this.mMetricUnits);
-
         // Initialize the circular seek bar widget
         this.mSeekBar = (CircularSeekBar) v.findViewById(R.id.circularSeekBar);
         this.mSeekBar.setEmptyCircleColor(Color.GRAY);
@@ -94,10 +80,9 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
             @Override
             public String format(double value) {
                 Quantity q = new Quantity(value, WeightUnit.KG);
-                if (mSystemOfMeasurement.equals(mMetricUnits))
-                    return QuantityStringFormat.formatWeightToMetric(q);
-                else
-                    return QuantityStringFormat.formatWeightToImperial(q);
+                return QuantityStringFormat.formatQuantityValue(q,
+                        PreferenceManager.getDefaultSharedPreferences(getActivity()),
+                        getResources());
             }
 
         };
@@ -109,7 +94,8 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
         final View dateView = factory.inflate(R.layout.layout_dialog_date_title, null);
         this.mDateButton = (Button) dateView.findViewById(R.id.dialog_date_button);
         this.mDateButton.setOnClickListener(this);
-        this.mDateButton.setText(DateUtils.formatToMediumFormatExtended(this.mDate));
+        this.mDateButton
+                .setText(DateUtils.formatToMediumFormatExtended(this.mDate, getResources()));
 
         AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
         builder.setCustomTitle(dateView);
@@ -181,8 +167,8 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
     private Quantity getAvarageWeight() {
         // get the sex of current user (male or female) from shared preferences
         String male = getResources().getString(R.string.sex_male);
-        String sex = this.mSharedPreferences.getString(SettingsActivity.PREFERENCE_ACCOUNT_SEX_KEY,
-                male);
+        String sex = PreferenceManager.getDefaultSharedPreferences(getActivity()).getString(
+                SettingsActivity.PREFERENCE_ACCOUNT_SEX_KEY, male);
 
         // get avarage weight for given sex
         if (sex.equals(male)) // male
@@ -241,15 +227,8 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
         switch (whichButton) {
             case DialogInterface.BUTTON_POSITIVE: // OK button pressed
                 boolean saved = save();
-                if (saved) // the input was valid and got saved
-                    Toast.makeText(getActivity(),
-                            R.string.message_toast_add_new_measurement_positive, Toast.LENGTH_SHORT)
-                            .show();
-                else
-                    // the input was invalid and not saved
-                    Toast.makeText(getActivity(),
-                            R.string.message_toast_add_new_measurement_negative, Toast.LENGTH_SHORT)
-                            .show();
+                Toast.makeText(getActivity(), R.string.message_toast_add_new_measurement_positive,
+                        Toast.LENGTH_SHORT).show();
                 break;
             case DialogInterface.BUTTON_NEGATIVE: // CANCEL button pressed, do
                                                   // something below if you need
@@ -267,7 +246,8 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
         monthOfYear++; // DatePickerFragment months goes from 0-11 while Joda
                        // DateTime 1-12
         this.mDate = new DateTime(year, monthOfYear, dayOfMonth, 0, 0);
-        this.mDateButton.setText(DateUtils.formatToMediumFormatExtended(this.mDate));
+        this.mDateButton
+                .setText(DateUtils.formatToMediumFormatExtended(this.mDate, getResources()));
     }
 
     // Callback interface when new measurement is created (and saved)

@@ -4,6 +4,11 @@
 
 package no.slomic.body.measurements.utils;
 
+import android.content.SharedPreferences;
+import android.content.res.Resources;
+
+import no.slomic.body.measurements.R;
+import no.slomic.body.measurements.activities.SettingsActivity;
 import no.slomic.body.measurements.entities.LengthUnit;
 import no.slomic.body.measurements.entities.Quantity;
 import no.slomic.body.measurements.entities.WeightUnit;
@@ -14,7 +19,28 @@ public class QuantityStringFormat {
     public static final DecimalFormat WEIGHT_ONE_DECIMAL_FORMAT = new DecimalFormat("#,##0.0");
     public static final DecimalFormat WEIGHT_TWO_DECIMAL_FORMAT = new DecimalFormat("#,##0.00");
     public static final DecimalFormat LENGTH_DECIMAL_FORMAT = new DecimalFormat("#,##0.00");
-
+    
+    public static String formatQuantityValue(Quantity q, SharedPreferences sp, Resources r)
+    {
+        if(q == null)
+            return "";
+        
+        String metricUnits = r.getString(R.string.metric_units);
+        String imperialUnits = r.getString(R.string.imperial_units);
+        String systemOfMeasurement = sp.getString(SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY, metricUnits);
+        
+        // Weight measurement
+        if(q.getUnit() instanceof WeightUnit)
+        {
+            if (systemOfMeasurement.equals(metricUnits))
+                return QuantityStringFormat.formatWeightToMetric(q);
+            else
+                return QuantityStringFormat.formatWeightToImperial(q);
+        }
+        else
+            return "";
+    }
+    
     /**
      * Formats the quantity value of weight measurement in kilograms and grams
      * 

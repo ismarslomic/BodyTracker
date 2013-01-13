@@ -1,37 +1,30 @@
 <resources>
 
     <string name="app_name">Body tracker</string>
-    <string name="hello_world">Hello world!</string>
     <string name="menu_settings">Settings</string>
     <string name="menu_import_data">Import data</string>
     <string name="menu_export_data">Export data</string>
-    <string name="gen_placeholder">View placeholder</string>
     <string name="yesterday">Yesterday</string>
     <string name="today">Today</string>
     <string name="tomorrow">Tomorrow</string>
 
-    <string-array name="view_switch_list">
-        <item>Table view</item>
-        <item>Chart view</item>
-    </string-array>
     <string-array name="account_sex_preference">
         <item>@string/sex_male</item>
         <item>@string/sex_female</item>
     </string-array>
-    
+
     <!-- System of measurement preference strings -->
     <string-array name="system_of_measurement_preference">
         <item>@string/metric_units</item>
         <item>@string/imperial_units</item>
     </string-array>
+
     <string name="metric_units">Metric units (kg, m)</string>
     <string name="imperial_units">Imperial units (lbs, ft)</string>
     <string name="dialog_title_system_of_measurement_preference">System of measurement</string>
     <string name="title_system_of_measurement_preference">System of measurement</string>
-
     <string name="title_alert_dialog_new_weight">Add weight measurement</string>
     <string name="message_toast_add_new_measurement_positive">Measurement added.</string>
-    <string name="message_toast_add_new_measurement_negative">Invalid values. No new measurement added.</string>
     <string name="sex_female">Female</string>
     <string name="sex_male">Male</string>
     <string name="title_tab_chest">Chest</string>
@@ -63,7 +56,7 @@
 
     <color name="white_color">#fff</color>
     <color name="gray_color">#aaa</color>
-    <color name ="red_color">#CC0000</color>
+    <color name="red_color">#CC0000</color>
 
     <string name="title_weight_measurement_preferences">Measure weight</string>
     <string name="title_weight_goal_preferences">Goal</string>
@@ -77,15 +70,22 @@
     <string name="title_period_start_preferences">Period starts</string>
     <string name="dialog_title_period_end_preferences">Period end date</string>
     <string name="title_period_end_preferences">Period ends</string>
-
+    <string name="delete">Delete</string>
     <string name="no">NO</string>
     <string name="yes">YES</string>
     <string name="title_move_to_next_measurement_preferences">Move to next measurement</string>
     <string name="summary_move_to_next_measurement_preferences">Automatically after new registration</string>
 
-    <!--  Dialog - New Measurement -->
-    <string name="label_date">Date</string>
-    <string name="label_value">Value</string>
-    
-    
+    <!-- Measurement list selected rows -->
+    <string name="message_select_items_measurement_list">Select</string>
+    <string name="message_one_item_selected_measurement_list">One selected</string>
+    <string name="message_several_item_selected_measurement_list">%1$d selected</string>
+    <string name="message_no_measurements_measurement_list">None existing measurements.</string>
+
+    <!-- Weekly stats -->
+    <string name="toast_no_measurements_weekly_stats">No measurements registered</string>
+    <string name="toast_reduced_measurements_weekly_stats">Last week you have reduced weight with %1$s</string>
+    <string name="toast_equal_measurements_weekly_stats">Equal weight as last week</string>
+    <string name="toast_increased_measurements_weekly_stats">Last week you increased weight with %1$s</string>
+
 </resources>

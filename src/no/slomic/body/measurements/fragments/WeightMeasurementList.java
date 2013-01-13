@@ -5,6 +5,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Environment;
+import android.preference.PreferenceManager;
 import android.support.v4.app.ListFragment;
 import android.util.Log;
 import android.util.SparseBooleanArray;
@@ -28,6 +29,7 @@ import no.slomic.body.measurements.entities.Measurement;
 import no.slomic.body.measurements.entities.Quantity;
 import no.slomic.body.measurements.storage.SQLiteHelper;
 import no.slomic.body.measurements.storage.WeightMeasurementDAO;
+import no.slomic.body.measurements.utils.QuantityStringFormat;
 
 import org.joda.time.DateTime;
 
@@ -83,7 +85,7 @@ public class WeightMeasurementList extends ListFragment {
         public boolean onCreateActionMode(ActionMode mode, Menu menu) {
             MenuInflater inflater = WeightMeasurementList.this.activity.getMenuInflater();
             inflater.inflate(R.menu.list_select_menu, menu);
-            mode.setTitle("Select Items");
+            mode.setTitle(getResources().getString(R.string.message_select_items_measurement_list));
             setSubtitle(mode);
             return true;
         }
@@ -139,10 +141,12 @@ public class WeightMeasurementList extends ListFragment {
                     mode.setSubtitle(null);
                     break;
                 case 1:
-                    mode.setSubtitle("One item selected");
+                    mode.setSubtitle(getResources().getString(
+                            R.string.message_one_item_selected_measurement_list));
                     break;
                 default:
-                    mode.setSubtitle("" + checkedCount + " items selected");
+                    mode.setSubtitle(getResources().getString(
+                            R.string.message_several_item_selected_measurement_list, checkedCount));
                     break;
             }
         }
@@ -223,14 +227,20 @@ public class WeightMeasurementList extends ListFragment {
         Quantity lastWeek = this.weightMeasurementDAO.lastWeekStatistics();
         this.weightMeasurementDAO.close();
 
+        String lastWeekString = "";
+        lastWeekString = QuantityStringFormat.formatQuantityValue(lastWeek,
+                PreferenceManager.getDefaultSharedPreferences(getActivity()), getResources());
+
         if (lastWeek == null)
-            text = "No measurements registered";
+            text = getResources().getString(R.string.toast_no_measurements_weekly_stats);
         else if (lastWeek.getValue() < 0)
-            text = "Last week you have reduced weight with " + lastWeek.toString();
+            text = getResources().getString(R.string.toast_reduced_measurements_weekly_stats,
+                    lastWeekString);
         else if (lastWeek.getValue() == 0)
-            text = "Equal weight as last week";
+            text = getResources().getString(R.string.toast_equal_measurements_weekly_stats);
         else
-            text = "Last week you increased weight with " + lastWeek.toString();
+            text = getResources().getString(R.string.toast_increased_measurements_weekly_stats,
+                    lastWeekString);
 
         Toast toast = Toast.makeText(this.activity, text, Toast.LENGTH_LONG);
         toast.setGravity(Gravity.CENTER_VERTICAL, 0, 0);

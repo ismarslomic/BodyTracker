@@ -55,11 +55,14 @@ public class WeightMeasurementAdapter extends MeasurementAdapter {
 
     public void bindDataToViews(MeasurementHolder holder, Measurement measurement) {
         // Set measurement date
-        String date = DateUtils.formatToMediumFormatExtended(measurement.getDate());
+        String date = DateUtils.formatToMediumFormatExtended(measurement.getDate(), getContext()
+                .getResources());
         holder.getMeasurementDate().setText(date);
 
         // Set measurement value in preferred system of measurement
-        String formattedValue = getFormattedQuantityValue(measurement.getQuantity());
+        String formattedValue = QuantityStringFormat.formatQuantityValue(measurement.getQuantity(),
+                mSharedPreferences, getContext().getResources());
+
         holder.getMeasurementValue().setText(formattedValue);
 
         // Set diff value between this and previous measurement
@@ -68,7 +71,8 @@ public class WeightMeasurementAdapter extends MeasurementAdapter {
                     measurement.getPrevious().getQuantity(),
                     measurement.getQuantity().getUnit().getSystemUnit());
 
-            String formattedDiffValue = getFormattedQuantityValue(diff);
+            String formattedDiffValue = QuantityStringFormat.formatQuantityValue(diff,
+                    mSharedPreferences, getContext().getResources());
             holder.getDiffValue().setText(formattedDiffValue);
 
             // Set diff relational sign/icon
@@ -82,14 +86,5 @@ public class WeightMeasurementAdapter extends MeasurementAdapter {
             holder.getDiffValue().setText("");
             holder.getDiffIcon().setImageDrawable(null);
         }
-    }
-
-    public String getFormattedQuantityValue(Quantity q) {
-        if (this.mSystemOfMeasurement.equals(this.mMetricUnits))
-            return QuantityStringFormat.formatWeightToMetric(q);
-        else if (this.mSystemOfMeasurement.equals(this.mImperialUnits))
-            return QuantityStringFormat.formatWeightToImperial(q);
-        else
-            return "";
     }
 }

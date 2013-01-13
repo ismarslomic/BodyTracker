@@ -29,7 +29,7 @@ public class MainActivity extends FragmentActivity implements OnSharedPreference
     private TabHost mTabHost;
     private ViewPager mViewPager;
     private TabsAdapter mTabsAdapter;
-    private static final String LOG_TAG = "MainActivity";
+    private static final String LOG_TAG = MainActivity.class.getName();
     private static final boolean DEBUG = true;
 
     @Override
@@ -72,8 +72,10 @@ public class MainActivity extends FragmentActivity implements OnSharedPreference
 
         // Add visible tabs to the tabs adapter
         if (activateWeightMeasurement)
-            this.mTabsAdapter.addTab(this.mTabHost.newTabSpec("Weight").setIndicator("Weight"),
-                    WeightMeasurementList.class, null);
+            this.mTabsAdapter.addTab(
+                    this.mTabHost.newTabSpec(getResources().getString(R.string.title_tab_weight))
+                            .setIndicator(getResources().getString(R.string.title_tab_weight)), WeightMeasurementList.class,
+                    null);
 
         /*
          * if (activateHeightMeasurement)
