@@ -43,8 +43,9 @@ containing a value of this type.
     }
     public static final class color {
         public static final int gray_color=0x7f080001;
-        public static final int list_view_background_selector=0x7f080002;
-        public static final int list_view_text_selector=0x7f080003;
+        public static final int list_view_background_selector=0x7f080003;
+        public static final int list_view_text_selector=0x7f080004;
+        public static final int red_color=0x7f080002;
         public static final int white_color=0x7f080000;
     }
     public static final class drawable {
@@ -185,9 +186,14 @@ containing a value of this type.
         public static final int yesterday=0x7f050006;
     }
     public static final class style {
-        public static final int AppTheme=0x7f090002;
-        public static final int AppThemeDark=0x7f090001;
+        public static final int AppTheme=0x7f090003;
+        public static final int AppThemeDark=0x7f090002;
+        /**  <item name="android:actionBarStyle">@style/MyActionBar</item>
+         */
         public static final int AppThemeLight=0x7f090000;
+        /**  style for the action bar backgrounds 
+         */
+        public static final int MyActionBar=0x7f090001;
     }
     public static final class xml {
         public static final int preferences=0x7f040000;
