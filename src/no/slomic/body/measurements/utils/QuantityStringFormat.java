@@ -32,6 +32,7 @@ public class QuantityStringFormat {
 
         // get value in kilograms
         int valueInKg = (int) q.showInUnits(WeightUnit.KG);
+        valueInKg = Math.abs(valueInKg); // if the value is negative we make it positive since we are having same rules for decimal formats for both ranges
 
         // if value >= 10 kg return with one decimal and kg as unit
         if (valueInKg >= 10)
@@ -44,14 +45,6 @@ public class QuantityStringFormat {
         // if value < 1 kg return in gram
         else
             return (int) q.showInUnits(WeightUnit.G) + " " + WeightUnit.G.toString();
-
-        // if value < 1 kg
-        /*
-         * if ((int) q.showInUnits(WeightUnit.KG) == 0) return (int)
-         * q.showInUnits(WeightUnit.G) + " " + WeightUnit.G.toString(); else
-         * return WEIGHT_ONE_DECIMAL_FORMAT.format(q.showInUnits(WeightUnit.KG))
-         * + " " + WeightUnit.KG.toString();
-         */
     }
 
     /**
@@ -74,10 +67,14 @@ public class QuantityStringFormat {
         // get value in pounds and ounces
         int pounds = (int) q.showInUnits(WeightUnit.LB);
         double ounces = q.showInUnits(WeightUnit.OZ);
+        
+        // if the value is negative we make it positive since we are having same rules for decimal formats for both ranges
+        int poundsAbs = (int) q.showInUnits(WeightUnit.LB);
+        poundsAbs = Math.abs(poundsAbs);
 
         // if value >= 10 kg return pounds (in plural form) and ounces with zero
         // decimals
-        if (pounds >= 22) {
+        if (poundsAbs >= 22) {
             pounds = (int) (ounces / 16);
             ounces = Math.abs(ounces) % 16; // so we don't get -4lb -6,55oz
             return pounds + WeightUnit.LB.getSymbolPlural() + " " + (int) ounces
@@ -85,12 +82,12 @@ public class QuantityStringFormat {
         }
         // if value between 0,45 and 10 kg return pounds (in plural form if > 1)
         // with zero decimal and ounces with one decimal
-        else if (pounds < 22 && pounds > 0) {
+        else if (poundsAbs < 22 && poundsAbs > 0) {
             pounds = (int) (ounces / 16);
             ounces = Math.abs(ounces) % 16; // so we don't get -4lb -6,55oz
 
             // return pounds in plural form
-            if (pounds > 1)
+            if (poundsAbs > 1)
                 return pounds + WeightUnit.LB.getSymbolPlural() + " "
                         + WEIGHT_ONE_DECIMAL_FORMAT.format(ounces) + WeightUnit.OZ.getSymbol();
             else
