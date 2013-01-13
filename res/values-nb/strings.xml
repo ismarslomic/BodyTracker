@@ -1,0 +1,91 @@
+<resources>
+
+    <string name="app_name">Body tracker</string>
+    <string name="menu_settings">Innstillinger</string>
+    <string name="menu_import_data">Importer data</string>
+    <string name="menu_export_data">Eksporter data</string>
+    <string name="yesterday">I går</string>
+    <string name="today">I dag</string>
+    <string name="tomorrow">I morgen</string>
+
+    <string-array name="account_sex_preference">
+        <item>@string/sex_male</item>
+        <item>@string/sex_female</item>
+    </string-array>
+
+    <!-- System of measurement preference strings -->
+    <string-array name="system_of_measurement_preference">
+        <item>@string/metric_units</item>
+        <item>@string/imperial_units</item>
+    </string-array>
+
+    <string name="metric_units">Metric (kg, m)</string>
+    <string name="imperial_units">Imperial (lbs, ft)</string>
+    <string name="dialog_title_system_of_measurement_preference">Måleenhet</string>
+    <string name="title_system_of_measurement_preference">Måleenhet</string>
+    <string name="title_alert_dialog_new_weight">Ny vektmåling</string>
+    <string name="message_toast_add_new_measurement_positive">Måling lagret.</string>
+    <string name="sex_female">Kvinne</string>
+    <string name="sex_male">Mann</string>
+    <string name="title_tab_chest">Bryst</string>
+    <string name="title_tab_waist">Midje</string>
+    <string name="title_tab_weight">Vekt</string>
+    <string name="share">Del</string>
+    <string name="alert_dialog_ok">OK</string>
+    <string name="alert_dialog_cancel">Avbryt</string>
+    <string name="photo_preferences">Foto</string>
+    <string name="measurement_preferences">Målinger</string>
+    <string name="account_preferences">Profil</string>
+    <string name="dialog_title_account_name_preferences">Profilnavn</string>
+    <string name="title_account_name_preferences">Profilnavn</string>
+    <string name="dialog_title_account_sex_preferences">Kjønn</string>
+    <string name="title_account_sex_preferences">Kjønn</string>
+    <string name="dialog_title_account_age_preferences">Fødselsdato</string>
+    <string name="title_account_age_preferences">År</string>
+    <string name="unit_years_preferences">år</string>
+    <string name="update_toast_preferences">Oppdatert %1$d</string>
+
+    <plurals name="numberOfYears">
+        <item quantity="one">%d år</item>
+        <item quantity="other">%d år</item>
+    </plurals>
+    <plurals name="numberOfMonths">
+        <item quantity="one">%d måned</item>
+        <item quantity="other">%d måneder</item>
+    </plurals>
+
+    <color name="white_color">#fff</color>
+    <color name="gray_color">#aaa</color>
+    <color name="red_color">#CC0000</color>
+
+    <string name="title_weight_measurement_preferences">Vektmåling</string>
+    <string name="title_weight_goal_preferences">Målsetting</string>
+    <string name="title_height_measurement_preferences">Høydemåling</string>
+    <string name="title_height_goal_preferences">Målsetting</string>
+    <string name="title_weist_measurement_preferences">Midjemåling</string>
+    <string name="title_weist_goal_preferences">Målsetting</string>
+    <string name="title_head_measurement_preferences">Hodemåling</string>
+    <string name="title_head_goal_preferences">Målsetting</string>
+    <string name="dialog_title_period_start_preferences">Startdato</string>
+    <string name="title_period_start_preferences">Perioden starter</string>
+    <string name="dialog_title_period_end_preferences">Sluttdato</string>
+    <string name="title_period_end_preferences">Perioden avslutter</string>
+    <string name="delete">Slett</string>
+    <string name="no">NEI</string>
+    <string name="yes">JA</string>
+    <string name="title_move_to_next_measurement_preferences">Flytt til neste måling</string>
+    <string name="summary_move_to_next_measurement_preferences">Automatisk etter ny registrering</string>
+
+    <!-- Measurement list selected rows -->
+    <string name="message_select_items_measurement_list">Velg</string>
+    <string name="message_one_item_selected_measurement_list">1 valgt</string>
+    <string name="message_several_item_selected_measurement_list">%1$d valgt</string>
+    <string name="message_no_measurements_measurement_list">Ingen målinger registrert.</string>
+
+    <!-- Weekly stats -->
+    <string name="toast_no_measurements_weekly_stats">Du må registrere målinger før statistikk kan vises.</string>
+    <string name="toast_reduced_measurements_weekly_stats">Sist uke har du redusert med %1$s</string>
+    <string name="toast_equal_measurements_weekly_stats">Du har samme mål som sist uke</string>
+    <string name="toast_increased_measurements_weekly_stats">Sist uke har du økt med %1$s</string>
+
+</resources>
