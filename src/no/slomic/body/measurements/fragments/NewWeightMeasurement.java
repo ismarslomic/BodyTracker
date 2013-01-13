@@ -89,6 +89,19 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
         // Sets how many steps should be changed when pressing + and - buttons
         this.mSeekBar.setButtonChangeInterval(10);
 
+        // Formatting the value into a string representation
+        CircularSeekBar.Formatter f = new CircularSeekBar.Formatter() {
+            @Override
+            public String format(double value) {
+                Quantity q = new Quantity(value, WeightUnit.KG);
+                if (mSystemOfMeasurement.equals(mMetricUnits))
+                    return QuantityStringFormat.formatWeightToMetric(q);
+                else
+                    return QuantityStringFormat.formatWeightToImperial(q);
+            }
+
+        };
+        this.mSeekBar.setFormatter(f);
         initializeMeasurement(savedInstanceState);
 
         // Initialize the UI controller for measurement date which is in the
@@ -260,12 +273,5 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
     // Callback interface when new measurement is created (and saved)
     public interface OnWeightMeasurementCreatedListener {
         public abstract void onWeightMeasurementCreated(Measurement measurement);
-    }
-
-    public String getFormattedValue(Quantity q) {
-        if (this.mSystemOfMeasurement.equals(this.mMetricUnits))
-            return QuantityStringFormat.formatWeightToMetric(q);
-        else
-            return QuantityStringFormat.formatWeightToImperial(q);
     }
 }
