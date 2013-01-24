@@ -69,7 +69,7 @@ public class MainActivity extends FragmentActivity implements OnSharedPreference
                 SettingsActivity.PREFERENCE_ACTIVATE_HEIGHT_MEASUREMENT, true);
         Boolean activateWeightMeasurement = sharedPref.getBoolean(
                 SettingsActivity.PREFERENCE_ACTIVATE_WEIGHT_MEASUREMENT, true);
-
+        activateWeightMeasurement=true;
         // Add visible tabs to the tabs adapter
         if (activateWeightMeasurement)
             this.mTabsAdapter.addTab(
