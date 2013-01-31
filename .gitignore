@@ -3,7 +3,6 @@
 #################
 
 *.pydevproject
-.project
 .metadata
 bin/
 tmp/
@@ -12,7 +11,6 @@ tmp/
 *.swp
 *~.nib
 local.properties
-.classpath
 .settings/
 .loadpath
 
@@ -28,6 +26,8 @@ local.properties
 # PDT-specific
 .buildpath
 
+# Android
+gen/
 
 #################
 ## Visual Studio
