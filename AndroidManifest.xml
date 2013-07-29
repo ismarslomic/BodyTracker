@@ -10,6 +10,7 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     
     <application
+        android:debuggable="true" 
         android:allowBackup="true"
         android:backupAgent="no.slomic.body.measurements.storage.DbBackupHelper"
         android:icon="@drawable/body_tracker_icon2"

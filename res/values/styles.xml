@@ -1,8 +1,10 @@
 <resources xmlns:android="http://schemas.android.com/apk/res/android">
 
     <style name="AppThemeLight" parent="@android:style/Theme.Holo.Light.DarkActionBar">
+        <!--
         <item name="android:actionBarStyle">@style/MyActionBar</item>
         <item name="android:tabWidgetStyle">@style/MyTab</item>
+        -->
     </style>
 
     <!-- style for the action bar backgrounds -->
@@ -20,5 +22,13 @@
         <item name="android:textStyle">bold</item>
         <item name="android:textColor">#ffffff</item>
     </style>
+
+    <style name="DialogButtonTitle">
+        <item name="android:gravity">left|center</item>
+        <item name="android:background">?android:attr/selectableItemBackground</item>
+        <item name="android:textAppearance">@android:style/TextAppearance.Holo.DialogWindowTitle</item>
+        <item name="android:textColor">@android:color/holo_blue_light</item>
+    </style>
+
 
 </resources>

@@ -27,51 +27,46 @@ public final class R {
     public static final class drawable {
         public static final int action_bar_bg=0x7f020000;
         public static final int add=0x7f020001;
-        public static final int bm_icon=0x7f020002;
-        public static final int bm_icon2=0x7f020003;
-        public static final int bm_icon3=0x7f020004;
-        public static final int body_tracker_icon=0x7f020005;
-        public static final int body_tracker_icon2=0x7f020006;
-        public static final int body_tracker_icon3=0x7f020007;
-        public static final int body_tracker_icon4=0x7f020008;
-        public static final int content_event=0x7f020009;
-        public static final int contet_event=0x7f02000a;
-        public static final int delete=0x7f02000b;
-        public static final int discard=0x7f02000c;
-        public static final int down=0x7f02000d;
-        public static final int equal=0x7f02000e;
-        public static final int ic_action_search=0x7f02000f;
-        public static final int ic_launcher=0x7f020010;
-        public static final int up=0x7f020011;
-        public static final int view_as_list=0x7f020012;
-        public static final int week_stat=0x7f020013;
+        public static final int body_tracker_icon2=0x7f020002;
+        public static final int body_tracker_icon3=0x7f020003;
+        public static final int content_event=0x7f020004;
+        public static final int contet_event=0x7f020005;
+        public static final int delete=0x7f020006;
+        public static final int discard=0x7f020007;
+        public static final int down=0x7f020008;
+        public static final int equal=0x7f020009;
+        public static final int ic_action_search=0x7f02000a;
+        public static final int up=0x7f02000b;
+        public static final int view_as_list=0x7f02000c;
+        public static final int week_stat=0x7f02000d;
     }
     public static final class id {
-        public static final int addMeasurement=0x7f0b0014;
-        public static final int circularSeekBar=0x7f0b0004;
-        public static final int current_value=0x7f0b0006;
-        public static final int date_picker=0x7f0b0003;
-        public static final int deleteMeasurement=0x7f0b0013;
-        public static final int dialog_date_button=0x7f0b0002;
-        public static final int diff_icon=0x7f0b000d;
-        public static final int diff_value=0x7f0b000c;
-        public static final int editText1=0x7f0b0012;
-        public static final int exportData=0x7f0b0017;
-        public static final int icon=0x7f0b000e;
-        public static final int importData=0x7f0b0016;
-        public static final int label=0x7f0b000f;
-        public static final int max_value=0x7f0b0009;
-        public static final int measurement_date=0x7f0b000b;
-        public static final int measurement_value=0x7f0b000a;
-        public static final int min_value=0x7f0b0008;
-        public static final int number_picker=0x7f0b0005;
+        public static final int addMeasurement=0x7f0b0015;
+        public static final int circularSeekBar=0x7f0b0005;
+        public static final int current_value=0x7f0b0007;
+        public static final int date_picker=0x7f0b0004;
+        public static final int deleteMeasurement=0x7f0b0014;
+        public static final int dialog_date_button=0x7f0b0003;
+        public static final int dialog_date_title=0x7f0b0002;
+        public static final int diff_icon=0x7f0b000e;
+        public static final int diff_value=0x7f0b000d;
+        public static final int editText1=0x7f0b0013;
+        public static final int exportData=0x7f0b0018;
+        public static final int icon=0x7f0b000f;
+        public static final int importData=0x7f0b0017;
+        public static final int label=0x7f0b0010;
+        public static final int max_value=0x7f0b000a;
+        public static final int measurement_date=0x7f0b000c;
+        public static final int measurement_value=0x7f0b000b;
+        public static final int min_value=0x7f0b0009;
+        public static final int number_picker=0x7f0b0006;
         public static final int pager=0x7f0b0000;
         public static final int pager_title_strip=0x7f0b0001;
-        public static final int seek_bar=0x7f0b0007;
-        public static final int settings=0x7f0b0018;
-        public static final int toast_layout_root=0x7f0b0011;
-        public static final int viewpager=0x7f0b0010;
-        public static final int weekStat=0x7f0b0015;
+        public static final int seek_bar=0x7f0b0008;
+        public static final int settings=0x7f0b0019;
+        public static final int toast_layout_root=0x7f0b0012;
+        public static final int viewpager=0x7f0b0011;
+        public static final int weekStat=0x7f0b0016;
     }
     public static final class layout {
         public static final int activity_main=0x7f030000;
@@ -161,8 +156,14 @@ public final class R {
         public static final int yesterday=0x7f050004;
     }
     public static final class style {
-        public static final int AppTheme=0x7f090004;
+        public static final int AppTheme=0x7f090005;
+        /** 
+        <item name="android:actionBarStyle">@style/MyActionBar</item>
+        <item name="android:tabWidgetStyle">@style/MyTab</item>
+        
+         */
         public static final int AppThemeLight=0x7f090000;
+        public static final int DialogButtonTitle=0x7f090004;
         /**  style for the action bar backgrounds 
          */
         public static final int MyActionBar=0x7f090001;

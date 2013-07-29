@@ -1,15 +1,12 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:android1="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical"
-    android:paddingLeft="8dp"
-    android:paddingRight="8dp" >
+    android:orientation="vertical">
 
     <ListView
-        android1:id="@id/android:list"
-        android1:layout_width="match_parent"
-        android1:layout_height="wrap_content" >
+        android:id="@id/android:list"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content" >
     </ListView>
 
     <TextView

@@ -2,7 +2,10 @@
 <GridLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:columnCount="1" >
+    android:paddingLeft="8dp"
+    android:paddingRight="8dp" 
+    android:columnCount="1" 
+    android:background="?android:attr/activatedBackgroundIndicator">
 
     <TextView
         android:id="@+id/measurement_value"

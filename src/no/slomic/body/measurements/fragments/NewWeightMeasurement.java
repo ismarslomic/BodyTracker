@@ -63,11 +63,13 @@ public class NewWeightMeasurement extends DialogFragment implements OnClickListe
 
         // Initialize the circular seek bar widget
         this.mSeekBar = (CircularSeekBar) v.findViewById(R.id.circularSeekBar);
-        this.mSeekBar.setEmptyCircleColor(Color.GRAY);
-        this.mSeekBar.setSelectedCircleColor(Color.WHITE);
-        this.mSeekBar.setSeekBarThumsColor(Color.BLACK);
+        this.mSeekBar.setEmptyCircleColor(getResources().getColor(android.R.color.secondary_text_light));
+        this.mSeekBar.setSelectedCircleColor(getResources().getColor(android.R.color.holo_blue_light));
+        this.mSeekBar.setSeekBarThumbsColor(Color.BLACK);
         this.mSeekBar.setButtonPushedColor(Color.LTGRAY);
-
+        this.mSeekBar.setTextColor(getResources().getColor(android.R.color.primary_text_light));
+        this.mSeekBar.setEmptyCircleColor(getResources().getColor(android.R.color.darker_gray));
+        
         // Setting the values that seek bar will iterate through
         generateValueArray();
         this.mSeekBar.setValueArray(this.mQuantityValues);

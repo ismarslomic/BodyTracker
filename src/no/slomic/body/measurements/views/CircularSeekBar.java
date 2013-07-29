@@ -236,6 +236,11 @@ public final class CircularSeekBar extends View {
     public void setEmptyCircleColor(int color) {
         mEmptyCircleColor.setColor(color);
     }
+    
+    /** Sets the color of the text in the middle **/
+    public void setTextColor(int color) {
+        mTextStyle.setColor(color);
+    }
 
     /**
      * Sets the color of the circle in the middle for selected steps from start
@@ -246,7 +251,7 @@ public final class CircularSeekBar extends View {
     }
 
     /** Sets the color of the seek bar thumb **/
-    public void setSeekBarThumsColor(int color) {
+    public void setSeekBarThumbsColor(int color) {
         mThumbColor.setColor(color);
     }
 
