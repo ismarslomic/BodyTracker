@@ -68,7 +68,7 @@ public class MainActivity extends FragmentActivity implements OnSharedPreference
         sharedPref.registerOnSharedPreferenceChangeListener(this);
 
         Boolean activateWaistMeasurement = sharedPref.getBoolean(
-                SettingsActivity.PREFERENCE_ACTIVATE_WAIST_MEASUREMENT, true);
+                SettingsActivity.PREFERENCE_ACTIVATE_WAIST_MEASUREMENT, false);
         Boolean activateWeightMeasurement = sharedPref.getBoolean(
                 SettingsActivity.PREFERENCE_ACTIVATE_WEIGHT_MEASUREMENT, true);
         activateWeightMeasurement = true;
@@ -106,7 +106,7 @@ public class MainActivity extends FragmentActivity implements OnSharedPreference
      */
     @Override
     public void onSharedPreferenceChanged(SharedPreferences sharedPreferences, String key) {
-        if (key.equals(SettingsActivity.PREFERENCE_ACTIVATE_HEIGHT_MEASUREMENT)
+        if (key.equals(SettingsActivity.PREFERENCE_ACTIVATE_WAIST_MEASUREMENT)
                 || key.equals(SettingsActivity.PREFERENCE_ACTIVATE_WEIGHT_MEASUREMENT)) {
             if (DEBUG)
                 Log.d(LOG_TAG, "Shared preference changed for key " + key);

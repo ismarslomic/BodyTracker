@@ -62,8 +62,8 @@
     <string name="title_weight_goal_preferences">Målsetting</string>
     <string name="title_height_measurement_preferences">Høydemåling</string>
     <string name="title_height_goal_preferences">Målsetting</string>
-    <string name="title_weist_measurement_preferences">Midjemåling</string>
-    <string name="title_weist_goal_preferences">Målsetting</string>
+    <string name="title_waist_measurement_preferences">Midjemåling</string>
+    <string name="title_waist_goal_preferences">Målsetting</string>
     <string name="title_head_measurement_preferences">Hodemåling</string>
     <string name="title_head_goal_preferences">Målsetting</string>
     <string name="dialog_title_period_start_preferences">Startdato</string>

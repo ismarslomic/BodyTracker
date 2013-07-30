@@ -80,15 +80,15 @@
             android:title="@string/title_height_goal_preferences" />
 
         <SwitchPreference
-            android:key="activate_weist_measurement"
+            android:key="activate_waist_measurement"
             android:switchTextOff="@string/no"
             android:switchTextOn="@string/yes"
-            android:title="@string/title_weist_measurement_preferences" />
+            android:title="@string/title_waist_measurement_preferences" />
 
         <EditTextPreference
-            android:dependency="activate_weist_measurement"
+            android:dependency="activate_waist_measurement"
             android:layout="?android:attr/preferenceLayoutChild"
-            android:title="@string/title_weist_goal_preferences" />
+            android:title="@string/title_waist_goal_preferences" />
 
         <SwitchPreference
             android:key="activate_head_measurement"

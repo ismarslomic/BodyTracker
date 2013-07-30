@@ -141,10 +141,10 @@ public final class R {
         public static final int title_tab_chest=0x7f05000f;
         public static final int title_tab_waist=0x7f050010;
         public static final int title_tab_weight=0x7f050011;
+        public static final int title_waist_goal_preferences=0x7f050025;
+        public static final int title_waist_measurement_preferences=0x7f050024;
         public static final int title_weight_goal_preferences=0x7f050021;
         public static final int title_weight_measurement_preferences=0x7f050020;
-        public static final int title_weist_goal_preferences=0x7f050025;
-        public static final int title_weist_measurement_preferences=0x7f050024;
         public static final int toast_equal_measurements_weekly_stats=0x7f050037;
         public static final int toast_increased_measurements_weekly_stats=0x7f050038;
         /**  Weekly stats 

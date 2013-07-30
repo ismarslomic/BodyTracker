@@ -62,8 +62,8 @@
     <string name="title_weight_goal_preferences">Goal</string>
     <string name="title_height_measurement_preferences">Measure height</string>
     <string name="title_height_goal_preferences">Goal</string>
-    <string name="title_weist_measurement_preferences">Measure weist</string>
-    <string name="title_weist_goal_preferences">Goal</string>
+    <string name="title_waist_measurement_preferences">Measure waist</string>
+    <string name="title_waist_goal_preferences">Goal</string>
     <string name="title_head_measurement_preferences">Measure head</string>
     <string name="title_head_goal_preferences">Goal</string>
     <string name="dialog_title_period_start_preferences">Period start date</string>
