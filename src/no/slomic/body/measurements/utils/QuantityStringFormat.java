@@ -4,43 +4,48 @@
 
 package no.slomic.body.measurements.utils;
 
-import android.content.SharedPreferences;
-import android.content.res.Resources;
+import java.text.DecimalFormat;
 
 import no.slomic.body.measurements.R;
 import no.slomic.body.measurements.activities.SettingsActivity;
 import no.slomic.body.measurements.entities.LengthUnit;
 import no.slomic.body.measurements.entities.Quantity;
 import no.slomic.body.measurements.entities.WeightUnit;
-
-import java.text.DecimalFormat;
+import android.content.SharedPreferences;
+import android.content.res.Resources;
 
 public class QuantityStringFormat {
-    public static final DecimalFormat WEIGHT_ONE_DECIMAL_FORMAT = new DecimalFormat("#,##0.0");
-    public static final DecimalFormat WEIGHT_TWO_DECIMAL_FORMAT = new DecimalFormat("#,##0.00");
-    public static final DecimalFormat LENGTH_DECIMAL_FORMAT = new DecimalFormat("#,##0.00");
-    
+    public static final DecimalFormat ONE_DECIMAL_FORMAT = new DecimalFormat("#,##0.0");
+    public static final DecimalFormat TWO_DECIMAL_FORMAT = new DecimalFormat("#,##0.00");
+
     public static String formatQuantityValue(Quantity q, SharedPreferences sp, Resources r)
     {
-        if(q == null)
+        if (q == null)
             return "";
-        
+
         String metricUnits = r.getString(R.string.metric_units);
-        String imperialUnits = r.getString(R.string.imperial_units);
-        String systemOfMeasurement = sp.getString(SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY, metricUnits);
-        
+        String systemOfMeasurement = sp.getString(SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY,
+                metricUnits);
+
         // Weight measurement
-        if(q.getUnit() instanceof WeightUnit)
+        if (q.getUnit() instanceof WeightUnit)
         {
             if (systemOfMeasurement.equals(metricUnits))
                 return QuantityStringFormat.formatWeightToMetric(q);
             else
                 return QuantityStringFormat.formatWeightToImperial(q);
         }
+        else if (q.getUnit() instanceof LengthUnit)
+        {
+            if (systemOfMeasurement.equals(metricUnits))
+                return QuantityStringFormat.formatLengthToMetric(q);
+            else
+                return QuantityStringFormat.formatLengthToImperial(q);
+        }
         else
             return "";
     }
-    
+
     /**
      * Formats the quantity value of weight measurement in kilograms and grams
      * 
@@ -58,15 +63,18 @@ public class QuantityStringFormat {
 
         // get value in kilograms
         int valueInKg = (int) q.showInUnits(WeightUnit.KG);
-        valueInKg = Math.abs(valueInKg); // if the value is negative we make it positive since we are having same rules for decimal formats for both ranges
+        valueInKg = Math.abs(valueInKg); // if the value is negative we make it
+                                         // positive since we are having same
+                                         // rules for decimal formats for both
+                                         // ranges
 
         // if value >= 10 kg return with one decimal and kg as unit
         if (valueInKg >= 10)
-            return WEIGHT_ONE_DECIMAL_FORMAT.format(q.showInUnits(WeightUnit.KG)) + " "
+            return ONE_DECIMAL_FORMAT.format(q.showInUnits(WeightUnit.KG)) + " "
                     + WeightUnit.KG.toString();
         // if value between 1 and 10 kg return with two decimals and kg as unit
         else if (valueInKg < 10 && valueInKg > 0)
-            return WEIGHT_TWO_DECIMAL_FORMAT.format(q.showInUnits(WeightUnit.KG)) + " "
+            return TWO_DECIMAL_FORMAT.format(q.showInUnits(WeightUnit.KG)) + " "
                     + WeightUnit.KG.toString();
         // if value < 1 kg return in gram
         else
@@ -93,8 +101,9 @@ public class QuantityStringFormat {
         // get value in pounds and ounces
         int pounds = (int) q.showInUnits(WeightUnit.LB);
         double ounces = q.showInUnits(WeightUnit.OZ);
-        
-        // if the value is negative we make it positive since we are having same rules for decimal formats for both ranges
+
+        // if the value is negative we make it positive since we are having same
+        // rules for decimal formats for both ranges
         int poundsAbs = (int) q.showInUnits(WeightUnit.LB);
         poundsAbs = Math.abs(poundsAbs);
 
@@ -115,24 +124,36 @@ public class QuantityStringFormat {
             // return pounds in plural form
             if (poundsAbs > 1)
                 return pounds + WeightUnit.LB.getSymbolPlural() + " "
-                        + WEIGHT_ONE_DECIMAL_FORMAT.format(ounces) + WeightUnit.OZ.getSymbol();
+                        + ONE_DECIMAL_FORMAT.format(ounces) + WeightUnit.OZ.getSymbol();
             else
                 return pounds + WeightUnit.LB.getSymbol() + " "
-                        + WEIGHT_ONE_DECIMAL_FORMAT.format(ounces) + WeightUnit.OZ.getSymbol();
+                        + ONE_DECIMAL_FORMAT.format(ounces) + WeightUnit.OZ.getSymbol();
         }
         // if value < 0,4535 kg return ounces with one decimal
         else
-            return WEIGHT_ONE_DECIMAL_FORMAT.format(q.showInUnits(WeightUnit.OZ)) + " "
+            return ONE_DECIMAL_FORMAT.format(q.showInUnits(WeightUnit.OZ)) + " "
                     + WeightUnit.OZ.getSymbol();
     }
 
     public static String formatLengthToMetric(Quantity q) {
-        if ((int) q.showInUnits(LengthUnit.MM) < 10 && (int) q.showInUnits(LengthUnit.MM) > -10)
-            return (int) q.showInUnits(LengthUnit.MM) + " " + LengthUnit.MM.toString();
-        if ((int) q.showInUnits(LengthUnit.CM) < 100 && (int) q.showInUnits(LengthUnit.CM) > -100)
-            return (int) q.showInUnits(LengthUnit.CM) + " " + LengthUnit.CM.toString();
+        // if quantity is empty return empty string
+        if (q == null)
+            return "";
+
+        // get value in kilograms
+        int valueInMM = (int) q.showInUnits(LengthUnit.MM);
+        valueInMM = Math.abs(valueInMM); // if the value is negative we make it
+                                         // positive since we are having same
+                                         // rules for decimal formats for both
+                                         // ranges
+
+        if (valueInMM < 10)
+            return valueInMM + " " + LengthUnit.MM.toString();
+        else if (valueInMM < 1000)
+            return ONE_DECIMAL_FORMAT.format(q.showInUnits(LengthUnit.CM)) + " "
+                    + LengthUnit.CM.toString();
         else
-            return LENGTH_DECIMAL_FORMAT.format(q.showInUnits(LengthUnit.M)) + " "
+            return TWO_DECIMAL_FORMAT.format(q.showInUnits(LengthUnit.M)) + " "
                     + LengthUnit.M.toString();
     }
 
@@ -142,8 +163,8 @@ public class QuantityStringFormat {
             double inches = q.showInUnits(LengthUnit.IN);
             feet = (int) (inches / 12);
             inches = Math.abs(inches) % 12;
-            return feet + "' " + LENGTH_DECIMAL_FORMAT.format(inches) + "''";
+            return feet + "' " +  TWO_DECIMAL_FORMAT.format(inches) + "''";
         } else
-            return LENGTH_DECIMAL_FORMAT.format(q.showInUnits(LengthUnit.IN)) + "''";
+            return TWO_DECIMAL_FORMAT.format(q.showInUnits(LengthUnit.IN)) + "''";
     }
 }

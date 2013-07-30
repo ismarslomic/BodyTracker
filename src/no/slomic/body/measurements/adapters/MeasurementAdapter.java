@@ -2,6 +2,7 @@
 
 package no.slomic.body.measurements.adapters;
 
+import android.app.Activity;
 import android.content.Context;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
@@ -9,17 +10,24 @@ import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.preference.PreferenceManager;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 
 import no.slomic.body.measurements.R;
 import no.slomic.body.measurements.activities.SettingsActivity;
 import no.slomic.body.measurements.entities.Measurement;
+import no.slomic.body.measurements.entities.Quantity;
+import no.slomic.body.measurements.holders.MeasurementHolder;
+import no.slomic.body.measurements.utils.DateUtils;
+import no.slomic.body.measurements.utils.QuantityStringFormat;
 
 import java.util.Iterator;
 import java.util.List;
 import java.util.TreeSet;
 
-public abstract class MeasurementAdapter extends ArrayAdapter<Measurement> implements
+public class MeasurementAdapter extends ArrayAdapter<Measurement> implements
         OnSharedPreferenceChangeListener {
     public List<Measurement> mMeasurements = null;
     public TreeSet<Measurement> mMeasurementSet = new TreeSet<Measurement>();
@@ -30,10 +38,15 @@ public abstract class MeasurementAdapter extends ArrayAdapter<Measurement> imple
     protected String mSystemOfMeasurement;
     private static final String LOG_TAG = MeasurementAdapter.class.getName();
     private static final boolean DEBUG = true;
-
+    private Context mContext;
+    private int mLayoutResourceId;
+    
     public MeasurementAdapter(Context context, int layoutResourceId, List<Measurement> measurements) {
         super(context, layoutResourceId, measurements);
 
+        this.mLayoutResourceId = layoutResourceId;
+        this.mContext = context;
+        
         // add measurement to the local list
         this.mMeasurements = measurements;
         this.mMeasurementSet.addAll(measurements);
@@ -101,6 +114,63 @@ public abstract class MeasurementAdapter extends ArrayAdapter<Measurement> imple
             this.mSystemOfMeasurement = this.mSharedPreferences.getString(
                     SettingsActivity.PREFERENCE_METRIC_SYSTEM_KEY, this.mMetricUnits);
             this.notifyDataSetChanged();
+        }
+    }
+    
+
+    @Override
+    public View getView(int position, View convertView, ViewGroup parent) {
+        View row = convertView;
+        MeasurementHolder holder = null;
+
+        if (row == null) {
+            LayoutInflater inflater = ((Activity) this.mContext).getLayoutInflater();
+            row = inflater.inflate(this.mLayoutResourceId, parent, false);
+
+            holder = new MeasurementHolder(row);
+            row.setTag(holder);
+        } else {
+            holder = (MeasurementHolder) row.getTag();
+        }
+
+        Measurement measurement = this.mMeasurements.get(position);
+        bindDataToViews(holder, measurement);
+
+        return row;
+    }
+
+    public void bindDataToViews(MeasurementHolder holder, Measurement measurement) {
+        // Set measurement date
+        String date = DateUtils.formatToMediumFormatExtended(measurement.getDate(), getContext()
+                .getResources());
+        holder.getMeasurementDate().setText(date);
+
+        // Set measurement value in preferred system of measurement
+        String formattedValue = QuantityStringFormat.formatQuantityValue(measurement.getQuantity(),
+                mSharedPreferences, getContext().getResources());
+
+        holder.getMeasurementValue().setText(formattedValue);
+
+        // Set diff value between this and previous measurement
+        if (measurement.getPrevious() != null) {
+            Quantity diff = measurement.getQuantity().subtract(
+                    measurement.getPrevious().getQuantity(),
+                    measurement.getQuantity().getUnit().getSystemUnit());
+
+            String formattedDiffValue = QuantityStringFormat.formatQuantityValue(diff,
+                    mSharedPreferences, getContext().getResources());
+            holder.getDiffValue().setText(formattedDiffValue);
+
+            // Set diff relational sign/icon
+            if (diff.getValue() < 0)
+                holder.getDiffIcon().setImageBitmap(this.mDownIcon);
+            else if (diff.getValue() == 0)
+                holder.getDiffIcon().setImageBitmap(this.mEqualIcon);
+            else
+                holder.getDiffIcon().setImageBitmap(this.mUpIcon);
+        } else {
+            holder.getDiffValue().setText("");
+            holder.getDiffIcon().setImageDrawable(null);
         }
     }
 }

@@ -5,7 +5,7 @@ import java.util.List;
 
 import no.slomic.body.measurements.R;
 import no.slomic.body.measurements.activities.SettingsActivity;
-import no.slomic.body.measurements.adapters.WeightMeasurementAdapter;
+import no.slomic.body.measurements.adapters.MeasurementAdapter;
 import no.slomic.body.measurements.entities.Measurement;
 import no.slomic.body.measurements.storage.WeightMeasurementDAO;
 import android.content.Intent;
@@ -35,7 +35,7 @@ public class WeightMeasurementList extends MeasurementList {
 
         this.dao.close();
 
-        WeightMeasurementAdapter wma = new WeightMeasurementAdapter(this.activity,
+        MeasurementAdapter wma = new MeasurementAdapter(this.activity,
                 R.layout.layout_measurement_list_row, measurements);
 
         setListAdapter(wma);

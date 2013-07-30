@@ -5,6 +5,7 @@ package no.slomic.body.measurements.activities;
 import no.slomic.body.measurements.R;
 import no.slomic.body.measurements.entities.Measurement;
 import no.slomic.body.measurements.fragments.MeasurementList;
+import no.slomic.body.measurements.fragments.NewWaistMeasurement.OnWaistMeasurementCreatedListener;
 import no.slomic.body.measurements.fragments.NewWeightMeasurement.OnWeightMeasurementCreatedListener;
 import no.slomic.body.measurements.fragments.WaistMeasurementList;
 import no.slomic.body.measurements.fragments.WeightMeasurementList;
@@ -26,7 +27,7 @@ import android.widget.TabHost;
  * project called Support4Demo. See FragmentTabsPager.java for more information.
  */
 public class MainActivity extends FragmentActivity implements OnSharedPreferenceChangeListener,
-        OnWeightMeasurementCreatedListener {
+        OnWeightMeasurementCreatedListener, OnWaistMeasurementCreatedListener {
     private TabHost mTabHost;
     private ViewPager mViewPager;
     private TabsAdapter mTabsAdapter;
@@ -136,5 +137,28 @@ public class MainActivity extends FragmentActivity implements OnSharedPreference
                         + ". Can't call the addMeassurement method to update list.");
         }
 
+    }
+
+    @Override
+    public void onWaistMeasurementCreated(Measurement measurement) {
+        // Get the fragment of the current tab (Weight tab)
+        int currentTabPosition = this.mTabHost.getCurrentTab();
+        String tag = this.mTabsAdapter.getFragmentTag(currentTabPosition);
+        Fragment f = getSupportFragmentManager().findFragmentByTag(tag);
+
+        if (f != null && f instanceof WaistMeasurementList) {
+            // Communicate the newly created measurement to the waist fragment
+            MeasurementList wml = (MeasurementList) f;
+            wml.addMeasurement(measurement);
+
+            if (DEBUG)
+                Log.d(LOG_TAG, "Found fragment at " + currentTabPosition + ": tag:" + f.getTag()
+                        + ", content:" + f + " and calling addMeasurement method to update list.");
+        } else {
+            if (DEBUG)
+                Log.e(LOG_TAG, "Could not find fragment at positon " + currentTabPosition
+                        + " with tag" + tag
+                        + ". Can't call the addMeassurement method to update list.");
+        }
     }
 }
