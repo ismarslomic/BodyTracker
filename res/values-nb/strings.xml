@@ -81,6 +81,12 @@
     <string name="message_one_item_selected_measurement_list">1 valgt</string>
     <string name="message_several_item_selected_measurement_list">%1$d valgt</string>
     <string name="message_no_measurements_measurement_list">Ingen målinger registrert.</string>
+    
+        <!-- Measurement list deleted rows -->
+    <plurals name="message_deleted_measurements">
+        <item quantity="one">Slettet én måling</item>
+        <item quantity="other">Slettet %d målinger</item>
+    </plurals>
 
     <!-- Weekly stats -->
     <string name="toast_no_measurements_weekly_stats">Du må registrere målinger før statistikk kan vises.</string>

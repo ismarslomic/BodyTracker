@@ -7,7 +7,7 @@ import no.slomic.body.measurements.R;
 import no.slomic.body.measurements.activities.SettingsActivity;
 import no.slomic.body.measurements.adapters.WeightMeasurementAdapter;
 import no.slomic.body.measurements.entities.Measurement;
-import no.slomic.body.measurements.storage.WeightMeasurementDAO;
+import no.slomic.body.measurements.storage.WaistMeasurementDAO;
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -15,7 +15,7 @@ import android.widget.AbsListView;
 import android.widget.ListView;
 
 //TODO: legg til LoaderManager i denne klassen (http://developer.android.com/guide/components/loaders.html). Se LoaderThrottleSupport i View pager tab test
-public class WeightMeasurementList extends MeasurementList {
+public class WaistMeasurementList extends MeasurementList {
     @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
@@ -23,7 +23,7 @@ public class WeightMeasurementList extends MeasurementList {
         setHasOptionsMenu(true);
 
         this.activity = getActivity();
-        this.dao = new WeightMeasurementDAO(this.activity);
+        this.dao = new WaistMeasurementDAO(this.activity);
 
         ListView lv = getListView();
         lv.setChoiceMode(AbsListView.CHOICE_MODE_MULTIPLE_MODAL);

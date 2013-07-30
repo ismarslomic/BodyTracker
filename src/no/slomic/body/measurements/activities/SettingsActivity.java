@@ -2,13 +2,12 @@
 
 package no.slomic.body.measurements.activities;
 
+import no.slomic.body.measurements.R;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
 import android.preference.Preference;
 import android.preference.PreferenceActivity;
-
-import no.slomic.body.measurements.R;
 
 /**
  * Check /res/xml/preferences.xml file preferences and keys (variables below)
@@ -24,6 +23,7 @@ public class SettingsActivity extends PreferenceActivity implements
     public static final String PREFERENCE_METRIC_SYSTEM_KEY = "system_of_measurement";
     public static final String PREFERENCE_ACTIVATE_HEIGHT_MEASUREMENT = "activate_height_measurement";
     public static final String PREFERENCE_ACTIVATE_WEIGHT_MEASUREMENT = "activate_weight_measurement";
+    public static final String PREFERENCE_ACTIVATE_WAIST_MEASUREMENT = "activate_waist_measurement";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {

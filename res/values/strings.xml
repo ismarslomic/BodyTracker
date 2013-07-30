@@ -82,6 +82,12 @@
     <string name="message_several_item_selected_measurement_list">%1$d selected</string>
     <string name="message_no_measurements_measurement_list">None existing measurements.</string>
 
+    <!-- Measurement list deleted rows -->
+    <plurals name="message_deleted_measurements">
+        <item quantity="one">Deleted one measurement</item>
+        <item quantity="other">Deleted %d measurements</item>
+    </plurals>
+
     <!-- Weekly stats -->
     <string name="toast_no_measurements_weekly_stats">No measurements registered</string>
     <string name="toast_reduced_measurements_weekly_stats">Last week you have reduced weight with %1$s</string>

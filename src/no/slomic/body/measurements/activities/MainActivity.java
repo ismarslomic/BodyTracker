@@ -2,6 +2,13 @@
 
 package no.slomic.body.measurements.activities;
 
+import no.slomic.body.measurements.R;
+import no.slomic.body.measurements.entities.Measurement;
+import no.slomic.body.measurements.fragments.MeasurementList;
+import no.slomic.body.measurements.fragments.NewWeightMeasurement.OnWeightMeasurementCreatedListener;
+import no.slomic.body.measurements.fragments.WaistMeasurementList;
+import no.slomic.body.measurements.fragments.WeightMeasurementList;
+import no.slomic.body.measurements.tabs.TabsAdapter;
 import android.content.SharedPreferences;
 import android.content.SharedPreferences.OnSharedPreferenceChangeListener;
 import android.os.Bundle;
@@ -11,12 +18,6 @@ import android.support.v4.app.FragmentActivity;
 import android.support.v4.view.ViewPager;
 import android.util.Log;
 import android.widget.TabHost;
-
-import no.slomic.body.measurements.R;
-import no.slomic.body.measurements.entities.Measurement;
-import no.slomic.body.measurements.fragments.NewWeightMeasurement.OnWeightMeasurementCreatedListener;
-import no.slomic.body.measurements.fragments.WeightMeasurementList;
-import no.slomic.body.measurements.tabs.TabsAdapter;
 
 /**
  * Main activity combines a TabHost with a ViewPager to implement a tab UI that
@@ -65,24 +66,27 @@ public class MainActivity extends FragmentActivity implements OnSharedPreference
         SharedPreferences sharedPref = PreferenceManager.getDefaultSharedPreferences(this);
         sharedPref.registerOnSharedPreferenceChangeListener(this);
 
-        Boolean activateHeightMeasurement = sharedPref.getBoolean(
-                SettingsActivity.PREFERENCE_ACTIVATE_HEIGHT_MEASUREMENT, true);
+        Boolean activateWaistMeasurement = sharedPref.getBoolean(
+                SettingsActivity.PREFERENCE_ACTIVATE_WAIST_MEASUREMENT, true);
         Boolean activateWeightMeasurement = sharedPref.getBoolean(
                 SettingsActivity.PREFERENCE_ACTIVATE_WEIGHT_MEASUREMENT, true);
-        activateWeightMeasurement=true;
+        activateWeightMeasurement = true;
+
         // Add visible tabs to the tabs adapter
         if (activateWeightMeasurement)
             this.mTabsAdapter.addTab(
                     this.mTabHost.newTabSpec(getResources().getString(R.string.title_tab_weight))
-                            .setIndicator(getResources().getString(R.string.title_tab_weight)), WeightMeasurementList.class,
+                            .setIndicator(getResources().getString(R.string.title_tab_weight)),
+                    WeightMeasurementList.class,
                     null);
 
-        /*
-         * if (activateHeightMeasurement)
-         * mTabsAdapter.addTab(mTabHost.newTabSpec
-         * ("Height").setIndicator("Height"), HeightMeasurementList.class,
-         * null);
-         */
+        if (activateWaistMeasurement)
+            this.mTabsAdapter.addTab(
+                    this.mTabHost.newTabSpec(getResources().getString(R.string.title_tab_waist))
+                            .setIndicator(getResources().getString(R.string.title_tab_waist)),
+                    WaistMeasurementList.class,
+                    null);
+
         if (DEBUG)
             Log.d(LOG_TAG, "Count of tabs: " + this.mTabsAdapter.getCount() + " after adding tabs");
     }
@@ -119,7 +123,7 @@ public class MainActivity extends FragmentActivity implements OnSharedPreference
 
         if (f != null && f instanceof WeightMeasurementList) {
             // Communicate the newly created measurement to the weight fragment
-            WeightMeasurementList wml = (WeightMeasurementList) f;
+            MeasurementList wml = (MeasurementList) f;
             wml.addMeasurement(measurement);
 
             if (DEBUG)

@@ -2,26 +2,6 @@
 
 package no.slomic.body.measurements.storage;
 
-import android.content.ContentValues;
-import android.content.Context;
-import android.database.Cursor;
-import android.database.SQLException;
-import android.database.sqlite.SQLiteDatabase;
-import android.util.Log;
-
-import no.slomic.body.measurements.entities.Measurement;
-import no.slomic.body.measurements.entities.Quantity;
-import no.slomic.body.measurements.entities.Unit;
-import no.slomic.body.measurements.entities.WeightUnit;
-import no.slomic.body.measurements.utils.DateUtils;
-
-import org.joda.time.DateTime;
-import org.supercsv.cellprocessor.constraint.NotNull;
-import org.supercsv.cellprocessor.ift.CellProcessor;
-import org.supercsv.io.CsvMapWriter;
-import org.supercsv.io.ICsvMapWriter;
-import org.supercsv.prefs.CsvPreference;
-
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
@@ -31,23 +11,44 @@ import java.util.List;
 import java.util.Map;
 import java.util.TreeSet;
 
-public class WeightMeasurementDAO implements MeasurementDAO {
+import no.slomic.body.measurements.entities.LengthUnit;
+import no.slomic.body.measurements.entities.Measurement;
+import no.slomic.body.measurements.entities.Quantity;
+import no.slomic.body.measurements.entities.Unit;
+import no.slomic.body.measurements.utils.DateUtils;
+
+import org.joda.time.DateTime;
+import org.supercsv.cellprocessor.constraint.NotNull;
+import org.supercsv.cellprocessor.ift.CellProcessor;
+import org.supercsv.io.CsvMapWriter;
+import org.supercsv.io.ICsvMapWriter;
+import org.supercsv.prefs.CsvPreference;
+
+import android.content.ContentValues;
+import android.content.Context;
+import android.database.Cursor;
+import android.database.SQLException;
+import android.database.sqlite.SQLiteDatabase;
+import android.util.Log;
+
+public class WaistMeasurementDAO implements MeasurementDAO {
     // Database fields
     private SQLiteDatabase mDatabase;
     private SQLiteHelper mDbHelper;
     private String[] mAllColumns = {
-            WeightMeasurementTable.COLUMN_MEASUREMENT_DATE,
-            WeightMeasurementTable.COLUMN_QUANTITY_VALUE,
-            WeightMeasurementTable.COLUMN_UNIT_SYMBOL, WeightMeasurementTable.COLUMN_CREATED_DATE
+            WaistMeasurementTable.COLUMN_MEASUREMENT_DATE,
+            WaistMeasurementTable.COLUMN_QUANTITY_VALUE,
+            WaistMeasurementTable.COLUMN_UNIT_SYMBOL, WaistMeasurementTable.COLUMN_CREATED_DATE
     };
-    private static final String LOG_TAG = "WeightMeasurementDAO";
+    private static final String LOG_TAG = "WaistMeasurementDAO";
     private static final boolean DEBUG = true;
 
-    public WeightMeasurementDAO(Context context) {
+    public WaistMeasurementDAO(Context context) {
         this.mDbHelper = new SQLiteHelper(context);
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see no.slomic.body.measurements.storage.MeasurementDAO#open()
      */
     @Override
@@ -55,7 +56,8 @@ public class WeightMeasurementDAO implements MeasurementDAO {
         this.mDatabase = this.mDbHelper.getWritableDatabase();
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see no.slomic.body.measurements.storage.MeasurementDAO#close()
      */
     @Override
@@ -63,48 +65,57 @@ public class WeightMeasurementDAO implements MeasurementDAO {
         this.mDbHelper.close();
     }
 
-    /* (non-Javadoc)
-     * @see no.slomic.body.measurements.storage.MeasurementDAO#create(no.slomic.body.measurements.entities.Measurement)
+    /*
+     * (non-Javadoc)
+     * @see
+     * no.slomic.body.measurements.storage.MeasurementDAO#create(no.slomic.body
+     * .measurements.entities.Measurement)
      */
     @Override
     public Measurement create(Measurement newMeasurement) {
         long l = newMeasurement.getDate().getMillis();
         ContentValues values = new ContentValues();
-        values.put(WeightMeasurementTable.COLUMN_QUANTITY_VALUE, newMeasurement.getQuantity()
+        values.put(WaistMeasurementTable.COLUMN_QUANTITY_VALUE, newMeasurement.getQuantity()
                 .getValue());
-        values.put(WeightMeasurementTable.COLUMN_MEASUREMENT_DATE, l);
-        values.put(WeightMeasurementTable.COLUMN_UNIT_SYMBOL, newMeasurement.getQuantity()
+        values.put(WaistMeasurementTable.COLUMN_MEASUREMENT_DATE, l);
+        values.put(WaistMeasurementTable.COLUMN_UNIT_SYMBOL, newMeasurement.getQuantity()
                 .getUnit().getSymbol());
-        values.put(WeightMeasurementTable.COLUMN_CREATED_DATE, DateTime.now().getMillis());
+        values.put(WaistMeasurementTable.COLUMN_CREATED_DATE, DateTime.now().getMillis());
 
-        this.mDatabase.insert(WeightMeasurementTable.TABLE_NAME, null, values);
-        Cursor cursor = this.mDatabase.query(WeightMeasurementTable.TABLE_NAME, this.mAllColumns,
-                WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " = '"
+        this.mDatabase.insert(WaistMeasurementTable.TABLE_NAME, null, values);
+        Cursor cursor = this.mDatabase.query(WaistMeasurementTable.TABLE_NAME, this.mAllColumns,
+                WaistMeasurementTable.COLUMN_MEASUREMENT_DATE + " = '"
                         + newMeasurement.getDate().getMillis() + "' ", null, null, null, null);
         cursor.moveToFirst();
 
         newMeasurement = cursorToMeasurement(cursor);
         cursor.close();
         if (DEBUG)
-            Log.d(LOG_TAG, "Created new Weight Measurement");
+            Log.d(LOG_TAG, "Created new Waist Measurement");
 
         return newMeasurement;
     }
 
-    /* (non-Javadoc)
-     * @see no.slomic.body.measurements.storage.MeasurementDAO#delete(no.slomic.body.measurements.entities.Measurement)
+    /*
+     * (non-Javadoc)
+     * @see
+     * no.slomic.body.measurements.storage.MeasurementDAO#delete(no.slomic.body
+     * .measurements.entities.Measurement)
      */
     @Override
     public void delete(Measurement measurement) {
-        this.mDatabase.delete(WeightMeasurementTable.TABLE_NAME,
-                WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " = "
+        this.mDatabase.delete(WaistMeasurementTable.TABLE_NAME,
+                WaistMeasurementTable.COLUMN_MEASUREMENT_DATE + " = "
                         + measurement.getDate().getMillis() + " ", null);
         if (DEBUG)
-            Log.d(LOG_TAG, "Deleted Weight Measurement " + measurement);
+            Log.d(LOG_TAG, "Deleted Waist Measurement " + measurement);
     }
 
-    /* (non-Javadoc)
-     * @see no.slomic.body.measurements.storage.MeasurementDAO#deleteAll(java.util.List)
+    /*
+     * (non-Javadoc)
+     * @see
+     * no.slomic.body.measurements.storage.MeasurementDAO#deleteAll(java.util
+     * .List)
      */
     @Override
     public void deleteAll(List<Measurement> measurements) {
@@ -114,15 +125,16 @@ public class WeightMeasurementDAO implements MeasurementDAO {
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see no.slomic.body.measurements.storage.MeasurementDAO#getAll()
      */
     @Override
     public List<Measurement> getAll() {
         List<Measurement> measurements = new ArrayList<Measurement>();
 
-        Cursor cursor = this.mDatabase.query(WeightMeasurementTable.TABLE_NAME, this.mAllColumns,
-                null, null, null, null, WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " ASC");
+        Cursor cursor = this.mDatabase.query(WaistMeasurementTable.TABLE_NAME, this.mAllColumns,
+                null, null, null, null, WaistMeasurementTable.COLUMN_MEASUREMENT_DATE + " ASC");
 
         cursor.moveToFirst();
 
@@ -133,20 +145,23 @@ public class WeightMeasurementDAO implements MeasurementDAO {
         }
         cursor.close();
         if (DEBUG)
-            Log.d(LOG_TAG, "Getting all Weight Measurements. List size: " + measurements.size());
+            Log.d(LOG_TAG, "Getting all Waist Measurements. List size: " + measurements.size());
         return measurements;
     }
 
-    /* (non-Javadoc)
-     * @see no.slomic.body.measurements.storage.MeasurementDAO#exportAll(java.io.File)
+    /*
+     * (non-Javadoc)
+     * @see
+     * no.slomic.body.measurements.storage.MeasurementDAO#exportAll(java.io.
+     * File)
      */
     @Override
     public void exportAll(File exportFile) throws IOException {
         final String[] header = new String[] {
                 "MeasurementDate", "QuantityValue", "UnitSymbol", "CreatedDate"
         };
-        Cursor cursor = this.mDatabase.query(WeightMeasurementTable.TABLE_NAME, this.mAllColumns,
-                null, null, null, null, WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " ASC");
+        Cursor cursor = this.mDatabase.query(WaistMeasurementTable.TABLE_NAME, this.mAllColumns,
+                null, null, null, null, WaistMeasurementTable.COLUMN_MEASUREMENT_DATE + " ASC");
 
         ICsvMapWriter mapWriter = null;
         int count = 0;
@@ -182,8 +197,8 @@ public class WeightMeasurementDAO implements MeasurementDAO {
             }
         }
         if (DEBUG)
-            Log.d(WeightMeasurementDAO.class.getName(), "Exported " + count
-                    + " weight measurements.");
+            Log.d(WaistMeasurementDAO.class.getName(), "Exported " + count
+                    + " waist measurements.");
 
     }
 
@@ -199,7 +214,8 @@ public class WeightMeasurementDAO implements MeasurementDAO {
         return processors;
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see no.slomic.body.measurements.storage.MeasurementDAO#getAllLastWeek()
      */
     @Override
@@ -207,17 +223,17 @@ public class WeightMeasurementDAO implements MeasurementDAO {
         DateTime today = DateTime.now();
         DateTime sevenDaysAgo = today.minusDays(8);
 
-        String selection = WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " >= "
+        String selection = WaistMeasurementTable.COLUMN_MEASUREMENT_DATE + " >= "
                 + sevenDaysAgo.getMillis() + " AND "
-                + WeightMeasurementTable.COLUMN_MEASUREMENT_DATE + " <= " + today.getMillis() + " ";
+                + WaistMeasurementTable.COLUMN_MEASUREMENT_DATE + " <= " + today.getMillis() + " ";
 
         if (DEBUG)
             Log.d("DAO", "selection = " + selection);
 
         TreeSet<Measurement> measurements = new TreeSet<Measurement>();
 
-        Cursor cursor = this.mDatabase.query(WeightMeasurementTable.TABLE_NAME, this.mAllColumns,
-                selection, null, null, null, WeightMeasurementTable.COLUMN_MEASUREMENT_DATE
+        Cursor cursor = this.mDatabase.query(WaistMeasurementTable.TABLE_NAME, this.mAllColumns,
+                selection, null, null, null, WaistMeasurementTable.COLUMN_MEASUREMENT_DATE
                         + " ASC");
 
         cursor.moveToFirst();
@@ -229,13 +245,15 @@ public class WeightMeasurementDAO implements MeasurementDAO {
         cursor.close();
 
         if (DEBUG)
-            Log.d(LOG_TAG, "Getting all Weight Measurements for the last week. List size: "
+            Log.d(LOG_TAG, "Getting all Waist Measurements for the last week. List size: "
                     + measurements.size());
         return measurements;
     }
 
-    /* (non-Javadoc)
-     * @see no.slomic.body.measurements.storage.MeasurementDAO#lastWeekStatistics()
+    /*
+     * (non-Javadoc)
+     * @see
+     * no.slomic.body.measurements.storage.MeasurementDAO#lastWeekStatistics()
      */
     @Override
     public Quantity lastWeekStatistics() {
@@ -249,10 +267,10 @@ public class WeightMeasurementDAO implements MeasurementDAO {
 
         // No measurements last weeks
         if (latest == null)
-            return new Quantity(0.000, WeightUnit.KG);
+            return new Quantity(0.000, LengthUnit.CM);
         // Only one measurement last week
         else if (oldest == null || latest.equals(oldest))
-            return new Quantity(0.000, WeightUnit.KG);
+            return new Quantity(0.000, LengthUnit.CM);
         // At least two measurements last week
         else {
             Quantity diff = latest.getQuantity().subtract(oldest.getQuantity(),
@@ -261,13 +279,14 @@ public class WeightMeasurementDAO implements MeasurementDAO {
         }
     }
 
-    /* (non-Javadoc)
+    /*
+     * (non-Javadoc)
      * @see no.slomic.body.measurements.storage.MeasurementDAO#getLatest()
      */
     @Override
     public Measurement getLatest() {
-        Cursor cursor = this.mDatabase.query(WeightMeasurementTable.TABLE_NAME, this.mAllColumns,
-                null, null, null, null, WeightMeasurementTable.COLUMN_MEASUREMENT_DATE
+        Cursor cursor = this.mDatabase.query(WaistMeasurementTable.TABLE_NAME, this.mAllColumns,
+                null, null, null, null, WaistMeasurementTable.COLUMN_MEASUREMENT_DATE
                         + " desc LIMIT 1");
 
         if (DEBUG)
@@ -277,11 +296,11 @@ public class WeightMeasurementDAO implements MeasurementDAO {
         if (cursor.moveToFirst()) {
             measurement = cursorToMeasurement(cursor);
             if (DEBUG)
-                Log.d(LOG_TAG, "Retrieved latest Weight Measurements. [Date:"
+                Log.d(LOG_TAG, "Retrieved latest Waist Measurements. [Date:"
                         + measurement.getDate().toString() + ", quantity: "
                         + measurement.getQuantity().toString());
         } else if (DEBUG)
-            Log.d(LOG_TAG, "No latest weight measurement found.");
+            Log.d(LOG_TAG, "No latest waist measurement found.");
 
         cursor.close();
 
@@ -304,12 +323,16 @@ public class WeightMeasurementDAO implements MeasurementDAO {
         return new Measurement(quantity, measurementDate);
     }
 
-    public WeightUnit getUnit(String unitSymbol) {
-        if (unitSymbol.equals(WeightUnit.LB.getSymbol()))
-            return WeightUnit.LB;
-        else if (unitSymbol.equals(WeightUnit.KG.getSymbol()))
-            return WeightUnit.KG;
+    public LengthUnit getUnit(String unitSymbol) {
+        if (unitSymbol.equals(LengthUnit.M.getSymbol()))
+            return LengthUnit.M;
+        else if (unitSymbol.equals(LengthUnit.MM.getSymbol()))
+            return LengthUnit.MM;
+        else if (unitSymbol.equals(LengthUnit.IN.getSymbol()))
+            return LengthUnit.IN;
+        else if (unitSymbol.equals(LengthUnit.FT.getSymbol()))
+            return LengthUnit.FT;
         else
-            return WeightUnit.G;
+            return LengthUnit.CM;
     }
 }

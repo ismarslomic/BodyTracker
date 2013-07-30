@@ -87,6 +87,10 @@ public final class R {
         public static final int mainmenu=0x7f0a0001;
     }
     public static final class plurals {
+        /**  Measurement list deleted rows 
+ Measurement list deleted rows 
+         */
+        public static final int message_deleted_measurements=0x7f070002;
         public static final int numberOfMonths=0x7f070001;
         public static final int numberOfYears=0x7f070000;
     }
